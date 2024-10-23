@@ -1,0 +1,1470 @@
+Date/Time: 2024-08-02 16:50:28.315657
+RPM:657.5 revolutions_per_minute
+Velocidade: 0.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:43.529411764705884 percent
+ 
+Date/Time: 2024-08-02 16:50:29.882300
+RPM:653.5 revolutions_per_minute
+Velocidade: 0.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:43.529411764705884 percent
+ 
+Date/Time: 2024-08-02 16:50:31.572830
+RPM:729.75 revolutions_per_minute
+Velocidade: 0.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:50:33.327559
+RPM:1649.25 revolutions_per_minute
+Velocidade: 1.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:34.906498
+RPM:997.0 revolutions_per_minute
+Velocidade: 7.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:36.501600
+RPM:1329.25 revolutions_per_minute
+Velocidade: 10.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:38.203461
+RPM:1096.5 revolutions_per_minute
+Velocidade: 8.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:39.764291
+RPM:1270.75 revolutions_per_minute
+Velocidade: 11.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:41.416356
+RPM:1174.75 revolutions_per_minute
+Velocidade: 10.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:43.92156862745098 percent
+ 
+Date/Time: 2024-08-02 16:50:43.038659
+RPM:1334.75 revolutions_per_minute
+Velocidade: 11.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:43.92156862745098 percent
+ 
+Date/Time: 2024-08-02 16:50:44.614613
+RPM:1406.75 revolutions_per_minute
+Velocidade: 11.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:43.92156862745098 percent
+ 
+Date/Time: 2024-08-02 16:50:46.306864
+RPM:1242.0 revolutions_per_minute
+Velocidade: 8.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:43.92156862745098 percent
+ 
+Date/Time: 2024-08-02 16:50:47.872684
+RPM:1349.25 revolutions_per_minute
+Velocidade: 9.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:49.494006
+RPM:2081.5 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:51.064776
+RPM:2561.25 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:52.726729
+RPM:2172.0 revolutions_per_minute
+Velocidade: 30.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:54.618053
+RPM:2324.75 revolutions_per_minute
+Velocidade: 32.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:56.360661
+RPM:2218.25 revolutions_per_minute
+Velocidade: 30.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:57.941097
+RPM:1843.5 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:44.31372549019608 percent
+ 
+Date/Time: 2024-08-02 16:50:59.620598
+RPM:1373.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:44.705882352941174 percent
+ 
+Date/Time: 2024-08-02 16:51:01.662300
+RPM:1518.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:44.705882352941174 percent
+ 
+Date/Time: 2024-08-02 16:51:03.224549
+RPM:1759.75 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:44.705882352941174 percent
+ 
+Date/Time: 2024-08-02 16:51:04.918318
+RPM:1743.75 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:44.705882352941174 percent
+ 
+Date/Time: 2024-08-02 16:51:06.576856
+RPM:1769.75 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:44.705882352941174 percent
+ 
+Date/Time: 2024-08-02 16:51:08.406770
+RPM:1852.0 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.705882352941174 percent
+ 
+Date/Time: 2024-08-02 16:51:10.513834
+RPM:1906.75 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:44.705882352941174 percent
+ 
+Date/Time: 2024-08-02 16:51:12.099746
+RPM:1778.5 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:51:13.973096
+RPM:1724.25 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:51:15.738363
+RPM:1534.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:51:17.315272
+RPM:1201.0 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:51:19.107732
+RPM:1465.25 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:51:20.999566
+RPM:1760.5 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:51:22.877334
+RPM:1930.75 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:24.455066
+RPM:1632.5 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:26.130582
+RPM:1420.5 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:27.892807
+RPM:1685.0 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:29.461151
+RPM:1976.75 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:31.093426
+RPM:2093.5 revolutions_per_minute
+Velocidade: 28.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:32.734899
+RPM:1968.75 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:34.322935
+RPM:1888.75 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:36.195049
+RPM:1863.25 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:38.034672
+RPM:1890.0 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:39.619630
+RPM:1910.25 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:41.263038
+RPM:1687.0 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:42.861587
+RPM:1444.5 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:44.426406
+RPM:1556.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:46.009867
+RPM:1684.0 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:47.596141
+RPM:1741.25 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:49.199953
+RPM:1588.25 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:51:50.800460
+RPM:1310.0 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:52.392066
+RPM:1076.75 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:53.955344
+RPM:1258.75 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:55.523207
+RPM:1498.0 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:57.172720
+RPM:1613.0 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:51:58.721398
+RPM:1708.75 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:00.291684
+RPM:1642.75 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:01.915982
+RPM:1626.25 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:03.517059
+RPM:1449.25 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:05.161445
+RPM:1451.25 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:06.744217
+RPM:1381.5 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:08.333912
+RPM:1554.25 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:09.906320
+RPM:1805.0 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:11.473629
+RPM:1854.25 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:13.036454
+RPM:1822.75 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:14.605251
+RPM:1823.75 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:16.172565
+RPM:1822.0 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:17.735471
+RPM:1740.75 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:19.302773
+RPM:1612.25 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:52:20.866601
+RPM:1525.75 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:52:22.494862
+RPM:1160.0 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:52:24.103532
+RPM:1062.75 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:52:25.682447
+RPM:1270.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:27.267369
+RPM:1407.75 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:28.833176
+RPM:1433.5 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:30.420074
+RPM:1596.25 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:31.988405
+RPM:1282.25 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:33.537612
+RPM:1117.25 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:35.092293
+RPM:1362.75 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:36.759927
+RPM:1581.5 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:38.378752
+RPM:1654.25 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:39.940539
+RPM:1143.5 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:41.734185
+RPM:798.25 revolutions_per_minute
+Velocidade: 10.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:43.283843
+RPM:1099.75 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:44.853657
+RPM:1466.75 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:46.422830
+RPM:1532.75 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:48.010825
+RPM:1819.0 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:49.576105
+RPM:1998.75 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:52:51.148520
+RPM:2101.25 revolutions_per_minute
+Velocidade: 29.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:52:52.730459
+RPM:2029.5 revolutions_per_minute
+Velocidade: 28.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:52:54.312894
+RPM:1955.5 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:52:55.920553
+RPM:1984.25 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:52:57.537754
+RPM:1978.5 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:52:59.145318
+RPM:1954.5 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:00.761333
+RPM:1967.0 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:02.345241
+RPM:1784.5 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:03.966550
+RPM:1412.5 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:05.574662
+RPM:1368.75 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:07.163203
+RPM:1498.5 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:08.726484
+RPM:1391.0 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:10.295283
+RPM:1395.0 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.09803921568628 percent
+ 
+Date/Time: 2024-08-02 16:53:11.869241
+RPM:1443.5 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:13.444676
+RPM:1456.5 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:15.085147
+RPM:1471.0 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:16.649473
+RPM:1500.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:18.254135
+RPM:1473.25 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:19.892012
+RPM:1262.75 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:21.459156
+RPM:1109.0 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:23.058223
+RPM:1238.25 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:24.643656
+RPM:1406.75 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:26.238050
+RPM:1591.0 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.490196078431374 percent
+ 
+Date/Time: 2024-08-02 16:53:27.809019
+RPM:1423.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:29.374306
+RPM:1274.25 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:30.947164
+RPM:1256.5 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:32.514468
+RPM:1562.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:34.116038
+RPM:1759.5 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:35.664052
+RPM:1862.0 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:37.268326
+RPM:1964.25 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:38.829683
+RPM:1832.25 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:40.442776
+RPM:1837.75 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:42.025720
+RPM:2094.0 revolutions_per_minute
+Velocidade: 29.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:43.661189
+RPM:2125.5 revolutions_per_minute
+Velocidade: 29.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:45.262213
+RPM:1859.25 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:53:46.828465
+RPM:1540.0 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:48.411779
+RPM:1342.5 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:50.020607
+RPM:1441.75 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:51.622127
+RPM:1446.0 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:53.232265
+RPM:1522.75 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:54.816565
+RPM:1716.25 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:56.375506
+RPM:1846.5 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:57.947279
+RPM:1730.75 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:53:59.516720
+RPM:1473.25 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:01.088077
+RPM:1332.25 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:02.687505
+RPM:1476.75 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:04.325041
+RPM:1477.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:05.890859
+RPM:1300.75 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:07.463763
+RPM:1098.25 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:09.044701
+RPM:1005.25 revolutions_per_minute
+Velocidade: 13.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:10.605465
+RPM:1032.25 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:12.169310
+RPM:1185.25 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:13.799044
+RPM:1282.25 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:15.434451
+RPM:1386.75 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:17.015295
+RPM:1428.0 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:18.606817
+RPM:1178.5 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:20.180568
+RPM:1209.75 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:21.754495
+RPM:1321.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:23.318617
+RPM:1420.75 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:24.902672
+RPM:1404.0 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:26.516848
+RPM:1414.5 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:28.100302
+RPM:1396.75 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:54:29.662123
+RPM:1108.5 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:54:31.234395
+RPM:1269.75 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:54:32.796641
+RPM:1522.25 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:54:34.369066
+RPM:1554.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:54:35.936345
+RPM:1534.75 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:54:37.524373
+RPM:1261.5 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:54:39.097811
+RPM:1179.25 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:54:40.715343
+RPM:1233.0 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:42.298397
+RPM:1276.75 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:43.983023
+RPM:1377.5 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:45.564867
+RPM:1429.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:47.155198
+RPM:1243.0 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:47.450980392156865 percent
+ 
+Date/Time: 2024-08-02 16:54:48.767989
+RPM:1455.0 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:47.450980392156865 percent
+ 
+Date/Time: 2024-08-02 16:54:50.335681
+RPM:1516.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:47.450980392156865 percent
+ 
+Date/Time: 2024-08-02 16:54:51.981559
+RPM:1622.75 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:53.555330
+RPM:1543.0 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:55.114631
+RPM:1456.25 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:56.683924
+RPM:1164.5 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:58.269360
+RPM:1011.0 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:54:59.870316
+RPM:1031.25 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:55:01.429244
+RPM:1162.25 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:55:03.009579
+RPM:1176.0 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:81 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:04.563841
+RPM:1380.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:06.167870
+RPM:1610.5 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:07.760846
+RPM:1729.5 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:09.390136
+RPM:1788.0 revolutions_per_minute
+Velocidade: 24.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:11.027567
+RPM:1855.75 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:12.608985
+RPM:1713.75 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:14.211031
+RPM:1549.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:15.797968
+RPM:1317.25 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:47.05882352941177 percent
+ 
+Date/Time: 2024-08-02 16:55:17.381374
+RPM:1147.75 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:18.947663
+RPM:1071.5 revolutions_per_minute
+Velocidade: 15.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:20.517951
+RPM:1359.75 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:22.109016
+RPM:1414.75 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.666666666666664 percent
+ 
+Date/Time: 2024-08-02 16:55:23.687448
+RPM:1626.0 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:25.298603
+RPM:1698.5 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:26.874010
+RPM:1627.25 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:28.516908
+RPM:1350.0 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:30.127100
+RPM:1165.5 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:31.694890
+RPM:1395.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:33.261152
+RPM:1684.5 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:34.830806
+RPM:1875.75 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:36.479257
+RPM:1992.5 revolutions_per_minute
+Velocidade: 27.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:38.082256
+RPM:2088.75 revolutions_per_minute
+Velocidade: 29.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:39.714537
+RPM:1855.0 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:41.321053
+RPM:1696.5 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:42.975240
+RPM:1467.0 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:44.557986
+RPM:1085.75 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:46.115292
+RPM:1149.75 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:47.762097
+RPM:1256.25 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:49.366439
+RPM:1383.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:50.933194
+RPM:1559.25 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:52.500046
+RPM:1552.75 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:55:54.064297
+RPM:1326.25 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:55.647248
+RPM:1296.5 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:57.214419
+RPM:1458.0 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:55:58.795931
+RPM:1542.75 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:56:00.387842
+RPM:1368.0 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:56:01.954617
+RPM:1205.5 revolutions_per_minute
+Velocidade: 16.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:56:03.554634
+RPM:1018.25 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:56:05.133109
+RPM:986.75 revolutions_per_minute
+Velocidade: 13.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:56:06.743769
+RPM:950.0 revolutions_per_minute
+Velocidade: 13.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:56:08.320159
+RPM:951.75 revolutions_per_minute
+Velocidade: 13.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:46.27450980392157 percent
+ 
+Date/Time: 2024-08-02 16:56:09.946418
+RPM:1200.0 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:11.554114
+RPM:1414.0 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:13.151008
+RPM:1612.0 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:14.717385
+RPM:1578.0 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:16.287693
+RPM:1568.25 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:17.915332
+RPM:1565.75 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:19.496319
+RPM:1609.25 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:21.087877
+RPM:1695.25 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:22.742292
+RPM:1675.5 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:24.323365
+RPM:1549.5 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:25.940899
+RPM:1463.75 revolutions_per_minute
+Velocidade: 20.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:27.496181
+RPM:1354.0 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:29.095770
+RPM:1361.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:30.682766
+RPM:1506.0 revolutions_per_minute
+Velocidade: 21.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:32.237950
+RPM:1815.25 revolutions_per_minute
+Velocidade: 25.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:33.844586
+RPM:2017.75 revolutions_per_minute
+Velocidade: 28.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:35.417405
+RPM:1959.0 revolutions_per_minute
+Velocidade: 26.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:37.006287
+RPM:1690.5 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:38.575864
+RPM:1408.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:40.229499
+RPM:1600.5 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:82 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:41.797183
+RPM:1688.25 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:43.362079
+RPM:1704.5 revolutions_per_minute
+Velocidade: 23.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:45.234182
+RPM:1646.5 revolutions_per_minute
+Velocidade: 22.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:46.812064
+RPM:1435.25 revolutions_per_minute
+Velocidade: 19.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:48.469319
+RPM:1353.5 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:50.244105
+RPM:1307.75 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:51.836442
+RPM:1318.5 revolutions_per_minute
+Velocidade: 18.0 kilometer_per_hour
+Temperatura:83 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:53.478279
+RPM:1307.0 revolutions_per_minute
+Velocidade: 17.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:55.151561
+RPM:1073.75 revolutions_per_minute
+Velocidade: 14.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:56.740449
+RPM:906.0 revolutions_per_minute
+Velocidade: 12.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:56:58.743764
+RPM:1143.75 revolutions_per_minute
+Velocidade: 12.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:57:00.487875
+RPM:796.25 revolutions_per_minute
+Velocidade: 6.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
+Date/Time: 2024-08-02 16:57:02.072117
+RPM:809.5 revolutions_per_minute
+Velocidade: 2.0 kilometer_per_hour
+Temperatura:84 degree_Celsius
+Combutível:45.88235294117647 percent
+ 
