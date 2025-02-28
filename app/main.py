@@ -10,9 +10,9 @@ print('Conectando')
 conexaoOBD = obd.OBD('com4')
 
 time = datetime.now
-time.strftime('%d-%m-%Y_%H-%M-%S')
+ftime = time.strftime('%d-%m-%Y_%H-%M-%S')
 
-with open ('../data/data_'+time, 'w', newline='') as csvfile:
+with open ('../data/data_'+ftime+".csv", 'w', newline='') as csvfile:
     fieldnames = ['time', 'rpm', 'velocidade', 'temperatura', 'combustivel']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     
@@ -37,7 +37,7 @@ while True:
     print("Temperatura: " + str(temperaturaRec))
     print("Combustivel: " + str(combustivelRec))
     
-    with open ('../data/data_'+time, 'w', newline='') as csvfile:
+    with open ('../data/data_'+ftime+".csv", 'a', newline='') as csvfile:
         writer.writerow({
             'time': str(now),
             'rpm': str(rotacoesRec), 
