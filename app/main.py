@@ -4,8 +4,6 @@ import os
 import csv
 from datetime import datetime
 
-nome_arquivo = 'dados.txt'
-dados = ''
 print('Conectando')
 conexaoOBD = obd.OBD('com4')
 
@@ -17,7 +15,7 @@ velocidadeCmd = obd.commands.SPEED
 temperaturaCmd = obd.commands.COOLANT_TEMP
 combustivelCmd = obd.commands.FUEL_LEVEL
 
-with open ('../data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
+with open ('../../data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
     fieldnames = ['time', 'rpm', 'velocidade', 'temperatura', 'combustivel']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect='excel')
     
@@ -29,17 +27,20 @@ with open ('../data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
         temperaturaRec = conexaoOBD.query(temperaturaCmd)
         combustivelRec = conexaoOBD.query(combustivelCmd)
 
-        print("RPM: " + str(rotacoesRec))
-        print("Velocidade: " + str(velocidadeRec))
-        print("Temperatura: " + str(temperaturaRec))
-        print("Combustivel: " + str(combustivelRec))
+        print("RPM: " + str(rotacoesRec.magnitude))
+        print("Velocidade: " + str(velocidadeRec.magnitude))
+        print("Temperatura: " + str(temperaturaRec.magnitude))
+        print("Combustivel: " + str(combustivelRec.magnitude))
+        
+        now = datetime.now();
+        str_time = now.strftime("%H-%M-%S")
         
         writer.writerow({
-            'time': str(datetime.now()),
-            'rpm': str(rotacoesRec), 
-            'velocidade': str(velocidadeRec), 
-            'temperatura': str(temperaturaRec), 
-            'combustivel': str(combustivelRec)
+            'time': str_time,
+            'rpm': str(rotacoesRec.magnitude), 
+            'velocidade': str(velocidadeRec.magnitude), 
+            'temperatura': str(temperaturaRec.magnitude), 
+            'combustivel': str(combustivelRec.magnitude)
             })
 
         time.sleep(1)
