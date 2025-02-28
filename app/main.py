@@ -25,7 +25,7 @@ with open ('../data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
         rpm_num = str(rpm_res.value.magnitude)
         speed_num = str(speed_res.value.magnitude)
         temp_num = str(temp_res.value.magnitude)
-        fuel_num = str(fuel_res.value.magnitude)
+        fuel_num = str(round(fuel_res.value.magnitude, 3))
 
         print("RPM: " + rpm_num)
         print("Velocidade: " + speed_num)
