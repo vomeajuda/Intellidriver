@@ -9,49 +9,45 @@ dados = ''
 print('Conectando')
 conexaoOBD = obd.OBD('com4')
 
-time = datetime.now
-time.strftime('%d-%m-%Y_%H-%M-%S')
+now = datetime.now()
+str_time = now.strftime('%d-%m-%Y_%H-%M-%S')
 
-with open ('../data/data_'+time, 'w', newline='') as csvfile:
+rotacoesCmd = obd.commands.RPM
+velocidadeCmd = obd.commands.SPEED
+temperaturaCmd = obd.commands.COOLANT_TEMP
+combustivelCmd = obd.commands.FUEL_LEVEL
+
+with open ('../data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
     fieldnames = ['time', 'rpm', 'velocidade', 'temperatura', 'combustivel']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect='excel')
     
     writer.writeheader()
 
-while True:
+    while True:
+        rotacoesRec = conexaoOBD.query(rotacoesCmd)
+        velocidadeRec = conexaoOBD.query(velocidadeCmd)
+        temperaturaRec = conexaoOBD.query(temperaturaCmd)
+        combustivelRec = conexaoOBD.query(combustivelCmd)
 
-    rotacoesCmd = obd.commands.RPM
-    velocidadeCmd = obd.commands.SPEED
-    temperaturaCmd = obd.commands.COOLANT_TEMP
-    combustivelCmd = obd.commands.FUEL_LEVEL
+        print("RPM: " + str(rotacoesRec))
+        print("Velocidade: " + str(velocidadeRec))
+        print("Temperatura: " + str(temperaturaRec))
+        print("Combustivel: " + str(combustivelRec))
         
-    rotacoesRec = conexaoOBD.query(rotacoesCmd)
-    velocidadeRec = conexaoOBD.query(velocidadeCmd)
-    temperaturaRec = conexaoOBD.query(temperaturaCmd)
-    combustivelRec = conexaoOBD.query(combustivelCmd)
-    
-    now = datetime.now
-
-    print("RPM: " + str(rotacoesRec))
-    print("Velocidade: " + str(velocidadeRec))
-    print("Temperatura: " + str(temperaturaRec))
-    print("Combustivel: " + str(combustivelRec))
-    
-    with open ('../data/data_'+time, 'w', newline='') as csvfile:
         writer.writerow({
-            'time': str(now),
+            'time': str(datetime.now()),
             'rpm': str(rotacoesRec), 
             'velocidade': str(velocidadeRec), 
             'temperatura': str(temperaturaRec), 
             'combustivel': str(combustivelRec)
             })
 
-    time.sleep(1)
+        time.sleep(1)
 
-    # dados = "Date/Time: " + str(agora) + "\nRPM:" + str(rotacoesRec) + "\nVelocidade: " + str(velocidadeRec) + "\nTemperatura:" + str(temperaturaRec) + "\nCombutível:" + str(combustivelRec) + "\n \n" 
+        # dados = "Date/Time: " + str(agora) + "\nRPM:" + str(rotacoesRec) + "\nVelocidade: " + str(velocidadeRec) + "\nTemperatura:" + str(temperaturaRec) + "\nCombutível:" + str(combustivelRec) + "\n \n" 
 
-    # with open(nome_arquivo, 'a+') as arquivo:
-    #     arquivo.write(dados)
+        # with open(nome_arquivo, 'a+') as arquivo:
+        #     arquivo.write(dados)
 
-    clear = lambda: os.system('cls')
-    clear()
+        clear = lambda: os.system('cls')
+        clear()
