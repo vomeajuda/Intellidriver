@@ -28,19 +28,46 @@ with open ('../data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
         oil_res = conexaoOBD.query(obd.commands.OIL_TEMP)
         rate_res = conexaoOBD.query(obd.commands.FUEL_RATE)
         
-        rpm_num = str(rpm_res.value.magnitude)
-        speed_num = str(speed_res.value.magnitude)
-        temp_num = str(temp_res.value.magnitude)
-        fuel_num = str(round(fuel_res.value.magnitude, 3))
-        load_num = str(round(load_res.value.magnitude, 3))
-        throttle_num = str(round(throttle_res.value.magnitude))
-        absload_num = str(absload_res.value.magnitude, 3)
-        type_num = str(type_res.value)
-        oil_num = str(oil_res.value.magnitude)
+        try:
+            rpm_num = str(rpm_res.value.magnitude)
+        except:
+            rpm_num = "undefined"
+        try:
+            speed_num = str(speed_res.value.magnitude)
+        except:
+            speed_num = "undefined"
+        try:
+            temp_num = str(temp_res.value.magnitude)
+        except:
+            temp_num = "undefined"
+        try:
+            fuel_num = str(fuel_res.value.magnitude)
+        except:
+            fuel_num = "undefined"
+        try:
+            load_num = str(load_res.value.magnitude)
+        except:
+            load_num = "undefined"
+        try:
+            throttle_num = str(throttle_res.value.magnitude)
+        except:
+            throttle_num = "undefined"
+        try:    
+            absload_num = str(absload_res.value.magnitude)
+        except:
+            absload_num = "undefined"
+        try:
+            type_num = str(type_res.value)
+        except:
+            type_num = "undefined"
+        try:
+            oil_num = str(oil_res.value.magnitude)
+        except:
+            oil_num = "undefined"
         try:
             rate_num = str(rate_res.value.magnitude)
         except:
-            rate_num = 0
+            rate_num = "undefined"
 
         print("RPM: " + rpm_num)
         print("Velocidade: " + speed_num)
