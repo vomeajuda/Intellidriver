@@ -1,16 +1,22 @@
 import obd
+from obd import OBDStatus
 import time
+import sys
 import os
 import csv
 from datetime import datetime
 
 print('Conectando')
 conexaoOBD = obd.OBD('com4')
+if not (conexaoOBD.status() == OBDStatus.CAR_CONNECTED):
+    print("Falha na conexao")
+    sys.exit()
+    
 
 now = datetime.now()
 str_time = now.strftime('%d-%m-%Y_%H-%M-%S')
 
-with open ('../data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
+with open ('./data/data_'+str_time+'.csv', 'w', newline='') as csvfile:
     fieldnames = ['time', 'rpm', 'velocidade', 'temperatura', 'combustivel', 'Status', 'Engine_Load', 'Posicao_Acelerador', 'Absolute_Load', 'Tipo_Combustivel', 'Temperatura_Oleo', 'L/h']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect='excel')
     
