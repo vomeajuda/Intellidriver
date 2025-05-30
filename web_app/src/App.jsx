@@ -1,13 +1,17 @@
-import { Content } from './components';
+import { Content, Header } from './components';
+
+import { MainPage } from './pages';
 
 import './App.scss';
 
 const App = () => {
   return (
-    <Content>
-      <h1>Welcome to the App</h1>
-      <p>This is a simple React application.</p>
-    </Content>
+    <>
+      <Header />
+      <Content>
+        <MainPage />
+      </Content>
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 //cores
 $theme-colors: (
-  primary: #adbba0,
-  secondary: #51663e,
+  primary: #51663e,
+  secondary: #adbba0,
   tertiary: #7f9170,
   search: #bfe59e,
   accent: #2a3c1a,
@@ -13,14 +13,13 @@ $theme-colors: (
   dark: #343a40 
 );
 
+@import '../node_modules/bootstrap/scss/bootstrap';
+
 //fontes
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:wght@400;600;800&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
 //css do projeto
-
-#root {
-  width: 100%;
-  margin: 0;
+.montserrat {
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
 }
