@@ -7,16 +7,25 @@ const Header = () => {
     <Navbar fixed='top' className='bg-secondary text-primary'>
       <Container>
         <header className='d-flex flex-wrap justify-content-center align-items-end w-100'>
-          <a className='d-flex align-items-center mb-3 mb-md-0 me-2 me-md-auto' href="/">
+          <a className='d-flex align-items-center mb-3 mb-md-0 me-0 me-lg-auto' href="/">
             <img className='me-3 ms-md-3' height={150} src={logo} alt='Logo do IncluMove' />
           </a>
 
-          <Nav defaultActiveKey='/' as='ul'>
+          <Nav defaultActiveKey='/' as='ul' className='text-primary fs-3 fw-semibold montserrat gap-xl-4'>
             <Nav.Item as='li'>
-              <Nav.Link className='fs-3 montserrat' href='/'>Página Inicial</Nav.Link>
+              <Nav.Link>Início</Nav.Link>
             </Nav.Item>
             <Nav.Item as='li'>
-              <Nav.Link className='fs-3 montserrat' href='/about' eventKey='link-1'>Sobre</Nav.Link>
+              <Nav.Link>Ranking</Nav.Link>
+            </Nav.Item>
+            <Nav.Item as='li'>
+              <Nav.Link>Objetivo</Nav.Link>
+            </Nav.Item>
+            <Nav.Item as='li'>
+              <Nav.Link>Sobre Nós</Nav.Link>
+            </Nav.Item>
+            <Nav.Item as='li'>
+              <Nav.Link>Contato</Nav.Link>
             </Nav.Item>
           </Nav>
         </header>
