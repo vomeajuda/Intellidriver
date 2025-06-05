@@ -4,7 +4,7 @@ import { logo } from '../../assets';
 
 const Header = () => {
   return (
-    <Navbar key={'md'} expand={'md'} fixed='top' className='bg-secondary text-primary'>
+    <Navbar key={'md'} expand={'md'} sticky='top' className='bg-secondary text-primary'>
       <Container className='d-flex flex-wrap justify-content-center align-items-center align-items-md-end'>
         <Navbar.Brand className='d-flex align-items-center me-auto me-md-0'>
           <img className='me-3 ms-md-3' height={150} src={logo} alt='Logo do IncluMove' />
