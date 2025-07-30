@@ -27,7 +27,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
   BluetoothConnection? _connection;
   bool _isConnecting = false;
 
-  String _response = '';
   int? _latestRPM;
   Timer? _timer;
 
@@ -54,7 +53,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
       _connection!.input!.listen((Uint8List data) {
         String raw = utf8.decode(data);
         setState(() {
-          _response += raw;
 
           if (raw.contains("41 0C")) {
             final match = RegExp(r'41 0C ([0-9A-Fa-f]{2}) ([0-9A-Fa-f]{2})')
@@ -132,10 +130,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     style: TextStyle(fontSize: 24, color: Colors.blueAccent),
                   ),
                   SizedBox(height: 20),
-                  Text(
-                    "Raw Response:\n$_response",
-                    textAlign: TextAlign.center,
-                  ),
                   SizedBox(height: 30),
                   ElevatedButton.icon(
                     onPressed: () {
@@ -145,7 +139,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
                       setState(() {
                         _connection = null;
                         _latestRPM = null;
-                        _response = '';
                       });
                     },
                     icon: Icon(Icons.arrow_back),
