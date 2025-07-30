@@ -94,7 +94,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('OBD-II Scanner')),
+      appBar: AppBar(title: Text('IntelliDriver')),
       body: Column(
         children: [
           Padding(
