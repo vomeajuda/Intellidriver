@@ -48,7 +48,7 @@ const App = () => {
       if (success) {
         setConnectedDevice(device);
         setIsConnected(true);
-        console.log('Connected to:', device.name);
+        console.log('Conectado a:', device.name);
         await device.write('010C\r');
       }
     } catch (err) {
@@ -70,7 +70,7 @@ const App = () => {
             <Button title="Conectar" onPress={() => connectToDevice(item)} />
           </View>
         )}
-        ListEmptyComponent={<Text>Nada aqui</Text>}
+        ListEmptyComponent={<Text>O vazio que corroe</Text>}
       />
 
       {isConnected && connectedDevice && (
