@@ -19,14 +19,19 @@ const App = () => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    requestPermissions();
+    let cleanup;
+    if (connectedDevice) {
+      cleanup = connectToDevice(connectedDevice);
+    }
 
     return () => {
+      if (cleanup) cleanup();
       if (isConnected) {
         RNBluetoothClassic.disconnect();
       }
     };
   }, [isConnected]);
+
 
   const addLog = (msg) => {
     console.log(msg);
@@ -62,18 +67,25 @@ const App = () => {
     try {
       addLog(`Tentando conectar a ${device.name || device.address}...`);
 
-      const success = await device.connect(); 
-      if (success) {
-        setConnectedDevice(device);
+      const connection = await RNBluetoothClassic.connectToDevice(device.address, {
+        delimiter: '\r',
+      });
+
+      if (connection) {
+        setConnectedDevice(connection);
         setIsConnected(true);
         addLog(`Conectado a: ${device.name || device.address}`);
 
-        await device.write('010C\r');
+        const subscription = connection.onDataReceived((event) => {
+          const msg = String(event.data).trim();
+          addLog(`Mensagem recebida: ${msg}`);
+          setMessages((prev) => [...prev, msg]);
+        });
+
+        await connection.write('010C\r');
         addLog('Enviado comando: 010C');
 
-        const response = await device.readFromDevice();
-        addLog(`⬅Resposta OBD: ${response}`);
-        setMessages((prev) => [...prev, response]);
+        return () => subscription.remove();
       } else {
         addLog('Falha na conexão (retornou false)');
       }
@@ -81,7 +93,6 @@ const App = () => {
       addLog(`Erro de conexão: ${err}`);
     }
   };
-
 
   return (
     <View style={styles.container}>
