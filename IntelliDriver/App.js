@@ -22,11 +22,14 @@ const App = () => {
   const intervalRef = useRef(null);
   const subscriptionRef = useRef(null);
 
-  useEffect(() => {
-    return () => {
-      disconnectFromDevice();
-    };
-  }, []);
+useEffect(() => {
+  requestPermissions();
+
+  return () => {
+    disconnectFromDevice();
+  };
+}, []);
+
 
   const addLog = (msg) => {
     console.log(msg);
