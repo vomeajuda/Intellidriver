@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -17,21 +17,16 @@ const App = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState([]);
   const [logs, setLogs] = useState([]);
+  const [rpm, setRpm] = useState(null);
+
+  const intervalRef = useRef(null);
+  const subscriptionRef = useRef(null);
 
   useEffect(() => {
-    let cleanup;
-    if (connectedDevice) {
-      cleanup = connectToDevice(connectedDevice);
-    }
-
     return () => {
-      if (cleanup) cleanup();
-      if (isConnected) {
-        RNBluetoothClassic.disconnect();
-      }
+      disconnectFromDevice();
     };
-  }, [isConnected]);
-
+  }, []);
 
   const addLog = (msg) => {
     console.log(msg);
@@ -76,16 +71,34 @@ const App = () => {
         setIsConnected(true);
         addLog(`Conectado a: ${device.name || device.address}`);
 
-        const subscription = connection.onDataReceived((event) => {
+        subscriptionRef.current = connection.onDataReceived((event) => {
           const msg = String(event.data).trim();
+
+          if (!msg) return;
           addLog(`Mensagem recebida: ${msg}`);
           setMessages((prev) => [...prev, msg]);
+
+          if (msg.startsWith("41 0C")) {
+            const parts = msg.split(" ");
+            if (parts.length >= 4) {
+              const A = parseInt(parts[2], 16);
+              const B = parseInt(parts[3], 16);
+              const rpmValue = ((A * 256) + B) / 4;
+              setRpm(rpmValue);
+              addLog(`RPM calculado: ${rpmValue}`);
+            }
+          }
         });
 
-        await connection.write('010C\r');
-        addLog('Enviado comando: 010C');
+        intervalRef.current = setInterval(async () => {
+          try {
+            await connection.write('010C\r');
+            addLog('Enviado comando: 010C');
+          } catch (err) {
+            addLog(`Erro enviando comando: ${err}`);
+          }
+        }, 1000);
 
-        return () => subscription.remove();
       } else {
         addLog('Falha na conexão (retornou false)');
       }
@@ -94,9 +107,32 @@ const App = () => {
     }
   };
 
+  const disconnectFromDevice = async () => {
+    try {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (subscriptionRef.current) {
+        subscriptionRef.current.remove();
+        subscriptionRef.current = null;
+      }
+      if (isConnected && connectedDevice) {
+        await RNBluetoothClassic.disconnect();
+        addLog(`Desconectado de ${connectedDevice.name || connectedDevice.address}`);
+      }
+    } catch (err) {
+      addLog(`Erro ao desconectar: ${err}`);
+    } finally {
+      setIsConnected(false);
+      setConnectedDevice(null);
+      setRpm(null);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bluetooth Classic Debug</Text>
+      <Text style={styles.title}>Bluetooth OBD-II Debug</Text>
       <Button title="List Paired Devices" onPress={listPairedDevices} />
 
       <FlatList
@@ -108,26 +144,35 @@ const App = () => {
             <Button title="Conectar" onPress={() => connectToDevice(item)} />
           </View>
         )}
-        ListEmptyComponent={<Text>Nada aq</Text>}
+        ListEmptyComponent={<Text style={{ color: 'gray' }}>Nada aq</Text>}
       />
 
       {isConnected && connectedDevice && (
-        <Text style={styles.connectedText}>
-          🔗 Connected to: {connectedDevice.name || connectedDevice.address}
-        </Text>
+        <View style={{ marginTop: 20 }}>
+          <Text style={styles.connectedText}>
+            🔗 Connected to: {connectedDevice.name || connectedDevice.address}
+          </Text>
+          <Button title="Desconectar" color="red" onPress={disconnectFromDevice} />
+        </View>
+      )}
+
+      {rpm !== null && (
+        <View style={styles.rpmBox}>
+          <Text style={styles.rpmText}>RPM: {rpm.toFixed(0)}</Text>
+        </View>
       )}
 
       {messages.length > 0 && (
         <View style={{ marginTop: 20 }}>
           <Text style={{ color: 'yellow' }}>Mensagens recebidas:</Text>
-          {messages.map((msg, idx) => (
+          {messages.slice(-10).map((msg, idx) => (
             <Text key={idx} style={{ color: 'white' }}>{msg}</Text>
           ))}
         </View>
       )}
 
       <ScrollView style={styles.logBox}>
-        {logs.map((log, idx) => (
+        {logs.slice(-20).map((log, idx) => (
           <Text key={idx} style={styles.logText}>{log}</Text>
         ))}
       </ScrollView>
@@ -154,7 +199,19 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   deviceItem: { marginVertical: 10 },
-  connectedText: { marginTop: 20, fontSize: 16, color: 'green' },
+  connectedText: { marginTop: 10, fontSize: 16, color: 'green' },
+  rpmBox: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: '#111',
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  rpmText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'cyan',
+  },
   logBox: {
     marginTop: 20,
     padding: 10,
