@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import RNBluetoothClassic from 'react-native-bluetooth-classic';
+import RNFS from 'react-native-fs';
 
 const App = () => {
   const [devices, setDevices] = useState([]);
@@ -18,18 +19,18 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [logs, setLogs] = useState([]);
   const [rpm, setRpm] = useState(null);
+  const [rpmLogs, setRpmLogs] = useState([]);
 
   const intervalRef = useRef(null);
   const subscriptionRef = useRef(null);
 
-useEffect(() => {
-  requestPermissions();
+  useEffect(() => {
+    requestPermissions();
 
-  return () => {
-    disconnectFromDevice();
-  };
-}, []);
-
+    return () => {
+      disconnectFromDevice();
+    };
+  }, []);
 
   const addLog = (msg) => {
     console.log(msg);
@@ -76,8 +77,8 @@ useEffect(() => {
 
         subscriptionRef.current = connection.onDataReceived((event) => {
           const msg = String(event.data).trim();
-
           if (!msg) return;
+
           addLog(`Mensagem recebida: ${msg}`);
           setMessages((prev) => [...prev, msg]);
 
@@ -89,6 +90,10 @@ useEffect(() => {
               const rpmValue = ((A * 256) + B) / 4;
               setRpm(rpmValue);
               addLog(`RPM calculado: ${rpmValue}`);
+
+              // ⏱️ salva no histórico
+              const timestamp = new Date().toISOString();
+              setRpmLogs((prev) => [...prev, { time: timestamp, rpm: rpmValue }]);
             }
           }
         });
@@ -133,6 +138,21 @@ useEffect(() => {
     }
   };
 
+  const saveCsv = async () => {
+    try {
+      let csv = "Time,RPM\n";
+      rpmLogs.forEach(item => {
+        csv += `${item.time},${item.rpm}\n`;
+      });
+
+      const path = RNFS.DownloadDirectoryPath + "/rpm_logs.csv";
+      await RNFS.writeFile(path, csv, "utf8");
+      addLog(`CSV salvo em: ${path}`);
+    } catch (err) {
+      addLog(`Erro salvando CSV: ${err}`);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bluetooth OBD-II Debug</Text>
@@ -156,6 +176,9 @@ useEffect(() => {
             🔗 Connected to: {connectedDevice.name || connectedDevice.address}
           </Text>
           <Button title="Desconectar" color="red" onPress={disconnectFromDevice} />
+          <View style={{ marginTop: 10 }}>
+            <Button title="Salvar CSV" onPress={saveCsv} />
+          </View>
         </View>
       )}
 
