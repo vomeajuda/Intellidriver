@@ -12,6 +12,13 @@ import {
 import RNBluetoothClassic from 'react-native-bluetooth-classic';
 import RNFS from 'react-native-fs';
 
+const PIDS = [
+  { cmd: '010C', name: 'RPM' },
+  { cmd: '010D', name: 'Speed' },
+  { cmd: '0105', name: 'CoolantTemp' },
+  { cmd: '012F', name: 'FuelLevel' },
+];
+
 const App = () => {
   const [devices, setDevices] = useState([]);
   const [connectedDevice, setConnectedDevice] = useState(null);
@@ -19,14 +26,18 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [logs, setLogs] = useState([]);
   const [rpm, setRpm] = useState(null);
-  const [rpmLogs, setRpmLogs] = useState([]);
+  const [speed, setSpeed] = useState(null);
+  const [coolant, setCoolant] = useState(null);
+  const [fuel, setFuel] = useState(null);
+  const [dataLogs, setDataLogs] = useState([]); // 📊 histórico com colunas fixas
 
   const intervalRef = useRef(null);
   const subscriptionRef = useRef(null);
+  const pidIndexRef = useRef(0);
+  const lastCommandRef = useRef(null);
 
   useEffect(() => {
     requestPermissions();
-
     return () => {
       disconnectFromDevice();
     };
@@ -65,7 +76,6 @@ const App = () => {
   const connectToDevice = async (device) => {
     try {
       addLog(`Tentando conectar a ${device.name || device.address}...`);
-
       const connection = await RNBluetoothClassic.connectToDevice(device.address, {
         delimiter: '\r',
       });
@@ -79,33 +89,78 @@ const App = () => {
           const msg = String(event.data).trim();
           if (!msg) return;
 
+          // ignora eco
+          if (lastCommandRef.current && msg.includes(lastCommandRef.current)) {
+            return;
+          }
+
           addLog(`Mensagem recebida: ${msg}`);
           setMessages((prev) => [...prev, msg]);
 
-          if (msg.startsWith("41 0C")) {
-            const parts = msg.split(" ");
-            if (parts.length >= 4) {
+          if (msg.startsWith("41")) {
+            const parts = msg.split(" ").map(p => p.trim());
+            if (parts.length >= 3) {
+              const pid = parts[1];
               const A = parseInt(parts[2], 16);
-              const B = parseInt(parts[3], 16);
-              const rpmValue = ((A * 256) + B) / 4;
-              setRpm(rpmValue);
-              addLog(`RPM calculado: ${rpmValue}`);
+              const B = parts[3] ? parseInt(parts[3], 16) : 0;
 
-              // ⏱️ salva no histórico
+              let rpmValue = rpm;
+              let speedValue = speed;
+              let tempValue = coolant;
+              let fuelValue = fuel;
+
+              if (pid === "0C" && parts.length >= 4) {
+                rpmValue = ((A * 256) + B) / 4;
+                setRpm(rpmValue);
+                addLog(`RPM calculado: ${rpmValue}`);
+              }
+              if (pid === "0D") {
+                speedValue = A;
+                setSpeed(speedValue);
+                addLog(`Velocidade calculada: ${speedValue}`);
+              }
+              if (pid === "05") {
+                tempValue = A - 40;
+                setCoolant(tempValue);
+                addLog(`Temp. calculada: ${tempValue}`);
+              }
+              if (pid === "2F") {
+                fuelValue = (A * 100) / 255;
+                setFuel(fuelValue);
+                addLog(`Nível combustível: ${fuelValue}%`);
+              }
+
+              // salva snapshot no histórico
               const timestamp = new Date().toISOString();
-              setRpmLogs((prev) => [...prev, { time: timestamp, rpm: rpmValue }]);
+              setDataLogs(prev => [
+                ...prev,
+                {
+                  time: timestamp,
+                  rpm: rpmValue ?? "",
+                  speed: speedValue ?? "",
+                  coolant: tempValue ?? "",
+                  fuel: fuelValue ?? "",
+                }
+              ]);
             }
           }
         });
 
+        // envia comandos em loop (um a cada 700ms)
         intervalRef.current = setInterval(async () => {
           try {
-            await connection.write('010C\r');
-            addLog('Enviado comando: 010C');
+            const pid = PIDS[pidIndexRef.current];
+            const cmd = pid.cmd + "\r";
+
+            lastCommandRef.current = pid.cmd;
+            await connection.write(cmd);
+            addLog(`Enviado comando: ${pid.cmd}`);
+
+            pidIndexRef.current = (pidIndexRef.current + 1) % PIDS.length;
           } catch (err) {
             addLog(`Erro enviando comando: ${err}`);
           }
-        }, 1000);
+        }, 700);
 
       } else {
         addLog('Falha na conexão (retornou false)');
@@ -135,17 +190,21 @@ const App = () => {
       setIsConnected(false);
       setConnectedDevice(null);
       setRpm(null);
+      setSpeed(null);
+      setCoolant(null);
+      setFuel(null);
     }
   };
 
+  // 📂 salvar CSV
   const saveCsv = async () => {
     try {
-      let csv = "Time,RPM\n";
-      rpmLogs.forEach(item => {
-        csv += `${item.time},${item.rpm}\n`;
+      let csv = "Time,RPM,Speed,CoolantTemp,FuelLevel\n";
+      dataLogs.forEach(item => {
+        csv += `${item.time},${item.rpm},${item.speed},${item.coolant},${item.fuel}\n`;
       });
 
-      const path = RNFS.DownloadDirectoryPath + "/rpm_logs.csv";
+      const path = RNFS.DownloadDirectoryPath + "/obd_logs.csv";
       await RNFS.writeFile(path, csv, "utf8");
       addLog(`CSV salvo em: ${path}`);
     } catch (err) {
@@ -182,20 +241,12 @@ const App = () => {
         </View>
       )}
 
-      {rpm !== null && (
-        <View style={styles.rpmBox}>
-          <Text style={styles.rpmText}>RPM: {rpm.toFixed(0)}</Text>
-        </View>
-      )}
-
-      {messages.length > 0 && (
-        <View style={{ marginTop: 20 }}>
-          <Text style={{ color: 'yellow' }}>Mensagens recebidas:</Text>
-          {messages.slice(-10).map((msg, idx) => (
-            <Text key={idx} style={{ color: 'white' }}>{msg}</Text>
-          ))}
-        </View>
-      )}
+      <View style={styles.dataBox}>
+        {rpm !== null && <Text style={styles.dataText}>RPM: {rpm.toFixed(0)}</Text>}
+        {speed !== null && <Text style={styles.dataText}>Velocidade: {speed} km/h</Text>}
+        {coolant !== null && <Text style={styles.dataText}>Temp: {coolant} °C</Text>}
+        {fuel !== null && <Text style={styles.dataText}>Combustível: {fuel.toFixed(1)}%</Text>}
+      </View>
 
       <ScrollView style={styles.logBox}>
         {logs.slice(-20).map((log, idx) => (
@@ -226,17 +277,17 @@ const styles = StyleSheet.create({
   },
   deviceItem: { marginVertical: 10 },
   connectedText: { marginTop: 10, fontSize: 16, color: 'green' },
-  rpmBox: {
+  dataBox: {
     marginTop: 20,
     padding: 15,
     backgroundColor: '#111',
     borderRadius: 12,
-    alignItems: 'center',
   },
-  rpmText: {
-    fontSize: 28,
+  dataText: {
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'cyan',
+    marginBottom: 5,
   },
   logBox: {
     marginTop: 20,
