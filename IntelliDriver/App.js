@@ -25,15 +25,15 @@ const App = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [logs, setLogs] = useState([]);
 
-  const [currentData, setCurrentData] = useState({
-    rpm: null,
-    speed: null,
-    coolant: null,
-    fuel: null,
-  });
+  // 📊 Estados para exibir na tela
+  const [rpm, setRpm] = useState(null);
+  const [speed, setSpeed] = useState(null);
+  const [coolant, setCoolant] = useState(null);
+  const [fuel, setFuel] = useState(null);
   const [dataLogs, setDataLogs] = useState([]);
 
-
+  // 📦 Buffer em tempo real (sincronizado direto com respostas)
+  const latestDataRef = useRef({ rpm: null, speed: null, coolant: null, fuel: null });
 
   const intervalRef = useRef(null);
   const subscriptionRef = useRef(null);
@@ -98,26 +98,31 @@ const App = () => {
 
           if (raw.startsWith("41 0C") && parts.length >= 2) {
             const val = ((parts[0] * 256 + parts[1]) / 4).toFixed(0);
-            setCurrentData(prev => ({ ...prev, rpm: val }));
+            setRpm(val);
+            latestDataRef.current.rpm = val;   // ✅ buffer
             addLog(`RPM: ${val}`);
           }
           if (raw.startsWith("41 0D") && parts.length >= 1) {
             const val = parts[0];
-            setCurrentData(prev => ({ ...prev, speed: val }));
+            setSpeed(val);
+            latestDataRef.current.speed = val; // ✅ buffer
             addLog(`Speed: ${val}`);
           }
           if (raw.startsWith("41 05") && parts.length >= 1) {
             const val = parts[0] - 40;
-            setCurrentData(prev => ({ ...prev, coolant: val }));
+            setCoolant(val);
+            latestDataRef.current.coolant = val; // ✅ buffer
             addLog(`Coolant: ${val}`);
           }
           if (raw.startsWith("41 2F") && parts.length >= 1) {
             const val = ((100 / 255) * parts[0]).toFixed(1);
-            setCurrentData(prev => ({ ...prev, fuel: val }));
+            setFuel(val);
+            latestDataRef.current.fuel = val;  // ✅ buffer
             addLog(`Fuel: ${val}`);
           }
         });
 
+        // Polling loop
         intervalRef.current = setInterval(async () => {
           try {
             if (!connection) return;
@@ -129,12 +134,23 @@ const App = () => {
             currentIndexRef.current =
               (currentIndexRef.current + 1) % PID_COMMANDS.length;
 
+            // ✅ Quando termina o ciclo → salva snapshot
             if (currentIndexRef.current === 0) {
               const timestamp = new Date().toISOString();
-              setDataLogs((prev) => [
-                ...prev,
-                { time: timestamp, ...currentData },
-              ]);
+              const { rpm, speed, coolant, fuel } = latestDataRef.current;
+
+              if (rpm !== null || speed !== null || coolant !== null || fuel !== null) {
+                setDataLogs((prev) => [
+                  ...prev,
+                  { time: timestamp, rpm, speed, coolant, fuel },
+                ]);
+                addLog("📊 Snapshot salvo");
+              } else {
+                addLog("⏩ Snapshot ignorado (sem dados)");
+              }
+
+              // Limpar buffer para próximo ciclo
+              latestDataRef.current = { rpm: null, speed: null, coolant: null, fuel: null };
             }
           } catch (err) {
             addLog(`Erro enviando comando: ${err}`);
@@ -221,10 +237,10 @@ const App = () => {
       )}
 
       <View style={styles.dataBox}>
-        {currentData.rpm !== null && <Text style={styles.dataText}>RPM: {currentData.rpm}</Text>}
-        {currentData.speed !== null && <Text style={styles.dataText}>Velocidade: {currentData.speed} km/h</Text>}
-        {currentData.coolant !== null && <Text style={styles.dataText}>Temp: {currentData.coolant} °C</Text>}
-        {currentData.fuel !== null && <Text style={styles.dataText}>Combustível: {currentData.fuel}%</Text>}
+        {rpm !== null && <Text style={styles.dataText}>RPM: {rpm}</Text>}
+        {speed !== null && <Text style={styles.dataText}>Velocidade: {speed} km/h</Text>}
+        {coolant !== null && <Text style={styles.dataText}>Temp: {coolant} °C</Text>}
+        {fuel !== null && <Text style={styles.dataText}>Combustível: {fuel}%</Text>}
       </View>
 
       <ScrollView style={styles.logBox}>
