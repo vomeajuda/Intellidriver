@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import RNBluetoothClassic from "react-native-bluetooth-classic";
+import { jsonToCSV } from "react-native-csv";
 import RNFS from "react-native-fs";
 
 const PID_COMMANDS = [
@@ -140,11 +141,17 @@ const App = () => {
               const { rpm, speed, coolant, fuel } = latestDataRef.current;
 
               if (rpm !== null || speed !== null || coolant !== null || fuel !== null) {
-                setDataLogs((prev) => [
-                  ...prev,
-                  { time: timestamp, rpm, speed, coolant, fuel },
+                setDataLogs([
+                  ...dataLogs,
+                  { 
+                    "Time": timestamp, 
+                    "RPM": rpm, 
+                    "Speed": speed, 
+                    "CoolantTemp": coolant, 
+                    "FuelLevel": fuel 
+                  },
                 ]);
-                addLog("📊 Snapshot salvo");
+                addLog(`📊 Snapshot em ${timestamp}: RPM=${rpm}, Speed=${speed}, Coolant=${coolant}, Fuel=${fuel}`);
               } else {
                 addLog("⏩ Snapshot ignorado (sem dados)");
               }
@@ -194,10 +201,7 @@ const App = () => {
 
   const saveCsv = async () => {
     try {
-      let csv = "Time,RPM,Speed,CoolantTemp,FuelLevel\n";
-      dataLogs.forEach((item) => {
-        csv += `${item.time},${item.rpm ?? ""},${item.speed ?? ""},${item.coolant ?? ""},${item.fuel ?? ""}\n`;
-      });
+      const csv = jsonToCSV(dataLogs);
 
       const path = RNFS.DownloadDirectoryPath + "/obd_logs.csv";
       await RNFS.writeFile(path, csv, "utf8");
