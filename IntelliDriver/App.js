@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -8,39 +8,40 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
-} from 'react-native';
-import RNBluetoothClassic from 'react-native-bluetooth-classic';
-import RNFS from 'react-native-fs';
+} from "react-native";
+import RNBluetoothClassic from "react-native-bluetooth-classic";
+import RNFS from "react-native-fs";
 
-const PIDS = [
-  { cmd: '010C', name: 'RPM' },
-  { cmd: '010D', name: 'Speed' },
-  { cmd: '0105', name: 'CoolantTemp' },
-  { cmd: '012F', name: 'FuelLevel' },
+const PID_COMMANDS = [
+  { pid: "010C", label: "RPM" },
+  { pid: "010D", label: "Speed" },
+  { pid: "0105", label: "Coolant" },
+  { pid: "012F", label: "Fuel" },
 ];
 
 const App = () => {
   const [devices, setDevices] = useState([]);
   const [connectedDevice, setConnectedDevice] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [messages, setMessages] = useState([]);
   const [logs, setLogs] = useState([]);
-  const [rpm, setRpm] = useState(null);
-  const [speed, setSpeed] = useState(null);
-  const [coolant, setCoolant] = useState(null);
-  const [fuel, setFuel] = useState(null);
-  const [dataLogs, setDataLogs] = useState([]); // 📊 histórico com colunas fixas
+
+  const [currentData, setCurrentData] = useState({
+    rpm: null,
+    speed: null,
+    coolant: null,
+    fuel: null,
+  });
+  const [dataLogs, setDataLogs] = useState([]);
+
+
 
   const intervalRef = useRef(null);
   const subscriptionRef = useRef(null);
-  const pidIndexRef = useRef(0);
-  const lastCommandRef = useRef(null);
+  const currentIndexRef = useRef(0);
 
   useEffect(() => {
     requestPermissions();
-    return () => {
-      disconnectFromDevice();
-    };
+    return () => disconnectFromDevice();
   }, []);
 
   const addLog = (msg) => {
@@ -49,14 +50,14 @@ const App = () => {
   };
 
   const requestPermissions = async () => {
-    if (Platform.OS === 'android' && Platform.Version >= 31) {
+    if (Platform.OS === "android" && Platform.Version >= 31) {
       try {
         await PermissionsAndroid.requestMultiple([
           PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
           PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         ]);
-        addLog('Permissions granted');
+        addLog("Permissions granted");
       } catch (err) {
         addLog(`Permissão negada: ${err}`);
       }
@@ -76,8 +77,9 @@ const App = () => {
   const connectToDevice = async (device) => {
     try {
       addLog(`Tentando conectar a ${device.name || device.address}...`);
+
       const connection = await RNBluetoothClassic.connectToDevice(device.address, {
-        delimiter: '\r',
+        delimiter: "\r",
       });
 
       if (connection) {
@@ -86,84 +88,60 @@ const App = () => {
         addLog(`Conectado a: ${device.name || device.address}`);
 
         subscriptionRef.current = connection.onDataReceived((event) => {
-          const msg = String(event.data).trim();
-          if (!msg) return;
+          const raw = String(event.data).trim();
+          if (!raw) return;
+          addLog(`Recebido cru: ${raw}`);
 
-          // ignora eco
-          if (lastCommandRef.current && msg.includes(lastCommandRef.current)) {
-            return;
+          if (raw.includes("NO DATA")) return;
+
+          const parts = raw.split(" ").slice(2).map((h) => parseInt(h, 16));
+
+          if (raw.startsWith("41 0C") && parts.length >= 2) {
+            const val = ((parts[0] * 256 + parts[1]) / 4).toFixed(0);
+            setCurrentData(prev => ({ ...prev, rpm: val }));
+            addLog(`RPM: ${val}`);
           }
-
-          addLog(`Mensagem recebida: ${msg}`);
-          setMessages((prev) => [...prev, msg]);
-
-          if (msg.startsWith("41")) {
-            const parts = msg.split(" ").map(p => p.trim());
-            if (parts.length >= 3) {
-              const pid = parts[1];
-              const A = parseInt(parts[2], 16);
-              const B = parts[3] ? parseInt(parts[3], 16) : 0;
-
-              let rpmValue = rpm;
-              let speedValue = speed;
-              let tempValue = coolant;
-              let fuelValue = fuel;
-
-              if (pid === "0C" && parts.length >= 4) {
-                rpmValue = ((A * 256) + B) / 4;
-                setRpm(rpmValue);
-                addLog(`RPM calculado: ${rpmValue}`);
-              }
-              if (pid === "0D") {
-                speedValue = A;
-                setSpeed(speedValue);
-                addLog(`Velocidade calculada: ${speedValue}`);
-              }
-              if (pid === "05") {
-                tempValue = A - 40;
-                setCoolant(tempValue);
-                addLog(`Temp. calculada: ${tempValue}`);
-              }
-              if (pid === "2F") {
-                fuelValue = (A * 100) / 255;
-                setFuel(fuelValue);
-                addLog(`Nível combustível: ${fuelValue}%`);
-              }
-
-              // salva snapshot no histórico
-              const timestamp = new Date().toISOString();
-              setDataLogs(prev => [
-                ...prev,
-                {
-                  time: timestamp,
-                  rpm: rpmValue ?? "",
-                  speed: speedValue ?? "",
-                  coolant: tempValue ?? "",
-                  fuel: fuelValue ?? "",
-                }
-              ]);
-            }
+          if (raw.startsWith("41 0D") && parts.length >= 1) {
+            const val = parts[0];
+            setCurrentData(prev => ({ ...prev, speed: val }));
+            addLog(`Speed: ${val}`);
+          }
+          if (raw.startsWith("41 05") && parts.length >= 1) {
+            const val = parts[0] - 40;
+            setCurrentData(prev => ({ ...prev, coolant: val }));
+            addLog(`Coolant: ${val}`);
+          }
+          if (raw.startsWith("41 2F") && parts.length >= 1) {
+            const val = ((100 / 255) * parts[0]).toFixed(1);
+            setCurrentData(prev => ({ ...prev, fuel: val }));
+            addLog(`Fuel: ${val}`);
           }
         });
 
-        // envia comandos em loop (um a cada 700ms)
         intervalRef.current = setInterval(async () => {
           try {
-            const pid = PIDS[pidIndexRef.current];
-            const cmd = pid.cmd + "\r";
+            if (!connection) return;
 
-            lastCommandRef.current = pid.cmd;
-            await connection.write(cmd);
-            addLog(`Enviado comando: ${pid.cmd}`);
+            const cmd = PID_COMMANDS[currentIndexRef.current];
+            await connection.write(cmd.pid + "\r");
+            addLog(`Enviado: ${cmd.pid}`);
 
-            pidIndexRef.current = (pidIndexRef.current + 1) % PIDS.length;
+            currentIndexRef.current =
+              (currentIndexRef.current + 1) % PID_COMMANDS.length;
+
+            if (currentIndexRef.current === 0) {
+              const timestamp = new Date().toISOString();
+              setDataLogs((prev) => [
+                ...prev,
+                { time: timestamp, ...currentData },
+              ]);
+            }
           } catch (err) {
             addLog(`Erro enviando comando: ${err}`);
           }
-        }, 700);
-
+        }, 500);
       } else {
-        addLog('Falha na conexão (retornou false)');
+        addLog("Falha na conexão (retornou false)");
       }
     } catch (err) {
       addLog(`Erro de conexão: ${err}`);
@@ -182,7 +160,9 @@ const App = () => {
       }
       if (isConnected && connectedDevice) {
         await RNBluetoothClassic.disconnect();
-        addLog(`Desconectado de ${connectedDevice.name || connectedDevice.address}`);
+        addLog(
+          `Desconectado de ${connectedDevice.name || connectedDevice.address}`
+        );
       }
     } catch (err) {
       addLog(`Erro ao desconectar: ${err}`);
@@ -196,12 +176,11 @@ const App = () => {
     }
   };
 
-  // 📂 salvar CSV
   const saveCsv = async () => {
     try {
       let csv = "Time,RPM,Speed,CoolantTemp,FuelLevel\n";
-      dataLogs.forEach(item => {
-        csv += `${item.time},${item.rpm},${item.speed},${item.coolant},${item.fuel}\n`;
+      dataLogs.forEach((item) => {
+        csv += `${item.time},${item.rpm ?? ""},${item.speed ?? ""},${item.coolant ?? ""},${item.fuel ?? ""}\n`;
       });
 
       const path = RNFS.DownloadDirectoryPath + "/obd_logs.csv";
@@ -214,7 +193,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bluetooth OBD-II Debug</Text>
+      <Text style={styles.title}>OBD-II Debug</Text>
       <Button title="List Paired Devices" onPress={listPairedDevices} />
 
       <FlatList
@@ -226,13 +205,13 @@ const App = () => {
             <Button title="Conectar" onPress={() => connectToDevice(item)} />
           </View>
         )}
-        ListEmptyComponent={<Text style={{ color: 'gray' }}>Nada aq</Text>}
+        ListEmptyComponent={<Text style={{ color: "gray" }}>Nada aq</Text>}
       />
 
-      {isConnected && connectedDevice && (
+      {isConnected && (
         <View style={{ marginTop: 20 }}>
           <Text style={styles.connectedText}>
-            🔗 Connected to: {connectedDevice.name || connectedDevice.address}
+            🔗 Conectado a {connectedDevice?.name || connectedDevice?.address}
           </Text>
           <Button title="Desconectar" color="red" onPress={disconnectFromDevice} />
           <View style={{ marginTop: 10 }}>
@@ -242,15 +221,17 @@ const App = () => {
       )}
 
       <View style={styles.dataBox}>
-        {rpm !== null && <Text style={styles.dataText}>RPM: {rpm.toFixed(0)}</Text>}
-        {speed !== null && <Text style={styles.dataText}>Velocidade: {speed} km/h</Text>}
-        {coolant !== null && <Text style={styles.dataText}>Temp: {coolant} °C</Text>}
-        {fuel !== null && <Text style={styles.dataText}>Combustível: {fuel.toFixed(1)}%</Text>}
+        {currentData.rpm !== null && <Text style={styles.dataText}>RPM: {currentData.rpm}</Text>}
+        {currentData.speed !== null && <Text style={styles.dataText}>Velocidade: {currentData.speed} km/h</Text>}
+        {currentData.coolant !== null && <Text style={styles.dataText}>Temp: {currentData.coolant} °C</Text>}
+        {currentData.fuel !== null && <Text style={styles.dataText}>Combustível: {currentData.fuel}%</Text>}
       </View>
 
       <ScrollView style={styles.logBox}>
         {logs.slice(-20).map((log, idx) => (
-          <Text key={idx} style={styles.logText}>{log}</Text>
+          <Text key={idx} style={styles.logText}>
+            {log}
+          </Text>
         ))}
       </ScrollView>
     </View>
@@ -258,49 +239,26 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    paddingTop: 40,
-    backgroundColor: '#000',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'white',
-  },
-  item: {
-    fontSize: 16,
-    marginVertical: 5,
-    color: 'white',
-  },
+  container: { flex: 1, padding: 20, backgroundColor: "#000" },
+  title: { fontSize: 20, fontWeight: "bold", marginBottom: 20, color: "white" },
+  item: { fontSize: 16, marginVertical: 5, color: "white" },
   deviceItem: { marginVertical: 10 },
-  connectedText: { marginTop: 10, fontSize: 16, color: 'green' },
+  connectedText: { marginTop: 10, fontSize: 16, color: "green" },
   dataBox: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: '#111',
+    backgroundColor: "#111",
     borderRadius: 12,
   },
-  dataText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'cyan',
-    marginBottom: 5,
-  },
+  dataText: { fontSize: 18, fontWeight: "bold", color: "cyan", marginVertical: 2 },
   logBox: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: '#111',
+    backgroundColor: "#111",
     borderRadius: 10,
     maxHeight: 200,
   },
-  logText: {
-    color: '#0f0',
-    fontSize: 14,
-    marginVertical: 2,
-  },
+  logText: { color: "#0f0", fontSize: 14, marginVertical: 2 },
 });
 
 export default App;
