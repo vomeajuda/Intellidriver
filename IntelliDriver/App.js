@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, use } from "react";
 import {
   View,
   Text,
@@ -31,8 +31,9 @@ const App = () => {
   const [speed, setSpeed] = useState(null);
   const [coolant, setCoolant] = useState(null);
   const [fuel, setFuel] = useState(null);
-  const [dataLogs, setDataLogs] = useState([]);
+  // const [dataLogs, setDataLogs] = useState([]);
 
+  let dataLogs = [];
   // 📦 Buffer em tempo real (sincronizado direto com respostas)
   const latestDataRef = useRef({ rpm: null, speed: null, coolant: null, fuel: null });
 
@@ -44,6 +45,9 @@ const App = () => {
     requestPermissions();
     return () => disconnectFromDevice();
   }, []);
+
+  useEffect(() => {
+  }, [latestDataRef.current]);
 
   const addLog = (msg) => {
     console.log(msg);
@@ -141,7 +145,7 @@ const App = () => {
               const { rpm, speed, coolant, fuel } = latestDataRef.current;
 
               if (rpm !== null || speed !== null || coolant !== null || fuel !== null) {
-                setDataLogs([
+                dataLogs = [
                   ...dataLogs,
                   { 
                     "Time": timestamp, 
@@ -150,7 +154,7 @@ const App = () => {
                     "CoolantTemp": coolant, 
                     "FuelLevel": fuel 
                   },
-                ]);
+                ];
                 addLog(`📊 Snapshot em ${timestamp}: RPM=${rpm}, Speed=${speed}, Coolant=${coolant}, Fuel=${fuel}`);
               } else {
                 addLog("⏩ Snapshot ignorado (sem dados)");
