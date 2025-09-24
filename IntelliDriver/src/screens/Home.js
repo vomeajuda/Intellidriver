@@ -1,15 +1,4 @@
-// ========================================
-// TELA PRINCIPAL - DASHBOARD HOME REFORMULADA
-// ========================================
-
-/**
- * IMPORTAÇÕES E DEPENDÊNCIAS
- * 
- * Tela principal (Home) do aplicativo IntelliDriver reformulada.
- * Dashboard central personalizado com saudação, estatísticas e funcionalidades principais.
- */
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   StyleSheet,
   Text,
@@ -21,7 +10,6 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import NavBar from '../components/Navbar';
@@ -36,9 +24,6 @@ import {
   recentAchievements,
   topUsers
 } from '../data/homeData';
-
-// ========================================
-// COMPONENTE PRINCIPAL - HOME
 // ========================================
 
 export default function Home({ navigation }) {
@@ -48,6 +33,9 @@ export default function Home({ navigation }) {
   // ========================================
   
   const [modalVisible, setModalVisible] = useState(false);
+  const [tripInProgress, setTripInProgress] = useState(false);
+  const [tripStartTime, setTripStartTime] = useState(null);
+  const [tripDurationDisplay, setTripDurationDisplay] = useState('00:00');
   const [formData, setFormData] = useState({
     origin: '',
     destination: '',
@@ -56,6 +44,25 @@ export default function Home({ navigation }) {
     distance: '',
     fuelType: 'Gasolina'
   });
+
+  // Atualizar duração do percurso a cada minuto
+  useEffect(() => {
+    let interval;
+    if (tripInProgress && tripStartTime) {
+      interval = setInterval(() => {
+        setTripDurationDisplay(formatTripDuration());
+      }, 60000); // Atualiza a cada minuto
+      
+      // Atualização inicial
+      setTripDurationDisplay(formatTripDuration());
+    }
+    
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [tripInProgress, tripStartTime]);
   
   // ========================================
   // FUNÇÕES HELPER
@@ -76,6 +83,57 @@ export default function Home({ navigation }) {
 
   const getUserName = () => {
     return 'João'; // Mock - em produção viria do contexto/estado global
+  };
+
+  // ========================================
+  // FUNÇÕES DO PERCURSO
+  // ========================================
+
+  const startTrip = () => {
+    const startTime = new Date();
+    setTripInProgress(true);
+    setTripStartTime(startTime);
+    setTripDurationDisplay('00:00');
+    // Aqui iniciaria a conexão Bluetooth
+    Alert.alert(
+      'Percurso Iniciado',
+      'Conexão Bluetooth ativada. Boa viagem!',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const endTrip = () => {
+    Alert.alert(
+      'Encerrar Percurso',
+      'Deseja realmente encerrar o percurso em andamento?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { 
+          text: 'Encerrar',
+          style: 'destructive',
+          onPress: () => {
+            setTripInProgress(false);
+            setTripStartTime(null);
+            setTripDurationDisplay('00:00');
+            // Aqui salvaria os dados e desligaria o Bluetooth
+            Alert.alert(
+              'Percurso Encerrado',
+              'Dados salvos com sucesso. Conexão Bluetooth desativada.',
+              [{ text: 'OK' }]
+            );
+          }
+        }
+      ]
+    );
+  };
+
+  const formatTripDuration = () => {
+    if (!tripStartTime) return '00:00';
+    const now = new Date();
+    const diff = now - tripStartTime;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   };
 
   // ========================================
@@ -456,7 +514,57 @@ export default function Home({ navigation }) {
           <Text style={styles.greetingSubtitle}>{getGreetingMessage()}</Text>
         </View>
 
+        {/* ========================================
+            BOTÃO DE INICIAR/ENCERRAR PERCURSO
+            ======================================== */}
         
+        <View style={styles.tripControlSection}>
+          {!tripInProgress ? (
+            <TouchableOpacity 
+              style={styles.startTripButton}
+              onPress={startTrip}
+            >
+              <LinearGradient
+                colors={['#4CAF50', '#45A049']}
+                style={styles.startTripGradient}
+              >
+                <Ionicons name="play-circle" size={24} color={colors.surface} />
+                <Text style={styles.startTripText}>Iniciar Percurso</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.tripInProgressContainer}>
+              <View style={styles.tripStatusCard}>
+                <View style={styles.tripStatusHeader}>
+                  <View style={styles.tripStatusIndicator}>
+                    <View style={styles.pulsingDot} />
+                  </View>
+                  <Text style={styles.tripStatusTitle}>Percurso em Andamento</Text>
+                  <Ionicons name="bluetooth" size={20} color={colors.primary} />
+                </View>
+                
+                <Text style={styles.tripDuration}>Duração: {tripDurationDisplay}</Text>
+                
+                <TouchableOpacity 
+                  style={styles.endTripButton}
+                  onPress={endTrip}
+                >
+                  <Ionicons name="stop-circle" size={20} color={colors.error} />
+                  <Text style={styles.endTripText}>Encerrar Percurso</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+
+        {/* ========================================
+            WIDGET DE CONDIÇÕES ATUAIS
+            ======================================== */}
+        
+        <View style={styles.conditionsSection}>
+          {renderConditionsWidget()}
+        </View>
+
         {/* ========================================
             IMPACTO AMBIENTAL
             ======================================== */}
@@ -482,14 +590,6 @@ export default function Home({ navigation }) {
             </LinearGradient>
           </View>
           
-        </View>
-
-        {/* ========================================
-            WIDGET DE CONDIÇÕES ATUAIS
-            ======================================== */}
-        
-        <View style={styles.conditionsSection}>
-          {renderConditionsWidget()}
         </View>
 
         {/* ========================================
@@ -609,6 +709,103 @@ const styles = StyleSheet.create({
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
+  },
+  
+  // SEÇÃO DE CONTROLE DO PERCURSO
+  tripControlSection: {
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+  },
+  
+  startTripButton: {
+    borderRadius: borderRadius.lg,
+    overflow: 'hidden',
+    ...shadows.medium,
+  },
+  
+  startTripGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.xl,
+    gap: spacing.md,
+  },
+  
+  startTripText: {
+    fontSize: fonts.sizes.lg,
+    fontFamily: getFontFamily('Poppins', 'SemiBold'),
+    color: colors.surface,
+  },
+  
+  tripInProgressContainer: {
+    marginHorizontal: spacing.xs,
+  },
+  
+  tripStatusCard: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    borderWidth: 2,
+    borderColor: colors.primary + '30',
+    ...shadows.small,
+  },
+  
+  tripStatusHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+    gap: spacing.sm,
+  },
+  
+  tripStatusIndicator: {
+    position: 'relative',
+  },
+  
+  pulsingDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#4CAF50',
+    shadowColor: '#4CAF50',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  
+  tripStatusTitle: {
+    flex: 1,
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'SemiBold'),
+    color: colors.text.primary,
+  },
+  
+  tripDuration: {
+    fontSize: fonts.sizes.xl,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.primary,
+    textAlign: 'center',
+    marginBottom: spacing.lg,
+  },
+  
+  endTripButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.error,
+    backgroundColor: colors.error + '10',
+    gap: spacing.sm,
+  },
+  
+  endTripText: {
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.error,
   },
   
   // BOTÃO FLUTUANTE

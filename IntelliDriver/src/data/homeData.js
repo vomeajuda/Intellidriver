@@ -1,15 +1,4 @@
-// ========================================
-// DADOS MOCK - HOME DASHBOARD
-// ========================================
-
-/**
- * Arquivo centralizado com todos os dados mock utilizados na tela Home
- * Facilita manutenção e reutilização de dados em outros componentes
- */
-
-// ========================================
-// DADOS MOCK - IMPACTO AMBIENTAL
-// ========================================
+// Dados mock para Home Dashboard
 
 export const performanceMetrics = {
   co2Impact: {
@@ -20,10 +9,6 @@ export const performanceMetrics = {
     description: 'CO₂ Economizado'
   }
 };
-
-// ========================================
-// DADOS MOCK - DESAFIOS MENSAIS
-// ========================================
 
 export const monthlyChallenges = [
   {

@@ -1,56 +1,14 @@
-// ========================================
-// DADOS MOCK - CARS ANALYTICS
-// ========================================
+// Dados mock para CarsAnalytics - simulação de scanner OBD-II
 
-/**
- * Arquivo centralizado com todos os dados mock utilizados na tela CarsAnalytics
- * Simula dados que seriam obtidos de um scanner OBD-II conectado ao veículo
- * Facilita manutenção e reutilização de dados em outros componentes
- */
-
-// ========================================
-// DADOS MOCK - SIMULAÇÃO DE DADOS REAIS
-// ========================================
-
-/**
- * OBJETO DE DADOS SIMULADOS
- * 
- * Este objeto contém dados fictícios que simulam informações reais
- * que seriam obtidas de um scanner OBD-II conectado ao veículo.
- * Na implementação real, estes dados viriam de uma API ou diretamente
- * do dispositivo OBD-II via Bluetooth.
- */
 export const mockData = {
-  
-  // ========================================
-  // SEÇÃO: SAÚDE GERAL DO VEÍCULO
-  // ========================================
-  
-  /**
-   * OBJETO vehicleHealth
-   * 
-   * Contém informações gerais sobre o estado de saúde do veículo,
-   * incluindo pontuação geral, status, datas de manutenção e quilometragem.
-   */
   vehicleHealth: {
-    overallStatus: 'WARNING',     // Status geral: 'OK', 'WARNING', 'CRITICAL'
-    healthScore: 72,              // Pontuação de 0-100 da saúde do veículo
-    lastMaintenance: '15/08/2024', // Data da última manutenção realizada
-    nextMaintenance: '15/10/2024', // Data agendada para próxima manutenção
-    mileage: 45820                // Quilometragem atual do veículo
+    overallStatus: 'WARNING',
+    healthScore: 72,
+    lastMaintenance: '15/08/2024',
+    nextMaintenance: '15/10/2024',
+    mileage: 45820
   },
   
-  // ========================================
-  // SEÇÃO: ALERTAS DE MANUTENÇÃO URGENTE
-  // ========================================
-  
-  /**
-   * ARRAY maintenanceAlerts
-   * 
-   * Lista de alertas de manutenção que requerem atenção.
-   * Cada alerta contém informações sobre prioridade, tipo, descrição,
-   * custos estimados e urgência do reparo.
-   */
   maintenanceAlerts: [
     {
       id: 1,                                    // Identificador único do alerta

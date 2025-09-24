@@ -1,88 +1,37 @@
-// ========================================
-// IMPORTAÇÕES E DEPENDÊNCIAS
-// ========================================
-
-// Importação do React e hooks fundamentais para gerenciamento de estado e efeitos
 import React, { useState, useEffect } from 'react';
-
-// Importação de componentes nativos do React Native para construção da interface
 import { 
-  StyleSheet,      // Para criação de estilos CSS-like
-  Text,           // Componente para exibição de texto
-  View,           // Container básico (equivalente ao div no HTML)
-  ScrollView,     // Container com scroll vertical/horizontal
-  TouchableOpacity // Componente tocável que responde ao toque do usuário
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Alert
 } from 'react-native';
-
-// Importação do componente Header para cabeçalho com logo centralizada
 import Header from '../components/Header';
-
-// Importação do LinearGradient do Expo para criar gradientes de cores
 import { LinearGradient } from 'expo-linear-gradient';
-
-// Importação de ícones vetoriais da biblioteca Ionicons
 import { Ionicons } from '@expo/vector-icons';
-
-// Importação do componente de navegação personalizado
 import NavBar from '../components/Navbar';
-
-// Importação de constantes de tema (cores, fontes, espaçamentos, etc.)
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
-
-// Importação do hook personalizado para carregamento de fontes
 import { getFontFamily } from '../hooks/useFontLoader';
-
-// Importação do hook personalizado para gerenciamento de Bluetooth
 import { useBluetooth } from '../hooks/useBluetooth';
-
-// Importação dos dados mock de diagnóstico do veículo
 import { mockData } from '../data/carsAnalyticsData';
 
-// ========================================
-// COMPONENTE PRINCIPAL - CARSANALYTICS
-// ========================================
-
-/**
- * FUNÇÃO PRINCIPAL DO COMPONENTE
- * 
- * Este é o componente funcional principal que representa a tela de análise de carros.
- * Recebe props de navegação do React Navigation para permitir navegação entre telas.
- * 
- * @param {Object} navigation - Objeto de navegação do React Navigation
- * @returns {JSX.Element} - Retorna o JSX que será renderizado na tela
- */
 export default function CarsAnalytics({ navigation }) {
   
-  // ========================================
-  // HOOKS DE ESTADO (useState)
-  // ========================================
-  
-  /**
-   * HOOK useState - DADOS DE ANÁLISE
-   * 
-   * Gerencia o estado dos dados de análise do veículo.
-   * - Estado inicial: null (vazio)
-   * - Será preenchido com dados mock ou dados reais da API
-   * - Contém informações sobre saúde do veículo, alertas, erros, etc.
-   */
   const [analyticsData, setAnalyticsData] = useState(null);
-  
-  /**
-   * HOOK useState - ESTADO DE CARREGAMENTO
-   * 
-   * Controla se a tela está em estado de carregamento.
-   * - Estado inicial: true (carregando)
-   * - Muda para false após os dados serem carregados
-   * - Usado para mostrar indicador de carregamento
-   */
   const [loading, setLoading] = useState(true);
+  const [maintenanceModalVisible, setMaintenanceModalVisible] = useState(false);
+  const [maintenanceFormData, setMaintenanceFormData] = useState({
+    type: '',
+    description: '',
+    maintenanceDate: '',
+    nextMaintenanceDate: '',
+    priority: 'medium',
+    notes: ''
+  });
   
-  /**
-   * HOOK PERSONALIZADO - GERENCIAMENTO BLUETOOTH
-   * 
-   * Usa o hook customizado para gerenciar toda a lógica de conexão Bluetooth.
-   * Retorna estados e funções necessários para controlar dispositivos OBD-II.
-   */
   const {
     bluetoothConnected,
     connecting,
@@ -91,211 +40,129 @@ export default function CarsAnalytics({ navigation }) {
     isDeviceReady
   } = useBluetooth();
 
-  // ========================================
-  // HOOK useEffect - CARREGAMENTO INICIAL
-  // ========================================
-  
-  /**
-   * HOOK useEffect - SIMULAÇÃO DE CARREGAMENTO DE DADOS
-   * 
-   * Este hook é executado apenas uma vez quando o componente é montado (array de dependências vazio []).
-   * Simula o carregamento de dados que, em uma aplicação real, viria de:
-   * - API REST
-   * - Conexão direta com OBD-II
-   * - Banco de dados local
-   * - Cache de dados anteriores
-   * 
-   * Processo:
-   * 1. Aguarda 1 segundo (simulando requisição de rede)
-   * 2. Define os dados mock no estado analyticsData
-   * 3. Remove o estado de carregamento
-   */
+  // Simula carregamento de dados de 1 segundo
   useEffect(() => {
-    // Simular carregamento de dados com setTimeout
     setTimeout(() => {
-      setAnalyticsData(mockData);  // Define os dados no estado
-      setLoading(false);           // Remove o estado de carregamento
-    }, 1000); // Aguarda 1000ms (1 segundo)
-  }, []); // Array vazio = executa apenas uma vez ao montar o componente
+      setAnalyticsData(mockData);
+      setLoading(false);
+    }, 1000);
+  }, []);
 
-  // ========================================
-  // COMPONENTE FUNCIONAL - CARTÃO DE SAÚDE DO VEÍCULO
-  // ========================================
-  
-  /**
-   * COMPONENTE HealthScoreCard
-   * 
-   * Componente funcional que renderiza um cartão visual mostrando
-   * a pontuação geral de saúde do veículo com gradiente colorido.
-   * 
-   * @param {number} score - Pontuação de 0-100 da saúde do veículo
-   * @param {string} status - Status geral: 'OK', 'WARNING', 'CRITICAL'
-   * @returns {JSX.Element} - Cartão com gradiente e informações de saúde
-   * 
-   * Funcionalidades:
-   * - Gradiente de cor baseado na pontuação
-   * - Ícone de carro
-   * - Pontuação grande e destacada
-   * - Texto de status traduzido
-   */
+  // Funções do modal de manutenção
+  const openMaintenanceModal = () => {
+    setMaintenanceModalVisible(true);
+  };
+
+  const closeMaintenanceModal = () => {
+    setMaintenanceModalVisible(false);
+    setMaintenanceFormData({
+      type: '',
+      description: '',
+      maintenanceDate: '',
+      nextMaintenanceDate: '',
+      priority: 'medium',
+      notes: ''
+    });
+  };
+
+  const handleMaintenanceInputChange = (field, value) => {
+    setMaintenanceFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const validateAndSubmitMaintenance = () => {
+    if (!maintenanceFormData.type || !maintenanceFormData.maintenanceDate || !maintenanceFormData.nextMaintenanceDate) {
+      Alert.alert(
+        'Campos Obrigatórios',
+        'Por favor, preencha todos os campos obrigatórios: tipo de manutenção, data da manutenção e próxima manutenção.'
+      );
+      return;
+    }
+
+    Alert.alert(
+      'Manutenção Adicionada!',
+      `Manutenção "${maintenanceFormData.type}" realizada em ${maintenanceFormData.maintenanceDate} foi cadastrada com sucesso.`,
+      [{ text: 'OK', onPress: closeMaintenanceModal }]
+    );
+  };
+
+  // Componente do cartão de saúde do veículo
   const HealthScoreCard = ({ score, status }) => {
-    
-    /**
-     * FUNÇÃO getStatusColor
-     * 
-     * Função interna que determina a cor baseada na pontuação de saúde.
-     * Utiliza sistema de semáforo: verde (bom), amarelo (atenção), vermelho (crítico)
-     * 
-     * @returns {string} - Código hexadecimal da cor
-     */
     const getStatusColor = () => {
-      if (score >= 80) return colors.success;    // Verde: 80-100 pontos
-      if (score >= 60) return colors.warning;    // Amarelo: 60-79 pontos
-      return colors.error;                       // Vermelho: 0-59 pontos
+      if (score >= 80) return colors.success;
+      if (score >= 60) return colors.warning;
+      return colors.error;
     };
 
-    // ========================================
-    // RENDERIZAÇÃO DO COMPONENTE
-    // ========================================
     return (
       <LinearGradient
-        colors={[getStatusColor(), getStatusColor() + '80']} // Gradiente: cor sólida + cor com 50% transparência
-        style={styles.healthCard} // Aplica estilos do cartão
+        colors={[getStatusColor(), getStatusColor() + '80']}
+        style={styles.healthCard}
       >
-        {/* ========================================
-            CABEÇALHO: ÍCONE + TÍTULO
-            ======================================== */}
         <View style={styles.healthHeader}>
           <Ionicons 
-            name="car-sport"              // Ícone de carro esportivo
-            size={32}                     // Tamanho do ícone
-            color={colors.surface}        // Cor branca/clara
+            name="car-sport"
+            size={32}
+            color={colors.surface}
           />
           <Text style={styles.healthTitle}>Saúde do Veículo</Text>
         </View>
         
-        {/* ========================================
-            PONTUAÇÃO PRINCIPAL
-            ======================================== */}
         <View style={styles.healthScore}>
-          <Text style={styles.scoreValue}>{score}</Text>      {/* Número grande */}
-          <Text style={styles.scoreLabel}>/100</Text>          {/* Label "/100" */}
+          <Text style={styles.scoreValue}>{score}</Text>
+          <Text style={styles.scoreLabel}>/100</Text>
         </View>
         
-        {/* ========================================
-            TEXTO DE STATUS TRADUZIDO
-            ======================================== */}
         <Text style={styles.statusText}>
-          {status === 'OK' ? 'Excelente' :                    // Tradução de 'OK'
+          {status === 'OK' ? 'Excelente' :
            status === 'WARNING' ? 'Atenção Necessária' : 'Crítico'}
         </Text>
       </LinearGradient>
     );
   };
 
-  // ========================================
-  // COMPONENTE FUNCIONAL - ALERTA DE MANUTENÇÃO
-  // ========================================
-  
-  /**
-   * COMPONENTE MaintenanceAlert
-   * 
-   * Componente que renderiza um cartão individual para cada alerta de manutenção.
-   * Exibe informações visuais como prioridade, ícone, descrição e custos.
-   * 
-   * @param {Object} alert - Objeto contendo dados do alerta de manutenção
-   * @param {number} alert.id - Identificador único
-   * @param {string} alert.type - Tipo de manutenção (oil_change, brake_pads, etc.)
-   * @param {string} alert.priority - Prioridade: 'high', 'medium', 'low'
-   * @param {string} alert.title - Título do alerta
-   * @param {string} alert.description - Descrição detalhada
-   * @param {number} alert.estimatedCost - Custo estimado em reais
-   * @param {string} alert.urgency - Nível de urgência
-   * @returns {JSX.Element} - Cartão de alerta renderizado
-   */
+  // Componente do alerta de manutenção
   const MaintenanceAlert = ({ alert }) => {
-    
-    /**
-     * FUNÇÃO getPriorityColor
-     * 
-     * Determina a cor do alerta baseada na prioridade.
-     * Sistema de cores:
-     * - Vermelho: alta prioridade (urgent)
-     * - Amarelo: média prioridade (moderate) 
-     * - Azul: baixa prioridade (low)
-     * 
-     * @returns {string} - Código de cor hexadecimal
-     */
     const getPriorityColor = () => {
       switch (alert.priority) {
-        case 'high': return colors.error;        // Vermelho para alta prioridade
-        case 'medium': return colors.warning;    // Amarelo para média prioridade
-        case 'low': return colors.accent;        // Azul para baixa prioridade
-        default: return colors.text.secondary;   // Cinza como fallback
+        case 'high': return colors.error;
+        case 'medium': return colors.warning;
+        case 'low': return colors.accent;
+        default: return colors.text.secondary;
       }
     };
 
-    /**
-     * FUNÇÃO getIcon
-     * 
-     * Seleciona o ícone apropriado baseado no tipo de manutenção.
-     * Cada tipo de manutenção tem um ícone específico para melhor identificação visual.
-     * 
-     * @returns {string} - Nome do ícone Ionicons
-     */
     const getIcon = () => {
       switch (alert.type) {
-        case 'oil_change': return 'water';        // Gota d'água para óleo
-        case 'brake_pads': return 'hand-left';    // Mão para freios
-        case 'air_filter': return 'leaf';         // Folha para filtro de ar
-        case 'battery': return 'battery-charging'; // Bateria para sistema elétrico
-        default: return 'construct';              // Ferramenta como padrão
+        case 'oil_change': return 'water';
+        case 'brake_pads': return 'hand-left';
+        case 'air_filter': return 'leaf';
+        case 'battery': return 'battery-charging';
+        default: return 'construct';
       }
     };
 
-    // ========================================
-    // RENDERIZAÇÃO DO COMPONENTE
-    // ========================================
     return (
       <View style={styles.alertCard}>
-        
-        {/* ========================================
-            BARRA LATERAL DE PRIORIDADE
-            ======================================== */}
-        {/* Barra colorida na lateral esquerda indicando prioridade */}
         <View style={[styles.alertPriority, { backgroundColor: getPriorityColor() }]} />
         
-        {/* ========================================
-            ÍCONE DO TIPO DE MANUTENÇÃO
-            ======================================== */}
         <View style={[styles.alertIcon, { backgroundColor: getPriorityColor() + '20' }]}>
           <Ionicons 
-            name={getIcon()}              // Ícone baseado no tipo
-            size={24}                     // Tamanho do ícone
-            color={getPriorityColor()}    // Cor baseada na prioridade
+            name={getIcon()}
+            size={24}
+            color={getPriorityColor()}
           />
         </View>
         
-        {/* ========================================
-            CONTEÚDO PRINCIPAL DO ALERTA
-            ======================================== */}
         <View style={styles.alertContent}>
-          
-          {/* Título do alerta */}
           <Text style={styles.alertTitle}>{alert.title}</Text>
-          
-          {/* Descrição detalhada */}
           <Text style={styles.alertDescription}>{alert.description}</Text>
           
-          {/* ========================================
-              RODAPÉ: CUSTO + BADGE DE URGÊNCIA
-              ======================================== */}
           <View style={styles.alertFooter}>
-            
-            {/* Custo estimado formatado */}
             <Text style={styles.alertCost}>Custo: R$ {alert.estimatedCost}</Text>
             
-            {/* Badge "URGENTE" - só aparece se urgency === 'urgent' */}
             {alert.urgency === 'urgent' && (
               <View style={styles.urgentBadge}>
                 <Text style={styles.urgentText}>URGENTE</Text>
@@ -307,176 +174,68 @@ export default function CarsAnalytics({ navigation }) {
     );
   };
 
-  // ========================================
-  // COMPONENTE FUNCIONAL - CARTÃO DE ERRO OBD-II
-  // ========================================
-  
-  /**
-   * COMPONENTE ErrorCard
-   * 
-   * Componente que renderiza informações detalhadas sobre erros detectados
-   * pelo sistema OBD-II do veículo. Cada erro possui código DTC, descrição,
-   * severidade, impacto e ações recomendadas.
-   * 
-   * @param {Object} error - Objeto contendo dados do erro OBD-II
-   * @param {string} error.code - Código DTC (ex: P0171, P0300)
-   * @param {string} error.description - Descrição do erro
-   * @param {string} error.severity - Severidade: 'high', 'medium', 'low'
-   * @param {string} error.impact - Impacto no funcionamento do veículo
-   * @param {string} error.recommendedAction - Ação recomendada para correção
-   * @param {number} error.estimatedRepairCost - Custo estimado do reparo
-   * @param {string} error.detected - Data de detecção do erro
-   * @returns {JSX.Element} - Cartão de erro renderizado
-   */
+  // Componente do cartão de erro OBD-II
   const ErrorCard = ({ error }) => {
-    
-    /**
-     * FUNÇÃO getSeverityColor
-     * 
-     * Determina a cor baseada na severidade do erro.
-     * Sistema de cores para indicar urgência:
-     * - Vermelho: severidade alta (risco de dano ao motor)
-     * - Amarelo: severidade média (perda de performance)
-     * - Azul: severidade baixa (monitoramento)
-     * 
-     * @returns {string} - Código de cor hexadecimal
-     */
     const getSeverityColor = () => {
       switch (error.severity) {
-        case 'high': return colors.error;        // Vermelho - atenção imediata
-        case 'medium': return colors.warning;    // Amarelo - atenção moderada
-        case 'low': return colors.accent;        // Azul - monitoramento
-        default: return colors.text.secondary;   // Cinza - fallback
+        case 'high': return colors.error;
+        case 'medium': return colors.warning;
+        case 'low': return colors.accent;
+        default: return colors.text.secondary;
       }
     };
 
-    // ========================================
-    // RENDERIZAÇÃO DO COMPONENTE
-    // ========================================
     return (
       <View style={styles.errorCard}>
-        
-        {/* ========================================
-            CABEÇALHO: CÓDIGO DTC + INFORMAÇÕES
-            ======================================== */}
         <View style={styles.errorHeader}>
-          
-          {/* Badge com código DTC colorido */}
           <View style={[styles.errorCodeBadge, { backgroundColor: getSeverityColor() }]}>
             <Text style={styles.errorCodeText}>{error.code}</Text>
           </View>
           
-          {/* Informações principais do erro */}
           <View style={styles.errorInfo}>
-            {/* Descrição técnica do erro */}
             <Text style={styles.errorTitle}>{error.description}</Text>
-            
-            {/* Impacto no funcionamento do veículo */}
             <Text style={styles.errorImpact}>{error.impact}</Text>
           </View>
         </View>
         
-        {/* ========================================
-            AÇÃO RECOMENDADA (com ícone de lâmpada)
-            ======================================== */}
         <Text style={styles.errorAction}>💡 {error.recommendedAction}</Text>
         
-        {/* ========================================
-            RODAPÉ: CUSTO DE REPARO + DATA
-            ======================================== */}
         <View style={styles.errorFooter}>
-          
-          {/* Custo estimado do reparo */}
           <Text style={styles.errorCost}>Reparo: R$ {error.estimatedRepairCost}</Text>
-          
-          {/* Data em que o erro foi detectado */}
           <Text style={styles.errorDate}>Detectado: {error.detected}</Text>
         </View>
       </View>
     );
   };
 
-  // ========================================
-  // COMPONENTE FUNCIONAL - LEITURA BÁSICA OBD-II
-  // ========================================
-  
-  /**
-   * COMPONENTE BasicReading
-   * 
-   * Componente reutilizável que exibe uma leitura individual de sensor OBD-II
-   * em formato de cartão compacto. Usado para mostrar dados como RPM,
-   * temperatura, voltagem, etc.
-   * 
-   * @param {string} icon - Nome do ícone Ionicons a ser exibido
-   * @param {string} label - Rótulo descritivo da leitura (ex: "RPM", "Temp. Motor")
-   * @param {number|string} value - Valor atual da leitura
-   * @param {string} unit - Unidade de medida (ex: "rpm", "°C", "V")
-   * @param {string} status - Status da leitura: 'normal', 'warning', 'error', 'good'
-   * @returns {JSX.Element} - Cartão de leitura renderizado
-   * 
-   * Exemplos de uso:
-   * - RPM do motor: icon="speedometer", value=850, unit="rpm"
-   * - Temperatura: icon="thermometer", value=89, unit="°C"
-   * - Bateria: icon="battery-charging", value=12.6, unit="V"
-   */
+  // Componente de leitura básica OBD-II
   const BasicReading = ({ icon, label, value, unit, status = 'normal' }) => {
-    
-    /**
-     * FUNÇÃO getStatusColor
-     * 
-     * Determina a cor baseada no status da leitura.
-     * Sistema de cores para indicar condição do sensor:
-     * - Verde: leitura boa/ideal
-     * - Amarelo: atenção/monitoramento  
-     * - Vermelho: problema/crítico
-     * - Azul: normal/padrão
-     * 
-     * @returns {string} - Código de cor hexadecimal
-     */
     const getStatusColor = () => {
       switch (status) {
-        case 'warning': return colors.warning;    // Amarelo - atenção necessária
-        case 'error': return colors.error;        // Vermelho - problema crítico
-        case 'good': return colors.success;       // Verde - condição ideal
-        default: return colors.primary;           // Azul - condição normal
+        case 'warning': return colors.warning;
+        case 'error': return colors.error;
+        case 'good': return colors.success;
+        default: return colors.primary;
       }
     };
 
-    // ========================================
-    // RENDERIZAÇÃO DO COMPONENTE
-    // ========================================
     return (
       <View style={styles.readingCard}>
-        
-        {/* ========================================
-            ÍCONE DO SENSOR/PARÂMETRO
-            ======================================== */}
-        {/* Container do ícone com fundo colorido baseado no status */}
         <View style={[styles.readingIcon, { backgroundColor: getStatusColor() + '20' }]}>
           <Ionicons 
-            name={icon}                   // Ícone específico do parâmetro
-            size={20}                     // Tamanho padrão do ícone
-            color={getStatusColor()}      // Cor baseada no status
+            name={icon}
+            size={20}
+            color={getStatusColor()}
           />
         </View>
         
-        {/* ========================================
-            RÓTULO DESCRITIVO
-            ======================================== */}
-        {/* Nome/descrição do parâmetro sendo medido */}
         <Text style={styles.readingLabel}>{label}</Text>
         
-        {/* ========================================
-            VALOR + UNIDADE DE MEDIDA
-            ======================================== */}
         <View style={styles.readingValue}>
-          
-          {/* Valor principal da leitura (número grande) */}
           <Text style={[styles.readingNumber, { color: getStatusColor() }]}>
             {value}
           </Text>
           
-          {/* Unidade de medida (menor, opcional) */}
           {unit && (
             <Text style={styles.readingUnit}>{unit}</Text>
           )}
@@ -485,149 +244,80 @@ export default function CarsAnalytics({ navigation }) {
     );
   };
 
-  // ========================================
-  // RENDERIZAÇÃO CONDICIONAL - ESTADO DE CARREGAMENTO
-  // ========================================
-  
-  /**
-   * VERIFICAÇÃO DE ESTADO DE CARREGAMENTO E DADOS
-   * 
-   * Se a variável loading for true ou analyticsData for null, renderiza uma tela de carregamento
-   * simples com texto informativo. Esta tela é exibida durante o tempo
-   * em que os dados estão sendo carregados (simulado pelo setTimeout).
-   * 
-   * Estrutura da tela de carregamento:
-   * - Container principal
-   * - Título da tela
-   * - Texto de carregamento centralizado
-   * - Barra de navegação inferior
-   * 
-   * return early: Se esta condição for verdadeira, a função para aqui
-   * e não executa o resto do código (renderização principal).
-   */
   if (loading || !analyticsData) {
     return (
       <View style={styles.container}>
-        {/* Título fixo da tela */}
         <Text style={styles.title}>Diagnóstico do Carro</Text>
         
-        {/* Container centralizado para texto de carregamento */}
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Carregando diagnóstico...</Text>
         </View>
         
-        {/* Barra de navegação inferior (sempre presente) */}
         <NavBar />
       </View>
     );
   }
 
-  // ========================================
-  // RENDERIZAÇÃO PRINCIPAL - TELA COMPLETA DE DIAGNÓSTICO
-  // ========================================
-  
-  /**
-   * RENDERIZAÇÃO DA INTERFACE PRINCIPAL
-   * 
-   * Esta é a renderização principal do componente quando os dados
-   * já foram carregados (loading = false). Contém toda a interface
-   * de diagnóstico do veículo organizada em seções.
-   * 
-   * Estrutura da tela:
-   * 1. Container principal
-   * 2. Título da tela
-   * 3. ScrollView com todo o conteúdo
-   * 4. Barra de navegação inferior
-   */
   return (
     <View style={styles.mainContainer}>
-      
-      {/* ========================================
-          HEADER COM LOGO CENTRALIZADA
-          ======================================== */}
       <Header />
       
       <View style={styles.container}>
-      {/* ========================================
-          TÍTULO FIXO DA TELA
-          ======================================== */}
       <Text style={styles.title}>Diagnóstico do Carro</Text>
 
-      {/* ========================================
-          ÁREA ROLÁVEL COM TODO O CONTEÚDO
-          ======================================== */}
-      {/* 
-        ScrollView permite rolar verticalmente quando o conteúdo
-        é maior que a altura da tela. showsVerticalScrollIndicator={false}
-        remove a barra de rolagem visual.
-      */}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
         
-        {/* ========================================
-            SEÇÃO: BOTÃO DE CONEXÃO BLUETOOTH
-            ======================================== */}
+        {/* Botão de conexão Bluetooth */}
         <View style={styles.bluetoothContainer}>
           <TouchableOpacity 
             style={[
-              styles.bluetoothButton,                               // Estilo base do botão
-              bluetoothConnected ?                                  // Operador ternário para estilo condicional
-                styles.bluetoothConnected :                         // Se conectado: estilo verde
-                styles.bluetoothDisconnected                        // Se desconectado: estilo azul/branco
+              styles.bluetoothButton,
+              bluetoothConnected ?
+                styles.bluetoothConnected :
+                styles.bluetoothDisconnected
             ]}
-            onPress={handleBluetoothConnection}                     // Função chamada ao tocar
-            disabled={connecting}                                   // Desabilita botão durante conexão
+            onPress={handleBluetoothConnection}
+            disabled={connecting}
           >
-            {/* Ícone do Bluetooth (sólido se conectado, outline se não) */}
             <Ionicons 
               name={bluetoothConnected ? "bluetooth" : "bluetooth-outline"} 
               size={20} 
               color={bluetoothConnected ? colors.surface : colors.primary} 
             />
             
-            {/* Texto do botão com estados diferentes */}
             <Text style={[
-              styles.bluetoothText,                                 // Estilo base do texto
-              bluetoothConnected ?                                  // Estilo condicional da cor
-                styles.bluetoothTextConnected :                     // Texto branco se conectado
-                styles.bluetoothTextDisconnected                    // Texto azul se desconectado
+              styles.bluetoothText,
+              bluetoothConnected ?
+                styles.bluetoothTextConnected :
+                styles.bluetoothTextDisconnected
             ]}>
               {connectionStatus}
             </Text>
             
-            {/* Indicador visual de conexão ativa (bolinha verde) */}
             {bluetoothConnected && (
               <View style={styles.statusIndicator} />
             )}
           </TouchableOpacity>
         </View>
         
-        {/* ========================================
-            SEÇÃO: SAÚDE GERAL DO VEÍCULO
-            ======================================== */}
+        {/* Seção: Saúde geral do veículo */}
         <View style={styles.section}>
-          
-          {/* Componente do cartão de saúde com pontuação e status */}
           <HealthScoreCard 
-            score={analyticsData?.vehicleHealth?.healthScore || 0}        // Pontuação 0-100
-            status={analyticsData?.vehicleHealth?.overallStatus || 'OK'}     // Status: OK/WARNING/CRITICAL
+            score={analyticsData?.vehicleHealth?.healthScore || 0}
+            status={analyticsData?.vehicleHealth?.overallStatus || 'OK'}
           />
           
-          {/* Informações adicionais de manutenção */}
           <View style={styles.healthInfo}>
-            
-            {/* Data da última manutenção */}
             <View style={styles.infoItem}>
               <Text style={styles.infoLabel}>Última Manutenção</Text>
               <Text style={styles.infoValue}>{analyticsData?.vehicleHealth?.lastMaintenance || 'N/A'}</Text>
             </View>
             
-            {/* Data da próxima manutenção */}
             <View style={styles.infoItem}>
               <Text style={styles.infoLabel}>Próxima Manutenção</Text>
               <Text style={styles.infoValue}>{analyticsData?.vehicleHealth?.nextMaintenance || 'N/A'}</Text>
             </View>
             
-            {/* Quilometragem atual formatada */}
             <View style={styles.infoItem}>
               <Text style={styles.infoLabel}>Quilometragem</Text>
               <Text style={styles.infoValue}>
@@ -635,70 +325,58 @@ export default function CarsAnalytics({ navigation }) {
               </Text>
             </View>
           </View>
+
+          {/* Botão Adicionar Manutenção */}
+          <TouchableOpacity 
+            style={styles.addMaintenanceButton}
+            onPress={openMaintenanceModal}
+          >
+            <View style={styles.addButtonContent}>
+              <Ionicons name="add-circle" size={24} color={colors.primary} />
+              <Text style={styles.addButtonText}>Adicionar Manutenção</Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
-        {/* ========================================
-            SEÇÃO: ALERTAS DE MANUTENÇÃO URGENTE
-            ======================================== */}
+        {/* Seção: Alertas de manutenção */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>🚨 Manutenção Necessária</Text>
           
-          {/* 
-            Mapeia array de alertas para renderizar um componente para cada alerta.
-            .map() itera sobre cada item do array e retorna um JSX element.
-          */}
           {(analyticsData?.maintenanceAlerts || []).map((alert) => (
             <MaintenanceAlert 
-              key={alert.id}                                        // Key única para React
-              alert={alert}                                         // Passa objeto completo do alerta
+              key={alert.id}
+              alert={alert}
             />
           ))}
         </View>
 
-        {/* ========================================
-            SEÇÃO: ERROS ENCONTRADOS (CONDICIONAL)
-            ======================================== */}
-        {/* 
-          Renderização condicional: só mostra seção se houver erros ativos.
-          && é um operador de curto-circuito: se length > 0 for true,
-          renderiza o JSX que vem depois.
-        */}
+        {/* Seção: Erros encontrados (condicional) */}
         {(analyticsData?.activeErrors?.length || 0) > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>⚠️ Erros Detectados (OBD-II)</Text>
             
-            {/* Mapeia array de erros para renderizar cada cartão de erro */}
             {(analyticsData?.activeErrors || []).map((error, index) => (
               <ErrorCard 
-                key={index}                                         // Key baseada no índice
-                error={error}                                       // Passa objeto completo do erro
+                key={index}
+                error={error}
               />
             ))}
           </View>
         )}
 
-        {/* ========================================
-            SEÇÃO: LEITURAS BÁSICAS OBD-II
-            ======================================== */}
+        {/* Seção: Leituras básicas OBD-II */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>📊 Leituras Básicas OBD-II</Text>
           
-          {/* 
-            Grid de leituras em formato 2 colunas.
-            Cada BasicReading é um cartão individual com um parâmetro do veículo.
-          */}
           <View style={styles.readingsGrid}>
-            
-            {/* RPM do motor */}
             <BasicReading
-              icon="speedometer"                                    // Ícone de velocímetro
-              label="RPM"                                           // Rótulo
-              value={analyticsData?.basicReadings?.engine?.rpm || 0}       // Valor atual
-              unit="rpm"                                            // Unidade
-              status="normal"                                       // Status normal
+              icon="speedometer"
+              label="RPM"
+              value={analyticsData?.basicReadings?.engine?.rpm || 0}
+              unit="rpm"
+              status="normal"
             />
             
-            {/* Temperatura do motor com lógica condicional */}
             <BasicReading
               icon="thermometer"
               label="Temp. Motor"
@@ -706,11 +384,10 @@ export default function CarsAnalytics({ navigation }) {
               unit="°C"
               status={
                 (analyticsData?.basicReadings?.engine?.coolantTemp || 0) > 95 ? 
-                'warning' : 'normal'                                // Se > 95°C: warning, senão: normal
+                'warning' : 'normal'
               }
             />
             
-            {/* Temperatura do óleo com lógica condicional */}
             <BasicReading
               icon="water"
               label="Temp. Óleo"
@@ -718,11 +395,10 @@ export default function CarsAnalytics({ navigation }) {
               unit="°C"
               status={
                 (analyticsData?.basicReadings?.engine?.oilTemp || 0) > 100 ? 
-                'warning' : 'normal'                                // Se > 100°C: warning, senão: normal
+                'warning' : 'normal'
               }
             />
             
-            {/* Carga do motor */}
             <BasicReading
               icon="pulse"
               label="Carga Motor"
@@ -731,7 +407,6 @@ export default function CarsAnalytics({ navigation }) {
               status="normal"
             />
             
-            {/* Nível de combustível com lógica condicional */}
             <BasicReading
               icon="car"
               label="Combustível"
@@ -739,11 +414,10 @@ export default function CarsAnalytics({ navigation }) {
               unit="%"
               status={
                 (analyticsData?.basicReadings?.fuel?.level || 0) < 20 ? 
-                'warning' : 'normal'                                // Se < 20%: warning, senão: normal
+                'warning' : 'normal'
               }
             />
             
-            {/* Voltagem da bateria com lógica condicional */}
             <BasicReading
               icon="battery-charging"
               label="Bateria"
@@ -751,11 +425,10 @@ export default function CarsAnalytics({ navigation }) {
               unit="V"
               status={
                 (analyticsData?.basicReadings?.electrical?.batteryVoltage || 0) < 12.0 ? 
-                'error' : 'normal'                                  // Se < 12V: error, senão: normal
+                'error' : 'normal'
               }
             />
             
-            {/* Saída do alternador */}
             <BasicReading
               icon="flash"
               label="Alternador"
@@ -764,7 +437,6 @@ export default function CarsAnalytics({ navigation }) {
               status="normal"
             />
             
-            {/* Sensor lambda 1 com cálculo de status complexo */}
             <BasicReading
               icon="leaf"
               label="Lambda 1"
@@ -772,24 +444,19 @@ export default function CarsAnalytics({ navigation }) {
               unit="λ"
               status={
                 Math.abs((analyticsData?.basicReadings?.emissions?.lambdaSensor1 || 1.0) - 1.0) > 0.1 ? 
-                'warning' : 'good'                                  // Se distância de 1.0 > 0.1: warning, senão: good
+                'warning' : 'good'
               }
             />
           </View>
         </View>
 
-        {/* ========================================
-            SEÇÃO: PRÓXIMAS MANUTENÇÕES PROGRAMADAS
-            ======================================== */}
+        {/* Seção: Próximas manutenções programadas */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>📅 Próximas Manutenções</Text>
           
           <View style={styles.scheduledContainer}>
-            {/* Mapeia manutenções programadas */}
             {(analyticsData?.scheduledMaintenance || []).map((item, index) => (
               <View key={index} style={styles.scheduledItem}>
-                
-                {/* Informações da manutenção */}
                 <View style={styles.scheduledInfo}>
                   <Text style={styles.scheduledTitle}>{item?.item || 'Manutenção'}</Text>
                   <Text style={styles.scheduledDetails}>
@@ -797,715 +464,744 @@ export default function CarsAnalytics({ navigation }) {
                   </Text>
                 </View>
                 
-                {/* Custo da manutenção */}
                 <Text style={styles.scheduledCost}>R$ {item?.cost || '0'}</Text>
               </View>
             ))}
           </View>
         </View>
 
-        {/* ========================================
-            ESPAÇAMENTO INFERIOR
-            ======================================== */}
-        {/* 
-          View vazia com altura fixa para garantir que o último
-          conteúdo não fique escondido atrás da barra de navegação.
-        */}
         <View style={{ height: 100 }} />
       </ScrollView>
 
-      {/* ========================================
-          BARRA DE NAVEGAÇÃO INFERIOR (FIXA)
-          ======================================== */}
       <NavBar />
       </View>
+
+      {/* Modal de Adicionar Manutenção */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={maintenanceModalVisible}
+        onRequestClose={closeMaintenanceModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              
+              {/* Header do Modal */}
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Nova Manutenção</Text>
+                <TouchableOpacity 
+                  style={styles.closeButton}
+                  onPress={closeMaintenanceModal}
+                >
+                  <Ionicons name="close" size={24} color={colors.text.secondary} />
+                </TouchableOpacity>
+              </View>
+
+              {/* Formulário */}
+              <View style={styles.formContainer}>
+                
+                {/* Tipo de Manutenção */}
+                <View style={styles.inputGroup}>
+                  <Text style={[styles.inputLabel, styles.requiredField]}>Tipo de Manutenção *</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.requiredInput]}
+                    placeholder="Ex: Troca de óleo, Pastilhas de freio..."
+                    placeholderTextColor={colors.text.placeholder}
+                    value={maintenanceFormData.type}
+                    onChangeText={(value) => handleMaintenanceInputChange('type', value)}
+                  />
+                </View>
+
+                {/* Descrição */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>Descrição</Text>
+                  <TextInput
+                    style={[styles.textInput, { height: 80 }]}
+                    placeholder="Descreva os detalhes da manutenção..."
+                    placeholderTextColor={colors.text.placeholder}
+                    value={maintenanceFormData.description}
+                    onChangeText={(value) => handleMaintenanceInputChange('description', value)}
+                    multiline={true}
+                    textAlignVertical="top"
+                  />
+                </View>
+
+                {/* Data da Manutenção */}
+                <View style={styles.inputGroup}>
+                  <Text style={[styles.inputLabel, styles.requiredField]}>Data da Manutenção *</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.requiredInput]}
+                    placeholder="DD/MM/AAAA"
+                    placeholderTextColor={colors.text.placeholder}
+                    value={maintenanceFormData.maintenanceDate}
+                    onChangeText={(value) => handleMaintenanceInputChange('maintenanceDate', value)}
+                    maxLength={10}
+                    keyboardType="numeric"
+                  />
+                </View>
+
+                {/* Próxima Manutenção */}
+                <View style={styles.inputGroup}>
+                  <Text style={[styles.inputLabel, styles.requiredField]}>Próxima Manutenção *</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.requiredInput]}
+                    placeholder="DD/MM/AAAA"
+                    placeholderTextColor={colors.text.placeholder}
+                    value={maintenanceFormData.nextMaintenanceDate}
+                    onChangeText={(value) => handleMaintenanceInputChange('nextMaintenanceDate', value)}
+                    maxLength={10}
+                    keyboardType="numeric"
+                  />
+                </View>
+
+                {/* Prioridade */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>Prioridade</Text>
+                  <View style={styles.priorityContainer}>
+                    {['low', 'medium', 'high'].map((priority) => (
+                      <TouchableOpacity
+                        key={priority}
+                        style={[
+                          styles.priorityButton,
+                          maintenanceFormData.priority === priority && styles.priorityButtonActive
+                        ]}
+                        onPress={() => handleMaintenanceInputChange('priority', priority)}
+                      >
+                        <Text style={[
+                          styles.priorityText,
+                          maintenanceFormData.priority === priority && styles.priorityTextActive
+                        ]}>
+                          {priority === 'low' ? 'Baixa' : priority === 'medium' ? 'Média' : 'Alta'}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+
+                {/* Observações */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>Observações</Text>
+                  <TextInput
+                    style={[styles.textInput, { height: 80 }]}
+                    placeholder="Observações adicionais..."
+                    placeholderTextColor={colors.text.placeholder}
+                    value={maintenanceFormData.notes}
+                    onChangeText={(value) => handleMaintenanceInputChange('notes', value)}
+                    multiline={true}
+                    textAlignVertical="top"
+                  />
+                </View>
+
+                <Text style={styles.requiredNote}>* Campos obrigatórios</Text>
+              </View>
+
+              {/* Botões de Ação */}
+              <View style={styles.modalActions}>
+                <TouchableOpacity 
+                  style={styles.cancelButton}
+                  onPress={closeMaintenanceModal}
+                >
+                  <Text style={styles.cancelButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={styles.saveButton}
+                  onPress={validateAndSubmitMaintenance}
+                >
+                  <LinearGradient
+                    colors={['#4CAF50', '#45A049']}
+                    style={styles.saveButtonGradient}
+                  >
+                    <Text style={styles.saveButtonText}>Salvar Manutenção</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
-// ========================================
-// FECHAMENTO DO COMPONENTE PRINCIPAL
-// ========================================
 }
 
-// ========================================
-// FOLHA DE ESTILOS - StyleSheet.create()
-// ========================================
-
-/**
- * OBJETO DE ESTILOS
- * 
- * StyleSheet.create() é uma função do React Native que otimiza
- * e valida estilos CSS-like para componentes nativos.
- * 
- * Benefícios:
- * - Validação de propriedades em tempo de desenvolvimento
- * - Otimização de performance 
- * - Reutilização de estilos
- * - Organização e manutenibilidade
- * 
- * Estrutura organizada por seções funcionais:
- * 1. Estilos gerais (container, título, loading)
- * 2. Cartão de saúde do veículo
- * 3. Alertas de manutenção
- * 4. Cartões de erro
- * 5. Leituras básicas
- * 6. Manutenções agendadas
- * 7. Interface Bluetooth
- */
 const styles = StyleSheet.create({
-  
-  // ========================================
-  // ESTILOS GERAIS E LAYOUT PRINCIPAL
-  // ========================================
-  
-  /**
-   * CONTAINER PRINCIPAL SEM PADDING
-   * Para o header ocupar toda a largura da tela
-   */
+  // Estilos gerais
   mainContainer: {
     flex: 1,
     backgroundColor: colors.background,
   },
   
-  /**
-   * CONTAINER PRINCIPAL
-   * Estilo do View mais externo que ocupa toda a tela
-   */
   container: {
-    flex: 1,                          // Ocupa todo espaço disponível
-    backgroundColor: colors.background, // Cor de fundo do tema
+    flex: 1,
+    backgroundColor: colors.background,
   },
   
-  /**
-   * TÍTULO DA TELA
-   * Estilo do texto principal no topo
-   */
   title: {
-    fontSize: 32,                     // Tamanho grande para destaque
-    fontWeight: 'bold',               // Peso da fonte em negrito
-    color: colors.text.primary,       // Cor primária do texto do tema
-    marginTop: 16,                    // Margem superior para espaçamento do header
-    marginBottom: 20,                 // Margem inferior
-    paddingHorizontal: spacing.lg,    // Padding horizontal das laterais
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: colors.text.primary,
+    marginTop: 16,
+    marginBottom: 20,
+    paddingHorizontal: spacing.lg,
   },
   
-  /**
-   * ÁREA DE CONTEÚDO ROLÁVEL
-   * Estilo do ScrollView principal
-   */
   content: {
-    flex: 1,                          // Ocupa espaço restante
-    paddingHorizontal: spacing.lg,    // Padding lateral interno
+    flex: 1,
+    paddingHorizontal: spacing.lg,
   },
   
-  /**
-   * CONTAINER DE CARREGAMENTO
-   * Para centralizar o texto "Carregando..."
-   */
   loadingContainer: {
-    flex: 1,                          // Ocupa todo espaço disponível
-    justifyContent: 'center',         // Centraliza verticalmente
-    alignItems: 'center',             // Centraliza horizontalmente
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   
-  /**
-   * TEXTO DE CARREGAMENTO
-   */
   loadingText: {
-    fontSize: fonts.sizes.md,         // Tamanho médio da fonte
-    fontWeight: '400',                // Peso normal da fonte
-    color: colors.text.secondary,     // Cor secundária (mais clara)
+    fontSize: fonts.sizes.md,
+    fontWeight: '400',
+    color: colors.text.secondary,
   },
   
-  /**
-   * SEÇÃO GENÉRICA
-   * Usado para agrupar blocos de conteúdo
-   */
   section: {
-    marginBottom: spacing.xl,         // Espaçamento grande entre seções
+    marginBottom: spacing.xl,
   },
   
-  /**
-   * TÍTULO DE SEÇÃO
-   * Para títulos como "🚨 Manutenção Necessária"
-   */
   sectionTitle: {
-    fontSize: fonts.sizes.xl,         // Tamanho extra grande
-    fontWeight: '600',                // Peso semi-negrito
-    color: colors.text.primary,       // Cor primária do texto
-    marginBottom: spacing.md,         // Margem inferior média
+    fontSize: fonts.sizes.xl,
+    fontWeight: '600',
+    color: colors.text.primary,
+    marginBottom: spacing.md,
   },
   
-  // ========================================
-  // ESTILOS DO CARTÃO DE SAÚDE DO VEÍCULO
-  // ========================================
-  
-  /**
-   * CARTÃO PRINCIPAL DE SAÚDE
-   * Container do LinearGradient com pontuação
-   */
+  // Estilos do cartão de saúde
   healthCard: {
-    borderRadius: borderRadius.lg,    // Bordas arredondadas grandes
-    padding: spacing.lg,              // Padding interno grande
-    marginBottom: spacing.md,         // Margem inferior média
-    ...shadows.medium,                // Sombra média (spread operator)
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    ...shadows.medium,
   },
   
-  /**
-   * CABEÇALHO DO CARTÃO DE SAÚDE
-   * Linha com ícone + título
-   */
   healthHeader: {
-    flexDirection: 'row',             // Disposição horizontal
-    alignItems: 'center',             // Alinhamento vertical centralizado
-    marginBottom: spacing.md,         // Margem inferior
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.md,
   },
   
-  /**
-   * TÍTULO DO CARTÃO DE SAÚDE
-   */
   healthTitle: {
-    fontSize: fonts.sizes.xl,         // Tamanho extra grande
-    fontWeight: 'bold',               // Negrito
-    color: colors.surface,            // Cor clara (branco/off-white)
-    marginLeft: spacing.md,           // Margem esquerda para separar do ícone
+    fontSize: fonts.sizes.xl,
+    fontWeight: 'bold',
+    color: colors.surface,
+    marginLeft: spacing.md,
   },
   
-  /**
-   * CONTAINER DA PONTUAÇÃO
-   * Para o número grande "72/100"
-   */
   healthScore: {
-    flexDirection: 'row',             // Disposição horizontal
-    alignItems: 'baseline',           // Alinha pela linha de base do texto
-    justifyContent: 'center',         // Centraliza horizontalmente
-    marginBottom: spacing.sm,         // Margem inferior pequena
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'center',
+    marginBottom: spacing.sm,
   },
   
-  /**
-   * VALOR PRINCIPAL DA PONTUAÇÃO
-   * O número grande (ex: "72")
-   */
   scoreValue: {
-    fontSize: fonts.sizes.hero,       // Tamanho heroico (muito grande)
-    fontWeight: 'bold',               // Negrito
-    color: colors.surface,            // Cor clara
+    fontSize: fonts.sizes.hero,
+    fontWeight: 'bold',
+    color: colors.surface,
   },
   
-  /**
-   * LABEL DA PONTUAÇÃO
-   * O texto "/100"
-   */
   scoreLabel: {
-    fontSize: fonts.sizes.xl,         // Tamanho extra grande (menor que o valor)
-    fontWeight: '400',                // Peso normal
-    color: colors.surface,            // Cor clara
-    opacity: 0.8,                     // Transparência para diminuir destaque
+    fontSize: fonts.sizes.xl,
+    fontWeight: '400',
+    color: colors.surface,
+    opacity: 0.8,
   },
   
-  /**
-   * TEXTO DE STATUS
-   * "Excelente", "Atenção Necessária", "Crítico"
-   */
   statusText: {
-    fontSize: fonts.sizes.lg,         // Tamanho grande
-    fontWeight: '500',                // Peso médio
-    color: colors.surface,            // Cor clara
-    textAlign: 'center',              // Centralizado
+    fontSize: fonts.sizes.lg,
+    fontWeight: '500',
+    color: colors.surface,
+    textAlign: 'center',
   },
   
-  /**
-   * INFORMAÇÕES ADICIONAIS DE SAÚDE
-   * Container para datas e quilometragem
-   */
   healthInfo: {
-    flexDirection: 'row',             // Disposição horizontal
-    justifyContent: 'space-between',  // Distribui espaço entre itens
-    backgroundColor: colors.surface,   // Fundo claro
-    borderRadius: borderRadius.md,    // Bordas arredondadas médias
-    padding: spacing.md,              // Padding interno
-    ...shadows.small,                 // Sombra pequena
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    ...shadows.small,
   },
   
-  /**
-   * ITEM INDIVIDUAL DE INFORMAÇÃO
-   * Para cada coluna (última manutenção, próxima, km)
-   */
   infoItem: {
-    alignItems: 'center',             // Centraliza conteúdo
-    flex: 1,                          // Distribui espaço igualmente
+    alignItems: 'center',
+    flex: 1,
   },
   
-  /**
-   * LABEL DE INFORMAÇÃO
-   * Texto pequeno descritivo
-   */
   infoLabel: {
-    fontSize: fonts.sizes.xs,         // Tamanho extra pequeno
-    fontFamily: getFontFamily('Poppins', 'Medium'), // Fonte Poppins média
-    color: colors.text.secondary,     // Cor secundária
-    marginBottom: spacing.xs,         // Margem inferior pequena
-    textAlign: 'center',              // Centralizado
+    fontSize: fonts.sizes.xs,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.text.secondary,
+    marginBottom: spacing.xs,
+    textAlign: 'center',
   },
   
-  /**
-   * VALOR DE INFORMAÇÃO
-   * Texto principal de cada informação
-   */
   infoValue: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.text.primary,       // Cor primária
-    textAlign: 'center',              // Centralizado
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.text.primary,
+    textAlign: 'center',
   },
 
-  // ========================================
-  // ESTILOS DOS ALERTAS DE MANUTENÇÃO
-  // ========================================
-  
-  /**
-   * CARTÃO DE ALERTA
-   * Container principal de cada alerta
-   */
+  // Estilos dos alertas de manutenção
   alertCard: {
-    backgroundColor: colors.surface,   // Fundo claro
-    borderRadius: borderRadius.md,    // Bordas arredondadas
-    padding: spacing.md,              // Padding interno
-    marginBottom: spacing.sm,         // Margem inferior pequena
-    flexDirection: 'row',             // Disposição horizontal
-    alignItems: 'center',             // Alinhamento vertical central
-    ...shadows.small,                 // Sombra pequena
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    ...shadows.small,
   },
   
-  /**
-   * BARRA DE PRIORIDADE
-   * Barra colorida lateral esquerda
-   */
   alertPriority: {
-    width: 4,                         // Largura da barra
-    height: '100%',                   // Altura total do container
-    borderRadius: borderRadius.xs,    // Bordas levemente arredondadas
-    marginRight: spacing.md,          // Margem direita
+    width: 4,
+    height: '100%',
+    borderRadius: borderRadius.xs,
+    marginRight: spacing.md,
   },
   
-  /**
-   * ÍCONE DO ALERTA
-   * Container circular com ícone
-   */
   alertIcon: {
-    width: 50,                        // Largura fixa
-    height: 50,                       // Altura fixa (quadrado)
-    borderRadius: borderRadius.md,    // Bordas arredondadas
-    justifyContent: 'center',         // Centraliza ícone verticalmente
-    alignItems: 'center',             // Centraliza ícone horizontalmente
-    marginRight: spacing.md,          // Margem direita
+    width: 50,
+    height: 50,
+    borderRadius: borderRadius.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: spacing.md,
   },
   
-  /**
-   * CONTEÚDO DO ALERTA
-   * Área principal com textos
-   */
   alertContent: {
-    flex: 1,                          // Ocupa espaço restante
+    flex: 1,
   },
   
-  /**
-   * TÍTULO DO ALERTA
-   */
   alertTitle: {
-    fontSize: fonts.sizes.md,         // Tamanho médio
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.text.primary,       // Cor primária
-    marginBottom: spacing.xs,         // Margem inferior pequena
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   
-  /**
-   * DESCRIÇÃO DO ALERTA
-   */
   alertDescription: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Regular'), // Fonte Poppins normal
-    color: colors.text.secondary,     // Cor secundária
-    marginBottom: spacing.sm,         // Margem inferior
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.secondary,
+    marginBottom: spacing.sm,
   },
   
-  /**
-   * RODAPÉ DO ALERTA
-   * Container para custo e badge de urgência
-   */
   alertFooter: {
-    flexDirection: 'row',             // Disposição horizontal
-    justifyContent: 'space-between',  // Distribui espaço
-    alignItems: 'center',             // Alinhamento vertical central
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   
-  /**
-   * CUSTO DO ALERTA
-   */
   alertCost: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.text.primary,       // Cor primária
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.text.primary,
   },
   
-  /**
-   * BADGE DE URGÊNCIA
-   * Container vermelho para "URGENTE"
-   */
   urgentBadge: {
-    backgroundColor: colors.error,     // Fundo vermelho
-    paddingHorizontal: spacing.sm,    // Padding horizontal
-    paddingVertical: spacing.xs,      // Padding vertical
-    borderRadius: borderRadius.sm,    // Bordas arredondadas pequenas
+    backgroundColor: colors.error,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.sm,
   },
   
-  /**
-   * TEXTO DE URGÊNCIA
-   */
   urgentText: {
-    fontSize: fonts.sizes.xs,         // Tamanho extra pequeno
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.surface,            // Cor clara (branco)
+    fontSize: fonts.sizes.xs,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.surface,
   },
 
-  // ========================================
-  // ESTILOS DOS CARTÕES DE ERRO
-  // ========================================
-  
-  /**
-   * CARTÃO DE ERRO
-   * Container principal para erros OBD-II
-   */
+  // Estilos dos cartões de erro
   errorCard: {
-    backgroundColor: colors.surface,   // Fundo claro
-    borderRadius: borderRadius.md,    // Bordas arredondadas
-    padding: spacing.md,              // Padding interno
-    marginBottom: spacing.sm,         // Margem inferior
-    ...shadows.small,                 // Sombra pequena
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    ...shadows.small,
   },
   
-  /**
-   * CABEÇALHO DO ERRO
-   * Linha com código DTC + informações
-   */
   errorHeader: {
-    flexDirection: 'row',             // Disposição horizontal
-    alignItems: 'flex-start',         // Alinhamento no topo
-    marginBottom: spacing.sm,         // Margem inferior
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: spacing.sm,
   },
   
-  /**
-   * BADGE DO CÓDIGO DTC
-   * Container colorido para código (ex: P0171)
-   */
   errorCodeBadge: {
-    paddingHorizontal: spacing.sm,    // Padding horizontal
-    paddingVertical: spacing.xs,      // Padding vertical
-    borderRadius: borderRadius.sm,    // Bordas arredondadas
-    marginRight: spacing.md,          // Margem direita
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.sm,
+    marginRight: spacing.md,
   },
   
-  /**
-   * TEXTO DO CÓDIGO DTC
-   */
   errorCodeText: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.surface,            // Cor clara
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.surface,
   },
   
-  /**
-   * INFORMAÇÕES DO ERRO
-   * Container para título e impacto
-   */
   errorInfo: {
-    flex: 1,                          // Ocupa espaço restante
+    flex: 1,
   },
   
-  /**
-   * TÍTULO DO ERRO
-   */
   errorTitle: {
-    fontSize: fonts.sizes.md,         // Tamanho médio
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.text.primary,       // Cor primária
-    marginBottom: spacing.xs,         // Margem inferior
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   
-  /**
-   * IMPACTO DO ERRO
-   */
   errorImpact: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Regular'), // Fonte Poppins normal
-    color: colors.text.secondary,     // Cor secundária
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.secondary,
   },
   
-  /**
-   * AÇÃO RECOMENDADA
-   * Com ícone de lâmpada (💡)
-   */
   errorAction: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Regular'), // Fonte Poppins normal
-    color: colors.text.primary,       // Cor primária
-    marginBottom: spacing.sm,         // Margem inferior
-    fontStyle: 'italic',              // Texto em itálico
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.primary,
+    marginBottom: spacing.sm,
+    fontStyle: 'italic',
   },
   
-  /**
-   * RODAPÉ DO ERRO
-   * Container para custo e data
-   */
   errorFooter: {
-    flexDirection: 'row',             // Disposição horizontal
-    justifyContent: 'space-between',  // Distribui espaço
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   
-  /**
-   * CUSTO DO ERRO
-   */
   errorCost: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.primary,            // Cor primária do tema
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.primary,
   },
   
-  /**
-   * DATA DO ERRO
-   */
   errorDate: {
-    fontSize: fonts.sizes.xs,         // Tamanho extra pequeno
-    fontFamily: getFontFamily('Poppins', 'Regular'), // Fonte Poppins normal
-    color: colors.text.secondary,     // Cor secundária
+    fontSize: fonts.sizes.xs,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.secondary,
   },
 
-  // ========================================
-  // ESTILOS DAS LEITURAS BÁSICAS
-  // ========================================
-  
-  /**
-   * GRID DAS LEITURAS
-   * Container que organiza leituras em 2 colunas
-   */
+  // Estilos das leituras básicas
   readingsGrid: {
-    flexDirection: 'row',             // Disposição horizontal
-    flexWrap: 'wrap',                 // Permite quebra de linha
-    justifyContent: 'space-between',  // Distribui espaço entre colunas
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   
-  /**
-   * CARTÃO DE LEITURA
-   * Cada cartão individual (RPM, temperatura, etc.)
-   */
   readingCard: {
-    width: '48%',                     // Largura para 2 colunas (48% + 4% gap)
-    backgroundColor: colors.surface,   // Fundo claro
-    borderRadius: borderRadius.md,    // Bordas arredondadas
-    padding: spacing.sm,              // Padding interno pequeno
-    marginBottom: spacing.sm,         // Margem inferior
-    alignItems: 'center',             // Centraliza conteúdo
-    ...shadows.small,                 // Sombra pequena
+    width: '48%',
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.sm,
+    marginBottom: spacing.sm,
+    alignItems: 'center',
+    ...shadows.small,
   },
   
-  /**
-   * ÍCONE DA LEITURA
-   * Container circular para ícone do parâmetro
-   */
   readingIcon: {
-    width: 40,                        // Largura fixa
-    height: 40,                       // Altura fixa
-    borderRadius: borderRadius.md,    // Bordas arredondadas
-    justifyContent: 'center',         // Centraliza ícone verticalmente
-    alignItems: 'center',             // Centraliza ícone horizontalmente
-    marginBottom: spacing.sm,         // Margem inferior
+    width: 40,
+    height: 40,
+    borderRadius: borderRadius.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
   },
   
-  /**
-   * LABEL DA LEITURA
-   * Nome do parâmetro (ex: "RPM", "Temp. Motor")
-   */
   readingLabel: {
-    fontSize: fonts.sizes.xs,         // Tamanho extra pequeno
-    fontFamily: getFontFamily('Poppins', 'Medium'), // Fonte Poppins média
-    color: colors.text.secondary,     // Cor secundária
-    marginBottom: spacing.xs,         // Margem inferior
-    textAlign: 'center',              // Centralizado
+    fontSize: fonts.sizes.xs,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.text.secondary,
+    marginBottom: spacing.xs,
+    textAlign: 'center',
   },
   
-  /**
-   * CONTAINER DO VALOR
-   * Para número + unidade na mesma linha
-   */
   readingValue: {
-    flexDirection: 'row',             // Disposição horizontal
-    alignItems: 'baseline',           // Alinha pela linha de base
+    flexDirection: 'row',
+    alignItems: 'baseline',
   },
   
-  /**
-   * NÚMERO DA LEITURA
-   * Valor principal (ex: "850", "89", "12.6")
-   */
   readingNumber: {
-    fontSize: fonts.sizes.lg,         // Tamanho grande
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
+    fontSize: fonts.sizes.lg,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
   },
   
-  /**
-   * UNIDADE DA LEITURA
-   * Texto pequeno com unidade (ex: "rpm", "°C", "V")
-   */
   readingUnit: {
-    fontSize: fonts.sizes.xs,         // Tamanho extra pequeno
-    fontFamily: getFontFamily('Poppins', 'Regular'), // Fonte Poppins normal
-    color: colors.text.secondary,     // Cor secundária
-    marginLeft: spacing.xs,           // Margem esquerda pequena
+    fontSize: fonts.sizes.xs,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.secondary,
+    marginLeft: spacing.xs,
   },
 
-  // ========================================
-  // ESTILOS DAS MANUTENÇÕES AGENDADAS
-  // ========================================
-  
-  /**
-   * CONTAINER DAS MANUTENÇÕES
-   * Container principal para lista de manutenções
-   */
+  // Estilos das manutenções agendadas
   scheduledContainer: {
-    backgroundColor: colors.surface,   // Fundo claro
-    borderRadius: borderRadius.md,    // Bordas arredondadas
-    padding: spacing.md,              // Padding interno
-    ...shadows.small,                 // Sombra pequena
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    ...shadows.small,
   },
   
-  /**
-   * ITEM DE MANUTENÇÃO
-   * Cada linha da lista de manutenções
-   */
   scheduledItem: {
-    flexDirection: 'row',             // Disposição horizontal
-    justifyContent: 'space-between',  // Distribui espaço
-    alignItems: 'center',             // Alinhamento vertical central
-    paddingVertical: spacing.sm,      // Padding vertical
-    borderBottomWidth: 1,             // Linha divisória inferior
-    borderBottomColor: colors.secondary, // Cor da linha divisória
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.secondary,
   },
   
-  /**
-   * INFORMAÇÕES DA MANUTENÇÃO
-   * Container para nome e detalhes
-   */
   scheduledInfo: {
-    flex: 1,                          // Ocupa espaço disponível
+    flex: 1,
   },
   
-  /**
-   * TÍTULO DA MANUTENÇÃO
-   */
   scheduledTitle: {
-    fontSize: fonts.sizes.md,         // Tamanho médio
-    fontFamily: getFontFamily('Poppins', 'Medium'), // Fonte Poppins média
-    color: colors.text.primary,       // Cor primária
-    marginBottom: spacing.xs,         // Margem inferior
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   
-  /**
-   * DETALHES DA MANUTENÇÃO
-   * Quilometragem e dias restantes
-   */
   scheduledDetails: {
-    fontSize: fonts.sizes.sm,         // Tamanho pequeno
-    fontFamily: getFontFamily('Poppins', 'Regular'), // Fonte Poppins normal
-    color: colors.text.secondary,     // Cor secundária
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.secondary,
   },
   
-  /**
-   * CUSTO DA MANUTENÇÃO
-   */
   scheduledCost: {
-    fontSize: fonts.sizes.md,         // Tamanho médio
-    fontFamily: getFontFamily('Poppins', 'Bold'), // Fonte Poppins negrito
-    color: colors.primary,            // Cor primária do tema
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Bold'),
+    color: colors.primary,
   },
 
-  // ========================================
-  // ESTILOS DA INTERFACE BLUETOOTH
-  // ========================================
-  
-  /**
-   * CONTAINER DO BLUETOOTH
-   * Container principal do botão de conexão
-   */
+  // Estilos da interface Bluetooth
   bluetoothContainer: {
-    marginBottom: spacing.md,         // Margem inferior
+    marginBottom: spacing.md,
   },
   
-  /**
-   * BOTÃO DE BLUETOOTH
-   * Estilo base do botão de conexão
-   */
   bluetoothButton: {
-    flexDirection: 'row',             // Disposição horizontal
-    alignItems: 'center',             // Alinhamento vertical central
-    justifyContent: 'center',         // Centraliza conteúdo
-    paddingVertical: spacing.md,      // Padding vertical
-    paddingHorizontal: spacing.lg,    // Padding horizontal
-    borderRadius: borderRadius.lg,    // Bordas arredondadas grandes
-    borderWidth: 2,                   // Largura da borda
-    ...shadows.small,                 // Sombra pequena
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderRadius: borderRadius.lg,
+    borderWidth: 2,
+    ...shadows.small,
   },
   
-  /**
-   * BOTÃO CONECTADO
-   * Estilo quando Bluetooth está conectado
-   */
   bluetoothConnected: {
-    backgroundColor: colors.success,   // Fundo verde
-    borderColor: colors.success,      // Borda verde
+    backgroundColor: colors.success,
+    borderColor: colors.success,
   },
   
-  /**
-   * BOTÃO DESCONECTADO
-   * Estilo quando Bluetooth está desconectado
-   */
   bluetoothDisconnected: {
-    backgroundColor: colors.surface,   // Fundo claro
-    borderColor: colors.primary,      // Borda azul
+    backgroundColor: colors.surface,
+    borderColor: colors.primary,
   },
   
-  /**
-   * TEXTO DO BLUETOOTH
-   * Estilo base do texto do botão
-   */
   bluetoothText: {
-    fontSize: fonts.sizes.md,         // Tamanho médio
-    fontWeight: '600',                // Peso semi-negrito
-    marginLeft: spacing.sm,           // Margem esquerda
+    fontSize: fonts.sizes.md,
+    fontWeight: '600',
+    marginLeft: spacing.sm,
   },
   
-  /**
-   * TEXTO CONECTADO
-   * Cor do texto quando conectado
-   */
   bluetoothTextConnected: {
-    color: colors.surface,            // Cor clara (branco)
+    color: colors.surface,
   },
   
-  /**
-   * TEXTO DESCONECTADO
-   * Cor do texto quando desconectado
-   */
   bluetoothTextDisconnected: {
-    color: colors.primary,            // Cor primária (azul)
+    color: colors.primary,
   },
   
-  /**
-   * INDICADOR DE STATUS
-   * Bolinha verde que indica conexão ativa
-   */
   statusIndicator: {
-    width: 8,                         // Largura pequena
-    height: 8,                        // Altura pequena (círculo)
-    borderRadius: 4,                  // Bordas totalmente arredondadas
-    backgroundColor: colors.surface,   // Cor clara
-    marginLeft: spacing.sm,           // Margem esquerda
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.surface,
+    marginLeft: spacing.sm,
+  },
+
+  // Estilos do botão adicionar manutenção
+  addMaintenanceButton: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    marginTop: spacing.md,
+    borderWidth: 2,
+    borderColor: colors.primary + '30',
+    borderStyle: 'dashed',
+    ...shadows.small,
+  },
+
+  addButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+  },
+
+  addButtonText: {
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.primary,
+  },
+
+  // Estilos do modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  modalContainer: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.xl,
+    margin: spacing.lg,
+    maxHeight: '90%',
+    width: '90%',
+    ...shadows.large,
+  },
+
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.text.placeholder + '20',
+  },
+
+  modalTitle: {
+    fontSize: fonts.sizes.xl,
+    fontFamily: getFontFamily('Poppins', 'SemiBold'),
+    color: colors.text.primary,
+  },
+
+  closeButton: {
+    padding: spacing.xs,
+  },
+
+  formContainer: {
+    padding: spacing.lg,
+  },
+
+  inputGroup: {
+    marginBottom: spacing.lg,
+  },
+
+  inputLabel: {
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
+  },
+
+  requiredField: {
+    color: colors.primary,
+  },
+
+  textInput: {
+    borderWidth: 1,
+    borderColor: colors.text.placeholder + '30',
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.primary,
+    backgroundColor: colors.background,
+  },
+
+  requiredInput: {
+    borderColor: colors.primary + '50',
+    borderWidth: 2,
+  },
+
+  priorityContainer: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+
+  priorityButton: {
+    flex: 1,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.text.placeholder + '30',
+    alignItems: 'center',
+  },
+
+  priorityButtonActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+
+  priorityText: {
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.text.secondary,
+  },
+
+  priorityTextActive: {
+    color: colors.surface,
+  },
+
+  requiredNote: {
+    fontSize: fonts.sizes.sm,
+    fontFamily: getFontFamily('Poppins', 'Regular'),
+    color: colors.text.placeholder,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: spacing.md,
+  },
+
+  modalActions: {
+    flexDirection: 'row',
+    padding: spacing.lg,
+    gap: spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: colors.text.placeholder + '20',
+  },
+
+  cancelButton: {
+    flex: 1,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.text.placeholder + '50',
+    alignItems: 'center',
+  },
+
+  cancelButtonText: {
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.text.secondary,
+  },
+
+  saveButton: {
+    flex: 2,
+    borderRadius: borderRadius.md,
+    overflow: 'hidden',
+  },
+
+  saveButtonGradient: {
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+  },
+
+  saveButtonText: {
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'SemiBold'),
+    color: colors.surface,
   },
 });

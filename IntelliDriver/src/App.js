@@ -30,6 +30,8 @@ import PercursoDetalhes from './screens/PercursoDetalhes';
 import CarsAnalytics from './screens/CarsAnalytics';
 import DadosPessoais from './screens/DadosPessoais';
 import ProfileStats from './screens/ProfileStats';
+import Cadastro from './screens/Cadastro';
+import Welcome from './screens/Welcome';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,9 +58,12 @@ export default function App() {
       <NavigationContainer>
         <SafeAreaView style={{ flex: 1 }}>
           <Stack.Navigator
-            initialRouteName="Home"
+            initialRouteName="Welcome"
             screenOptions={{ headerShown: false }}
-          >
+          > 
+            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Cadastro" component={Cadastro} />
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Activity" component={Activity} />
             <Stack.Screen name="Historico" component={Historico} />

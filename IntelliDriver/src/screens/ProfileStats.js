@@ -1,14 +1,3 @@
-// ========================================
-// TELA DE PERFIL E ESTATÍSTICAS REDESENHADA - INTELLIDRIVER
-// ========================================
-
-/**
- * IMPORTAÇÕES E DEPENDÊNCIAS
- * 
- * Tela principal de perfil com estatísticas completas, conquistas e navegação para dados pessoais.
- * Interface totalmente redesenhada com melhor experiência visual e funcionalidades expandidas.
- */
-
 import React, { useState } from 'react';
 import { 
   StyleSheet, 
@@ -33,23 +22,8 @@ import userData from '../data/profileStatsData';
 
 const { width } = Dimensions.get('window');
 
-// ========================================
-// COMPONENTE PRINCIPAL - PROFILE STATS REDESENHADO
-// ========================================
-
 export default function ProfileStats() {
-  // Navegação para outras telas
   const navigation = useNavigation();
-  
-  // ========================================
-  // DADOS IMPORTADOS DO ARQUIVO EXTERNO
-  // ========================================
-  
-  // userData agora vem de profileStatsData.js
-
-  // ========================================
-  // FUNÇÕES DE RENDERIZAÇÃO APRIMORADAS
-  // ========================================
   
   const StatCard = ({ icon, value, label, color = colors.primary, subtitle = null }) => (
     <View style={styles.statCard}>
@@ -213,7 +187,7 @@ export default function ProfileStats() {
               icon="car" 
               value={userData.stats.totalTrips} 
               label="Viagens" 
-              subtitle="Total realizadas"
+              subtitle="Total realizadas com IntelliDriver"
               color={colors.primary}
             />
             <StatCard 
@@ -239,23 +213,6 @@ export default function ProfileStats() {
               label="Combustível Poupado" 
               subtitle="Litros economizados"
               color="#FF9800"
-            />
-          </View>
-
-          <View style={styles.statsGrid}>
-            <StatCard 
-              icon="pulse" 
-              value={userData.stats.avgEcoScore} 
-              label="Eco Score Médio" 
-              subtitle="Eficiência energética"
-              color="#9C27B0"
-            />
-            <StatCard 
-              icon="shield-checkmark" 
-              value={userData.stats.safetyScore} 
-              label="Safety Score" 
-              subtitle="Índice de segurança"
-              color="#E91E63"
             />
           </View>
         </View>
