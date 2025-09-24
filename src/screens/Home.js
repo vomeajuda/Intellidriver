@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity, 
+  TouchableOpacity,
   ScrollView,
   Image,
   Modal,
   TextInput,
   Alert,
 } from 'react-native';
+import DeviceList from '../components/DeviceList';
+import { listDevices } from '../services/bluetoothService';
+import { useBluetooth } from '../hooks/useBluetooth';
+import { saveCsv } from '../services/csvService';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import NavBar from '../components/Navbar';
@@ -24,14 +28,15 @@ import {
   recentAchievements,
   topUsers
 } from '../data/homeData';
-// ========================================
 
 export default function Home({ navigation }) {
-  
-  // ========================================
-  // ESTADOS DO COMPONENTE
-  // ========================================
-  
+  const {
+    data, logs, dataLogs, connect, disconnectNow, addLog,
+  } = useBluetooth();
+
+  const [devices, setDevices] = useState([]);
+  const [deviceModalVisible, setDeviceModalVisible] = useState(false);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [tripInProgress, setTripInProgress] = useState(false);
   const [tripStartTime, setTripStartTime] = useState(null);
@@ -45,33 +50,20 @@ export default function Home({ navigation }) {
     fuelType: 'Gasolina'
   });
 
-  // Atualizar duração do percurso a cada minuto
   useEffect(() => {
     let interval;
     if (tripInProgress && tripStartTime) {
       interval = setInterval(() => {
         setTripDurationDisplay(formatTripDuration());
-      }, 60000); // Atualiza a cada minuto
-      
-      // Atualização inicial
+      }, 60000);
       setTripDurationDisplay(formatTripDuration());
     }
-    
     return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
+      if (interval) clearInterval(interval);
     };
   }, [tripInProgress, tripStartTime]);
-  
-  // ========================================
-  // FUNÇÕES HELPER
-  // ========================================
-  
-  const getGreeting = () => {
-    return 'Bem-vindo de volta';
-  };
 
+  const getGreeting = () => 'Bem-vindo de volta';
   const getGreetingMessage = () => {
     const hour = new Date().getHours();
     if (hour < 6) return 'Que tal começar o dia com uma direção eficiente?';
@@ -80,26 +72,35 @@ export default function Home({ navigation }) {
     if (hour < 22) return 'Finalizando o dia com direção responsável?';
     return 'Dirija com segurança na madrugada!';
   };
+  const getUserName = () => 'Leonardo';
 
-  const getUserName = () => {
-    return 'João'; // Mock - em produção viria do contexto/estado global
+  // ========== BLUETOOTH TRIP LOGIC ==========
+
+  const startTrip = async () => {
+    try {
+      const paired = await listDevices();
+      setDevices(paired);
+      setDeviceModalVisible(true);
+    } catch (err) {
+      Alert.alert('Erro', 'Não foi possível listar dispositivos Bluetooth.');
+    }
   };
 
-  // ========================================
-  // FUNÇÕES DO PERCURSO
-  // ========================================
-
-  const startTrip = () => {
-    const startTime = new Date();
-    setTripInProgress(true);
-    setTripStartTime(startTime);
-    setTripDurationDisplay('00:00');
-    // Aqui iniciaria a conexão Bluetooth
-    Alert.alert(
-      'Percurso Iniciado',
-      'Conexão Bluetooth ativada. Boa viagem!',
-      [{ text: 'OK' }]
-    );
+  const handleDeviceSelect = async (selectedDevice) => {
+    setDeviceModalVisible(false);
+    try {
+      await connect(selectedDevice);
+      setTripInProgress(true);
+      setTripStartTime(new Date());
+      setTripDurationDisplay('00:00');
+      Alert.alert(
+        'Percurso Iniciado',
+        `Conectado a ${selectedDevice.name || selectedDevice.address}. Boa viagem!`,
+        [{ text: 'OK' }]
+      );
+    } catch (err) {
+      Alert.alert('Erro', 'Falha ao conectar ao dispositivo.');
+    }
   };
 
   const endTrip = () => {
@@ -108,19 +109,26 @@ export default function Home({ navigation }) {
       'Deseja realmente encerrar o percurso em andamento?',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { 
+        {
           text: 'Encerrar',
           style: 'destructive',
-          onPress: () => {
+          onPress: async () => {
+            try {
+              const path = await saveCsv(dataLogs);
+              addLog(`CSV salvo em: ${path}`);
+              await disconnectNow();
+              Alert.alert(
+                'Percurso Encerrado',
+                `Dados salvos em ${path}. Conexão Bluetooth desativada.`,
+                [{ text: 'OK' }]
+              );
+            } catch (err) {
+              addLog(`Erro ao encerrar percurso: ${err}`);
+              Alert.alert('Erro', 'Falha ao salvar ou desconectar.');
+            }
             setTripInProgress(false);
             setTripStartTime(null);
             setTripDurationDisplay('00:00');
-            // Aqui salvaria os dados e desligaria o Bluetooth
-            Alert.alert(
-              'Percurso Encerrado',
-              'Dados salvos com sucesso. Conexão Bluetooth desativada.',
-              [{ text: 'OK' }]
-            );
           }
         }
       ]
@@ -136,17 +144,11 @@ export default function Home({ navigation }) {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   };
 
-  // ========================================
-  // FUNÇÕES DO MODAL
-  // ========================================
-  
-  const openAddTripModal = () => {
-    setModalVisible(true);
-  };
+  // ========== MODAL ADD TRIP ==========
 
+  const openAddTripModal = () => setModalVisible(true);
   const closeAddTripModal = () => {
     setModalVisible(false);
-    // Limpar formulário ao fechar
     setFormData({
       origin: '',
       destination: '',
@@ -165,48 +167,36 @@ export default function Home({ navigation }) {
   };
 
   const validateAndSubmit = () => {
-    // Validação dos campos obrigatórios
     if (!formData.date || !formData.time) {
       Alert.alert(
-        'Campos Obrigatórios', 
+        'Campos Obrigatórios',
         'Por favor, preencha a data e horário do percurso.'
       );
       return;
     }
-
-    // Validação adicional de formato de data (opcional)
     if (formData.date && !/^\d{2}\/\d{2}\/\d{4}$/.test(formData.date)) {
       Alert.alert(
-        'Data Inválida', 
+        'Data Inválida',
         'Por favor, use o formato DD/MM/AAAA para a data.'
       );
       return;
     }
-
-    // Validação adicional de formato de horário (opcional)
     if (formData.time && !/^\d{2}:\d{2}$/.test(formData.time)) {
       Alert.alert(
-        'Horário Inválido', 
+        'Horário Inválido',
         'Por favor, use o formato HH:MM para o horário.'
       );
       return;
     }
-
-    // Simular salvamento do percurso
     Alert.alert(
-      'Percurso Adicionado!', 
+      'Percurso Adicionado!',
       `Percurso de ${formData.origin || 'Origem'} para ${formData.destination || 'Destino'} em ${formData.date} às ${formData.time} foi salvo com sucesso.`,
       [{ text: 'OK', onPress: closeAddTripModal }]
     );
   };
 
-  // ========================================
-  // FUNÇÕES DE RENDERIZAÇÃO MODERNAS
-  // ========================================
-  
-  /**
-   * CARD DE DESAFIO MENSAL
-   */
+  // ========== RENDER HELPERS ==========
+
   const renderChallenge = (challenge) => (
     <View key={challenge.id} style={[styles.challengeCard, challenge.completed && styles.challengeCompleted]}>
       <View style={styles.challengeHeader}>
@@ -223,17 +213,16 @@ export default function Home({ navigation }) {
           </View>
         )}
       </View>
-      
       <View style={styles.challengeProgress}>
         <View style={styles.progressBar}>
-          <View 
+          <View
             style={[
-              styles.progressFill, 
-              { 
+              styles.progressFill,
+              {
                 width: `${(challenge.progress / challenge.target) * 100}%`,
-                backgroundColor: challenge.color 
+                backgroundColor: challenge.color
               }
-            ]} 
+            ]}
           />
         </View>
         <Text style={styles.progressText}>
@@ -243,9 +232,6 @@ export default function Home({ navigation }) {
     </View>
   );
 
-  /**
-   * CARD DE DICA DE CONDUÇÃO
-   */
   const renderDrivingTip = (tip) => (
     <View key={tip.id} style={styles.tipCard}>
       <View style={styles.tipHeader}>
@@ -261,33 +247,24 @@ export default function Home({ navigation }) {
     </View>
   );
 
-  /**
-   * WIDGET DE CONDIÇÕES ATUAIS
-   */
   const renderConditionsWidget = () => (
     <View style={styles.conditionsWidget}>
       <Text style={styles.widgetTitle}>Condições Atuais</Text>
-      
       <View style={styles.conditionsGrid}>
-        {/* Clima */}
         <View style={styles.conditionItem}>
-          <Ionicons 
-            name={currentConditions.weather.condition === 'sunny' ? 'sunny' : 'cloudy'} 
-            size={24} 
-            color="#FFA726" 
+          <Ionicons
+            name={currentConditions.weather.condition === 'sunny' ? 'sunny' : 'cloudy'}
+            size={24}
+            color="#FFA726"
           />
           <Text style={styles.conditionValue}>{currentConditions.weather.temperature}°C</Text>
           <Text style={styles.conditionLabel}>{currentConditions.weather.description}</Text>
         </View>
-
-        {/* Etanol */}
         <View style={styles.conditionItem}>
           <Ionicons name="water" size={24} color="#66BB6A" />
           <Text style={styles.conditionValue}>R$ {currentConditions.ethanolPrice.price}</Text>
           <Text style={styles.conditionLabel}>{currentConditions.ethanolPrice.description}</Text>
         </View>
-
-        {/* Combustível */}
         <View style={styles.conditionItem}>
           <Ionicons name="water" size={24} color="#66BB6A" />
           <Text style={styles.conditionValue}>R$ {currentConditions.fuelPrice.gasoline}</Text>
@@ -297,9 +274,6 @@ export default function Home({ navigation }) {
     </View>
   );
 
-  /**
-   * CARD DE CONQUISTA RECENTE
-   */
   const renderAchievement = (achievement) => (
     <View key={achievement.id} style={[styles.achievementCard, achievement.isNew && styles.newAchievement]}>
       <View style={[styles.achievementIcon, { backgroundColor: achievement.color + '20' }]}>
@@ -319,13 +293,9 @@ export default function Home({ navigation }) {
     </View>
   );
 
-  /**
-   * USUÁRIO DO TOP 3 (DESIGN SIMPLIFICADO)
-   */
   const renderTopUser = (user) => (
     <View key={user.id} style={styles.topUserItem}>
-      {/* Imagem PNG user_rankeado */}
-      <Image 
+      <Image
         source={require('../assets/user_rankeado.png')}
         style={styles.rankingIcon}
       />
@@ -336,10 +306,6 @@ export default function Home({ navigation }) {
     </View>
   );
 
-  // ========================================
-  // MODAL DE ADICIONAR PERCURSO
-  // ========================================
-  
   const renderAddTripModal = () => (
     <Modal
       animationType="slide"
@@ -350,21 +316,16 @@ export default function Home({ navigation }) {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Header do Modal */}
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Adicionar Percurso</Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.closeButton}
                 onPress={closeAddTripModal}
               >
                 <Ionicons name="close" size={24} color={colors.text.secondary} />
               </TouchableOpacity>
             </View>
-
-            {/* Campos do Formulário */}
             <View style={styles.formContainer}>
-              
-              {/* Origem */}
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Origem</Text>
                 <TextInput
@@ -375,8 +336,6 @@ export default function Home({ navigation }) {
                   onChangeText={(value) => handleInputChange('origin', value)}
                 />
               </View>
-
-              {/* Destino */}
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Destino</Text>
                 <TextInput
@@ -387,8 +346,6 @@ export default function Home({ navigation }) {
                   onChangeText={(value) => handleInputChange('destination', value)}
                 />
               </View>
-
-              {/* Data (Obrigatório) */}
               <View style={styles.inputGroup}>
                 <Text style={[styles.inputLabel, styles.requiredField]}>
                   Data *
@@ -403,8 +360,6 @@ export default function Home({ navigation }) {
                   keyboardType="numeric"
                 />
               </View>
-
-              {/* Horário (Obrigatório) */}
               <View style={styles.inputGroup}>
                 <Text style={[styles.inputLabel, styles.requiredField]}>
                   Horário *
@@ -419,8 +374,6 @@ export default function Home({ navigation }) {
                   keyboardType="numeric"
                 />
               </View>
-
-              {/* Distância */}
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Distância (km)</Text>
                 <TextInput
@@ -432,8 +385,6 @@ export default function Home({ navigation }) {
                   keyboardType="numeric"
                 />
               </View>
-
-              {/* Tipo de Combustível */}
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Tipo de Combustível</Text>
                 <View style={styles.fuelTypeContainer}>
@@ -456,23 +407,18 @@ export default function Home({ navigation }) {
                   ))}
                 </View>
               </View>
-
-              {/* Nota sobre campos obrigatórios */}
               <Text style={styles.requiredNote}>
                 * Campos obrigatórios
               </Text>
             </View>
-
-            {/* Botões de Ação */}
             <View style={styles.modalActions}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={closeAddTripModal}
               >
                 <Text style={styles.cancelButtonText}>Cancelar</Text>
               </TouchableOpacity>
-              
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.saveButton}
                 onPress={validateAndSubmit}
               >
@@ -490,37 +436,41 @@ export default function Home({ navigation }) {
     </Modal>
   );
 
-  // ========================================
-  // RENDERIZAÇÃO DA INTERFACE
-  // ========================================
-  
+  // ========== DEVICE SELECTION MODAL ==========
+
+  const renderDeviceModal = () => (
+    <Modal
+      visible={deviceModalVisible}
+      transparent
+      animationType="slide"
+      onRequestClose={() => setDeviceModalVisible(false)}
+    >
+      <View style={{ flex: 1, backgroundColor: '#0008', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, width: '90%' }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Selecione o dispositivo OBD</Text>
+          <DeviceList devices={devices} onConnect={handleDeviceSelect} />
+          <TouchableOpacity onPress={() => setDeviceModalVisible(false)} style={{ marginTop: 20, alignSelf: 'center' }}>
+            <Text style={{ color: 'red' }}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+
+  // ========== MAIN RENDER ==========
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        
-        {/* ========================================
-            HEADER COM LOGO CENTRALIZADA
-            ======================================== */}
-        
         <Header />
-
-        {/* ========================================
-            SEÇÃO DE SAUDAÇÃO PERSONALIZADA
-            ======================================== */}
-        
         <View style={styles.greetingSection}>
           <Text style={styles.greetingTime}>{getGreeting()},</Text>
           <Text style={styles.greetingName}>{getUserName()}!</Text>
           <Text style={styles.greetingSubtitle}>{getGreetingMessage()}</Text>
         </View>
-
-        {/* ========================================
-            BOTÃO DE INICIAR/ENCERRAR PERCURSO
-            ======================================== */}
-        
         <View style={styles.tripControlSection}>
           {!tripInProgress ? (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.startTripButton}
               onPress={startTrip}
             >
@@ -542,10 +492,8 @@ export default function Home({ navigation }) {
                   <Text style={styles.tripStatusTitle}>Percurso em Andamento</Text>
                   <Ionicons name="bluetooth" size={20} color={colors.primary} />
                 </View>
-                
                 <Text style={styles.tripDuration}>Duração: {tripDurationDisplay}</Text>
-                
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.endTripButton}
                   onPress={endTrip}
                 >
@@ -556,21 +504,10 @@ export default function Home({ navigation }) {
             </View>
           )}
         </View>
-
-        {/* ========================================
-            WIDGET DE CONDIÇÕES ATUAIS
-            ======================================== */}
-        
         <View style={styles.conditionsSection}>
           {renderConditionsWidget()}
         </View>
-
-        {/* ========================================
-            IMPACTO AMBIENTAL
-            ======================================== */}
-        
         <View style={styles.statsSection}>
-          {/* Destaque de Impacto Ambiental */}
           <View style={styles.impactHighlight}>
             <LinearGradient
               colors={['#4CAF50', '#45A049']}
@@ -589,13 +526,7 @@ export default function Home({ navigation }) {
               </View>
             </LinearGradient>
           </View>
-          
         </View>
-
-        {/* ========================================
-            DESAFIOS MENSAIS
-            ======================================== */}
-        
         <View style={styles.challengesSection}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Desafios Mensais</Text>
@@ -604,38 +535,22 @@ export default function Home({ navigation }) {
             {monthlyChallenges.map(renderChallenge)}
           </View>
         </View>
-
-        {/* ========================================
-            CONQUISTAS RECENTES
-            ======================================== */}
-        
         <View style={styles.achievementsSection}>
           <Text style={styles.sectionTitle}>Conquistas Recentes</Text>
           <View style={styles.achievementsList}>
             {recentAchievements.map(renderAchievement)}
           </View>
         </View>
-
-        {/* ========================================
-            DICAS DE CONDUÇÃO
-            ======================================== */}
-        
         <View style={styles.tipsSection}>
           <Text style={styles.sectionTitle}>Dica do Dia</Text>
-          <ScrollView 
-            horizontal 
+          <ScrollView
+            horizontal
             showsHorizontalScrollIndicator={false}
             style={styles.tipsScroll}
           >
             {drivingTips.map(renderDrivingTip)}
           </ScrollView>
         </View>
-
-        
-        {/* ========================================
-            RANKING SIMPLIFICADO
-            ======================================== */}
-
         <View style={styles.rankingSection}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Top 3 do Mês</Text>
@@ -644,14 +559,10 @@ export default function Home({ navigation }) {
             {topUsers.map(renderTopUser)}
           </View>
         </View>
-
         <View style={{ height: 100 }} />
       </ScrollView>
-      
       <NavBar />
-      
-      {/* Botão Flutuante Adicionar Percurso */}
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.floatingButton}
         onPress={openAddTripModal}
       >
@@ -662,9 +573,8 @@ export default function Home({ navigation }) {
           <Ionicons name="add" size={28} color={colors.surface} />
         </LinearGradient>
       </TouchableOpacity>
-      
-      {/* Modal de Adicionar Percurso */}
       {renderAddTripModal()}
+      {renderDeviceModal()}
     </View>
   );
 }

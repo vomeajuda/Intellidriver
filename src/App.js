@@ -16,7 +16,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 // React Native components
-import { View, Text, StatusBar, Platform } from 'react-native';
+import { View, Text, StatusBar, Platform, PermissionsAndroid } from 'react-native';
 
 // Custom font loader
 import { useFontLoader } from './hooks/useFontLoader';
@@ -37,6 +37,37 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const fontsLoaded = useFontLoader();
+
+  // Simple logger (replace with your addLog if you already have it)
+  const addLog = (msg) => console.log(msg);
+
+  // Request permissions (Android only)
+  const requestPermissions = async () => {
+    if (Platform.OS === "android") {
+      try {
+        if (Platform.Version >= 31) {
+          // Android 12+ needs Bluetooth + Location
+          await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+            PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          ]);
+        } else {
+          // Android < 12 needs only Location
+          await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+          );
+        }
+        addLog("✅ Permissions requested");
+      } catch (err) {
+        addLog(`❌ Permissão negada: ${err}`);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    requestPermissions();
+  }, []);
 
   if (!fontsLoaded) {
     return (

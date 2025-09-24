@@ -6,7 +6,7 @@ const DeviceList = ({ devices, onConnect }) => (
     keyExtractor={(item) => item.address}
     renderItem={({ item }) => (
       <View style={{ marginVertical: 10 }}>
-        <Text style={{ color: "white" }}>{item.name || item.address}</Text>
+        <Text style={{ color: "black" }}>{item.name || item.address}</Text>
         <Button title="Conectar" onPress={() => onConnect(item)} />
       </View>
     )}

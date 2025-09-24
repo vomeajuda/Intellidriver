@@ -25,8 +25,8 @@ export default function DadosPessoais({ navigation }) {
   
   // Dados do perfil do usuário
   const [profileData, setProfileData] = useState({
-    name: 'João Silva',
-    email: 'joao.silva@email.com',
+    name: 'Leonardo Godoy',
+    email: 'leo.godoy@email.com',
     phone: '(11) 99999-9999',
     birthDate: '15/03/1990',
     license: 'AB',

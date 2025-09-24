@@ -22,7 +22,8 @@ export default function Login({ navigation }) {
     const validPassword = '1234';
 
     if (username === validUsername && password === validPassword) {
-      alert('Login bem-sucedido!');
+      navigation.navigate('Home');
+    } else if (username === 'leogugo' && password === '12345'){
       navigation.navigate('Home');
     } else {
       alert('Usuário ou senha inválidos.');
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
   },
   
   input: {
+    color: colors.text.primary,
     backgroundColor: colors.surface,
     borderRadius: borderRadius.sm,
     padding: spacing.lg,
