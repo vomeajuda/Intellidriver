@@ -492,7 +492,15 @@ export default function Home({ navigation }) {
                   <Text style={styles.tripStatusTitle}>Percurso em Andamento</Text>
                   <Ionicons name="bluetooth" size={20} color={colors.primary} />
                 </View>
-                <Text style={styles.tripDuration}>Duração: {tripDurationDisplay}</Text>
+                {/* Exibe dados OBD se disponíveis */}
+                <View style={{ marginBottom: spacing.lg }}>
+                  <Text style={styles.tripObdInfo}>
+                    RPM: {data?.rpm ?? '--'}{'\n'}
+                    Velocidade: {data?.speed ?? '--'} km/h{'\n'}
+                    Temperatura: {data?.temperature ?? '--'}°C{'\n'}
+                    Combustível: {data?.fuel ?? '--'}%
+                  </Text>
+                </View>
                 <TouchableOpacity
                   style={styles.endTripButton}
                   onPress={endTrip}
@@ -584,55 +592,55 @@ export default function Home({ navigation }) {
 // ========================================
 
 const styles = StyleSheet.create({
-  
+
   // LAYOUT PRINCIPAL
   container: {
     flex: 1,
     backgroundColor: colors.background,
   },
-  
+
   // SEÇÃO DE SAUDAÇÃO
   greetingSection: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    
+
     marginHorizontal: spacing.sm,
     marginTop: spacing.lg,
     marginBottom: spacing.lg,
-    
+
   },
-  
+
   greetingTime: {
     fontSize: fonts.sizes.lg,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.primary,
   },
-  
+
   greetingName: {
     fontSize: fonts.sizes.title,
     fontFamily: getFontFamily('Poppins', 'Bold'),
     color: colors.primary,
     marginBottom: spacing.xs,
   },
-  
+
   greetingSubtitle: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
   },
-  
+
   // SEÇÃO DE CONTROLE DO PERCURSO
   tripControlSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   startTripButton: {
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
     ...shadows.medium,
   },
-  
+
   startTripGradient: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -641,17 +649,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     gap: spacing.md,
   },
-  
+
   startTripText: {
     fontSize: fonts.sizes.lg,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.surface,
   },
-  
+
   tripInProgressContainer: {
     marginHorizontal: spacing.xs,
   },
-  
+
   tripStatusCard: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
@@ -660,18 +668,18 @@ const styles = StyleSheet.create({
     borderColor: colors.primary + '30',
     ...shadows.small,
   },
-  
+
   tripStatusHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.md,
     gap: spacing.sm,
   },
-  
+
   tripStatusIndicator: {
     position: 'relative',
   },
-  
+
   pulsingDot: {
     width: 12,
     height: 12,
@@ -683,14 +691,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
-  
+
   tripStatusTitle: {
     flex: 1,
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
   },
-  
+
   tripDuration: {
     fontSize: fonts.sizes.xl,
     fontFamily: getFontFamily('Poppins', 'Bold'),
@@ -698,7 +706,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: spacing.lg,
   },
-  
+
   endTripButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -711,13 +719,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.error + '10',
     gap: spacing.sm,
   },
-  
+
   endTripText: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.error,
   },
-  
+
   // BOTÃO FLUTUANTE
   floatingButton: {
     position: 'absolute',
@@ -731,7 +739,7 @@ const styles = StyleSheet.create({
     elevation: 8, // Para Android
     zIndex: 1000,
   },
-  
+
   floatingButtonGradient: {
     width: '100%',
     height: '100%',
@@ -739,50 +747,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 30,
   },
-  
+
   // SEÇÕES GERAIS
   statsSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   recentTripsSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   rankingSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   sectionTitle: {
     fontSize: fonts.sizes.xl,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
     marginBottom: spacing.lg,
   },
-  
+
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.lg,
   },
-  
+
   sectionLink: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.primary,
   },
-  
+
   // CARDS DE ESTATÍSTICAS
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.md,
   },
-  
+
   statCard: {
     flex: 1,
     minWidth: 150,
@@ -794,7 +802,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   statIconContainer: {
     width: 40,
     height: 40,
@@ -804,89 +812,89 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  
+
   statContent: {
     flex: 1,
   },
-  
+
   statValue: {
     fontSize: fonts.sizes.lg,
     fontFamily: getFontFamily('Poppins', 'Bold'),
     color: colors.text.primary,
   },
-  
+
   statTitle: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
   },
-  
+
   // PERCURSOS RECENTES
   recentTripsList: {
     gap: spacing.md,
   },
-  
+
   tripCard: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     ...shadows.small,
   },
-  
+
   tripHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  
+
   tripRoute: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
     gap: spacing.xs,
   },
-  
+
   tripOrigin: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.primary,
   },
-  
+
   tripDestination: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.primary,
   },
-  
+
   tripDate: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.placeholder,
   },
-  
+
   tripStats: {
     flexDirection: 'row',
     gap: spacing.lg,
   },
-  
+
   tripStat: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
   },
-  
+
   tripStatText: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.secondary,
   },
-  
+
   // RANKING SIMPLIFICADO
   topUsersList: {
     gap: spacing.sm,
   },
-  
+
   topUserItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -895,47 +903,47 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     ...shadows.small,
   },
-  
+
   rankingIcon: {
     width: 50,
     height: 50,
     marginRight: spacing.md,
     resizeMode: 'contain',
   },
-  
+
   topUserInfo: {
     flex: 1,
   },
-  
+
   topUserName: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.primary,
   },
-  
+
   topUserPoints: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
   },
-  
+
   // ========================================
   // ESTILOS MODERNOS ADICIONAIS
   // ========================================
-  
+
   statCardGradient: {
     padding: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   statSubtitle: {
     fontSize: fonts.sizes.xs,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.placeholder,
     marginTop: spacing.xs / 2,
   },
-  
+
   // ESTILOS DO IMPACTO AMBIENTAL
   impactHighlight: {
     marginBottom: spacing.lg,
@@ -943,53 +951,53 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...shadows.medium,
   },
-  
+
   impactGradient: {
     padding: spacing.lg,
   },
-  
+
   impactContent: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
   },
-  
+
   impactText: {
     flex: 1,
   },
-  
+
   impactTitle: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: 'white',
     marginBottom: spacing.xs,
   },
-  
+
   impactValue: {
     fontSize: fonts.sizes.lg,
     fontFamily: getFontFamily('Poppins', 'Bold'),
     color: 'white',
     marginBottom: spacing.xs,
   },
-  
+
   impactChange: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs / 2,
   },
-  
+
   impactChangeText: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: 'white',
     opacity: 0.9,
   },
-  
+
   achievementsRow: {
     flexDirection: 'row',
     gap: spacing.md,
   },
-  
+
   achievementCard: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -998,7 +1006,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...shadows.small,
   },
-  
+
   achievementIcon: {
     width: 48,
     height: 48,
@@ -1008,14 +1016,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  
+
   achievementNumber: {
     fontSize: fonts.sizes.xl,
     fontFamily: getFontFamily('Poppins', 'Bold'),
     color: colors.text.primary,
     marginBottom: spacing.xs,
   },
-  
+
   achievementLabel: {
     fontSize: fonts.sizes.xs,
     fontFamily: getFontFamily('Poppins', 'Regular'),
@@ -1023,14 +1031,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: spacing.xs,
   },
-  
+
   achievementTrend: {
     fontSize: fonts.sizes.xs,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: '#4CAF50',
     textAlign: 'center',
   },
-  
+
   performanceSummary: {
     marginTop: spacing.xl,
     backgroundColor: colors.surface,
@@ -1038,130 +1046,130 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     ...shadows.small,
   },
-  
+
   summaryTitle: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
     marginBottom: spacing.md,
   },
-  
+
   performanceGrid: {
     flexDirection: 'row',
     gap: spacing.md,
   },
-  
+
   performanceCard: {
     flex: 1,
     backgroundColor: colors.background.light,
     borderRadius: borderRadius.md,
     padding: spacing.md,
   },
-  
+
   performanceHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.sm,
     gap: spacing.xs,
   },
-  
+
   performanceLabel: {
     fontSize: fonts.sizes.xs,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
   },
-  
+
   performanceValue: {
     fontSize: fonts.sizes.lg,
     fontFamily: getFontFamily('Poppins', 'Bold'),
     color: colors.text.primary,
     marginBottom: spacing.xs,
   },
-  
+
   performanceChange: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs / 2,
   },
-  
+
   performanceChangeText: {
     fontSize: fonts.sizes.xs,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
   },
-  
+
   // Widget de condições
   conditionsSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   conditionsWidget: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
     ...shadows.small,
   },
-  
+
   widgetTitle: {
     fontSize: fonts.sizes.lg,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
     marginBottom: spacing.md,
   },
-  
+
   conditionsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  
+
   conditionItem: {
     alignItems: 'center',
     flex: 1,
   },
-  
+
   conditionValue: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Bold'),
     color: colors.text.primary,
     marginTop: spacing.xs,
   },
-  
+
   conditionLabel: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
     textAlign: 'center',
   },
-  
+
   // Seção de desafios
   challengesSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   challengesList: {
     gap: spacing.md,
   },
-  
+
   challengeCard: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     ...shadows.small,
   },
-  
+
   challengeCompleted: {
     backgroundColor: '#F1F8E9',
     borderWidth: 1,
     borderColor: '#4CAF50',
   },
-  
+
   challengeHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  
+
   challengeIcon: {
     width: 40,
     height: 40,
@@ -1170,24 +1178,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  
+
   challengeInfo: {
     flex: 1,
   },
-  
+
   challengeTitle: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
   },
-  
+
   challengeDescription: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
     marginTop: spacing.xs / 2,
   },
-  
+
   completedBadge: {
     width: 24,
     height: 24,
@@ -1196,11 +1204,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
+
   challengeProgress: {
     marginTop: spacing.sm,
   },
-  
+
   progressBar: {
     height: 6,
     backgroundColor: colors.text.placeholder + '20',
@@ -1208,29 +1216,29 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: spacing.xs,
   },
-  
+
   progressFill: {
     height: '100%',
     borderRadius: borderRadius.sm,
   },
-  
+
   progressText: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.secondary,
     textAlign: 'right',
   },
-  
+
   // Seção de conquistas
   achievementsSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   achievementsList: {
     gap: spacing.sm,
   },
-  
+
   achievementCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1239,13 +1247,13 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     ...shadows.small,
   },
-  
+
   newAchievement: {
     borderWidth: 2,
     borderColor: '#FFD700',
     backgroundColor: '#FFFBF0',
   },
-  
+
   achievementIcon: {
     width: 48,
     height: 48,
@@ -1254,53 +1262,53 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  
+
   achievementContent: {
     flex: 1,
   },
-  
+
   achievementHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  
+
   achievementTitle: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
   },
-  
+
   achievementDescription: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     color: colors.text.secondary,
     marginTop: spacing.xs / 2,
   },
-  
+
   newBadge: {
     backgroundColor: '#FF5722',
     paddingHorizontal: spacing.xs,
     paddingVertical: spacing.xs / 2,
     borderRadius: borderRadius.sm,
   },
-  
+
   newBadgeText: {
     fontSize: fonts.sizes.xs,
     fontFamily: getFontFamily('Poppins', 'Bold'),
     color: colors.surface,
   },
-  
+
   // Seção de dicas
   tipsSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
-  
+
   tipsScroll: {
     marginTop: spacing.sm,
   },
-  
+
   tipCard: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
@@ -1309,14 +1317,14 @@ const styles = StyleSheet.create({
     width: 280,
     ...shadows.small,
   },
-  
+
   tipHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  
+
   tipIcon: {
     width: 32,
     height: 32,
@@ -1325,27 +1333,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
+
   tipCategory: {
     backgroundColor: colors.secondary + '20',
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs / 2,
     borderRadius: borderRadius.sm,
   },
-  
+
   tipCategoryText: {
     fontSize: fonts.sizes.xs,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.secondary,
   },
-  
+
   tipTitle: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
     marginBottom: spacing.xs,
   },
-  
+
   tipDescription: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
@@ -1356,14 +1364,14 @@ const styles = StyleSheet.create({
   // ========================================
   // ESTILOS DO MODAL
   // ========================================
-  
+
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
+
   modalContainer: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.xl,
@@ -1372,7 +1380,7 @@ const styles = StyleSheet.create({
     width: '90%',
     ...shadows.large,
   },
-  
+
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1381,36 +1389,36 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.text.placeholder + '20',
   },
-  
+
   modalTitle: {
     fontSize: fonts.sizes.xl,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.text.primary,
   },
-  
+
   closeButton: {
     padding: spacing.xs,
   },
-  
+
   formContainer: {
     padding: spacing.lg,
   },
-  
+
   inputGroup: {
     marginBottom: spacing.lg,
   },
-  
+
   inputLabel: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.primary,
     marginBottom: spacing.xs,
   },
-  
+
   requiredField: {
     color: colors.primary,
   },
-  
+
   textInput: {
     borderWidth: 1,
     borderColor: colors.text.placeholder + '30',
@@ -1421,17 +1429,17 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
     backgroundColor: colors.background,
   },
-  
+
   requiredInput: {
     borderColor: colors.primary + '50',
     borderWidth: 2,
   },
-  
+
   fuelTypeContainer: {
     flexDirection: 'row',
     gap: spacing.sm,
   },
-  
+
   fuelTypeButton: {
     flex: 1,
     paddingVertical: spacing.sm,
@@ -1441,22 +1449,22 @@ const styles = StyleSheet.create({
     borderColor: colors.text.placeholder + '30',
     alignItems: 'center',
   },
-  
+
   fuelTypeButtonActive: {
     backgroundColor: colors.primary,
     borderColor: colors.primary,
   },
-  
+
   fuelTypeText: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.secondary,
   },
-  
+
   fuelTypeTextActive: {
     color: colors.surface,
   },
-  
+
   requiredNote: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
@@ -1465,7 +1473,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: spacing.md,
   },
-  
+
   modalActions: {
     flexDirection: 'row',
     padding: spacing.lg,
@@ -1473,7 +1481,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.text.placeholder + '20',
   },
-  
+
   cancelButton: {
     flex: 1,
     paddingVertical: spacing.md,
@@ -1482,27 +1490,35 @@ const styles = StyleSheet.create({
     borderColor: colors.text.placeholder + '50',
     alignItems: 'center',
   },
-  
+
   cancelButtonText: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'Medium'),
     color: colors.text.secondary,
   },
-  
+
   saveButton: {
     flex: 2,
     borderRadius: borderRadius.md,
     overflow: 'hidden',
   },
-  
+
   saveButtonGradient: {
     paddingVertical: spacing.md,
     alignItems: 'center',
   },
-  
+
   saveButtonText: {
     fontSize: fonts.sizes.md,
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.surface,
+  },
+
+  tripObdInfo: {
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'Medium'),
+    color: colors.text.primary,
+    textAlign: 'center',
+    marginBottom: spacing.sm,
   },
 });
