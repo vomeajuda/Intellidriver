@@ -12,7 +12,7 @@
 // ========================================
 
 export const userData = {
-  name: 'João Silva',
+  name: 'Leonardo Godoy',
   profileImage: null,
   ecocoins: 1850,
   level: 'Eco Master',
