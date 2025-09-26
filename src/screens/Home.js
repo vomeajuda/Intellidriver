@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import DeviceList from '../components/DeviceList';
+import DataDisplay from '../components/DataDisplay';
 import { listDevices } from '../services/bluetoothService';
 import { useBluetooth } from '../hooks/useBluetooth';
 import { saveCsv } from '../services/csvService';
@@ -30,17 +31,13 @@ import {
 } from '../data/homeData';
 
 export default function Home({ navigation }) {
-  const {
-    data, logs, dataLogs, connect, disconnectNow, addLog,
-  } = useBluetooth();
+  const { data, dataLogs, isConnected, device, connect, disconnectNow } = useBluetooth();
 
   const [devices, setDevices] = useState([]);
   const [deviceModalVisible, setDeviceModalVisible] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [tripInProgress, setTripInProgress] = useState(false);
-  const [tripStartTime, setTripStartTime] = useState(null);
-  const [tripDurationDisplay, setTripDurationDisplay] = useState('00:00');
   const [formData, setFormData] = useState({
     origin: '',
     destination: '',
@@ -51,17 +48,11 @@ export default function Home({ navigation }) {
   });
 
   useEffect(() => {
-    let interval;
-    if (tripInProgress && tripStartTime) {
-      interval = setInterval(() => {
-        setTripDurationDisplay(formatTripDuration());
-      }, 60000);
-      setTripDurationDisplay(formatTripDuration());
+    if (isConnected && deviceModalVisible) {
+      Alert.alert('Conectado', `Conectado a ${device?.name || device?.address}`);
+      setDeviceModalVisible(false);
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [tripInProgress, tripStartTime]);
+  }, [isConnected, deviceModalVisible]);
 
   const getGreeting = () => 'Bem-vindo de volta';
   const getGreetingMessage = () => {
@@ -81,67 +72,25 @@ export default function Home({ navigation }) {
       const paired = await listDevices();
       setDevices(paired);
       setDeviceModalVisible(true);
+      setTripInProgress(true);
     } catch (err) {
       Alert.alert('Erro', 'Não foi possível listar dispositivos Bluetooth.');
     }
   };
 
-  const handleDeviceSelect = async (selectedDevice) => {
-    setDeviceModalVisible(false);
+    const handleSave = async () => {
     try {
-      await connect(selectedDevice);
-      setTripInProgress(true);
-      setTripStartTime(new Date());
-      setTripDurationDisplay('00:00');
+      const path = await saveCsv(dataLogs);
       Alert.alert(
-        'Percurso Iniciado',
-        `Conectado a ${selectedDevice.name || selectedDevice.address}. Boa viagem!`,
+        'Percurso Encerrado',
+        `Dados salvos em ${path}. Conexão Bluetooth desativada.`,
         [{ text: 'OK' }]
       );
+      disconnectNow();
     } catch (err) {
-      Alert.alert('Erro', 'Falha ao conectar ao dispositivo.');
+      Alert.alert(`Erro salvando CSV: ${err}`);
     }
-  };
-
-  const endTrip = () => {
-    Alert.alert(
-      'Encerrar Percurso',
-      'Deseja realmente encerrar o percurso em andamento?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Encerrar',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const path = await saveCsv(dataLogs);
-              addLog(`CSV salvo em: ${path}`);
-              await disconnectNow();
-              Alert.alert(
-                'Percurso Encerrado',
-                `Dados salvos em ${path}. Conexão Bluetooth desativada.`,
-                [{ text: 'OK' }]
-              );
-            } catch (err) {
-              addLog(`Erro ao encerrar percurso: ${err}`);
-              Alert.alert('Erro', 'Falha ao salvar ou desconectar.');
-            }
-            setTripInProgress(false);
-            setTripStartTime(null);
-            setTripDurationDisplay('00:00');
-          }
-        }
-      ]
-    );
-  };
-
-  const formatTripDuration = () => {
-    if (!tripStartTime) return '00:00';
-    const now = new Date();
-    const diff = now - tripStartTime;
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    setTripInProgress(false);
   };
 
   // ========== MODAL ADD TRIP ==========
@@ -448,7 +397,7 @@ export default function Home({ navigation }) {
       <View style={{ flex: 1, backgroundColor: '#0008', justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, width: '90%' }}>
           <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Selecione o dispositivo OBD</Text>
-          <DeviceList devices={devices} onConnect={handleDeviceSelect} />
+          <DeviceList devices={devices} onConnect={connect} />
           <TouchableOpacity onPress={() => setDeviceModalVisible(false)} style={{ marginTop: 20, alignSelf: 'center' }}>
             <Text style={{ color: 'red' }}>Cancelar</Text>
           </TouchableOpacity>
@@ -494,16 +443,11 @@ export default function Home({ navigation }) {
                 </View>
                 {/* Exibe dados OBD se disponíveis */}
                 <View style={{ marginBottom: spacing.lg }}>
-                  <Text style={styles.tripObdInfo}>
-                    RPM: {data?.rpm ?? '--'}{'\n'}
-                    Velocidade: {data?.speed ?? '--'} km/h{'\n'}
-                    Temperatura: {data?.temperature ?? '--'}°C{'\n'}
-                    Combustível: {data?.fuel ?? '--'}%
-                  </Text>
+                  <DataDisplay {...data} />
                 </View>
                 <TouchableOpacity
                   style={styles.endTripButton}
-                  onPress={endTrip}
+                  onPress={handleSave}
                 >
                   <Ionicons name="stop-circle" size={20} color={colors.error} />
                   <Text style={styles.endTripText}>Encerrar Percurso</Text>
