@@ -45,22 +45,14 @@ export default function App() {
   const requestPermissions = async () => {
     if (Platform.OS === "android") {
       try {
-        if (Platform.Version >= 31) {
-          // Android 12+ needs Bluetooth + Location
           await PermissionsAndroid.requestMultiple([
             PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
             PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           ]);
-        } else {
-          // Android < 12 needs only Location
-          await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-          );
-        }
-        addLog("✅ Permissions requested");
+        addLog("Permissions requested");
       } catch (err) {
-        addLog(`❌ Permissão negada: ${err}`);
+        addLog(`Permissão negada: ${err}`);
       }
     }
   };
