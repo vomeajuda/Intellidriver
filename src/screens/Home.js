@@ -36,6 +36,7 @@ export default function Home({ navigation }) {
   const [devices, setDevices] = useState([]);
   const [deviceModalVisible, setDeviceModalVisible] = useState(false);
 
+  const [connectionAttempted, setConnectionAttempted] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [tripInProgress, setTripInProgress] = useState(false);
   const [formData, setFormData] = useState({
@@ -48,14 +49,18 @@ export default function Home({ navigation }) {
   });
 
   useEffect(() => {
+    if (!connectionAttempted) return;
+
     if (isConnected && deviceModalVisible) {
       Alert.alert('Conectado', `Conectado a ${device?.name || device?.address}`);
       setDeviceModalVisible(false);
-    } else if (deviceModalVisible) {
+      setConnectionAttempted(false);
+    } else if (isConnected === false && deviceModalVisible) {
       Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
       setDeviceModalVisible(false);
+      setConnectionAttempted(false);
     }
-  }, [isConnected, deviceModalVisible]);
+  }, [isConnected, deviceModalVisible, connectionAttempted]);
 
   const getGreeting = () => 'Bem-vindo de volta';
   const getGreetingMessage = () => {
@@ -81,7 +86,12 @@ export default function Home({ navigation }) {
     }
   };
 
-    const handleSave = async () => {
+  const handleDeviceConnect = async (device) => {
+    setConnectionAttempted(true);
+    await connect(device);
+  };
+
+  const handleSave = async () => {
     try {
       const path = await saveCsv(dataLogs);
       Alert.alert(
@@ -94,6 +104,7 @@ export default function Home({ navigation }) {
       Alert.alert(`Erro salvando CSV: ${err}`);
     }
     setTripInProgress(false);
+    setConnectionAttempted(false);
   };
 
   // ========== MODAL ADD TRIP ==========
@@ -400,7 +411,7 @@ export default function Home({ navigation }) {
       <View style={{ flex: 1, backgroundColor: '#0008', justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, width: '90%' }}>
           <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Selecione o dispositivo OBD</Text>
-          <DeviceList devices={devices} onConnect={connect} />
+          <DeviceList devices={devices} onConnect={handleDeviceConnect} />
           <TouchableOpacity onPress={() => setDeviceModalVisible(false)} style={{ marginTop: 20, alignSelf: 'center' }}>
             <Text style={{ color: 'red' }}>Cancelar</Text>
           </TouchableOpacity>
