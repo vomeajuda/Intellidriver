@@ -51,6 +51,9 @@ export default function Home({ navigation }) {
     if (isConnected && deviceModalVisible) {
       Alert.alert('Conectado', `Conectado a ${device?.name || device?.address}`);
       setDeviceModalVisible(false);
+    } else if (deviceModalVisible) {
+      Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
+      setDeviceModalVisible(false);
     }
   }, [isConnected, deviceModalVisible]);
 

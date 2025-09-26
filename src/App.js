@@ -49,6 +49,8 @@ export default function App() {
             PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
             PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+            PermissionsAndroid.PERMISSIONS.FOREGROUND_SERVICE
           ]);
         addLog("Permissions requested");
       } catch (err) {
