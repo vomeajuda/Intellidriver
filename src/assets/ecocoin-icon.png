@@ -1,0 +1,3 @@
+// Este arquivo representa o ícone do EcoCoin
+// Na implementação real, substituir por arquivo de imagem
+export default require('./ecocoin-icon.png');

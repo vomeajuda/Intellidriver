@@ -1,6 +1,6 @@
 import RNBluetoothClassic from "react-native-bluetooth-classic";
 
-export const listPairedDevices = async () => {
+export const listDevices = async () => {
   return await RNBluetoothClassic.getBondedDevices();
 };
 
