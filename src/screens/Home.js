@@ -49,7 +49,7 @@ const bgOptions = {
   taskName: 'IntelliDriver',
   taskTitle: 'Percurso em andamento',
   taskDesc: 'Mantendo conexão Bluetooth ativa',
-  taskIcon: { name: 'ic_launcher', type: 'mipmap' },
+  taskIcon: { name: 'ic_notification', type: 'drawable' },
   color: '#4CAF50',
   parameters: { delay: 1000 },
 };
