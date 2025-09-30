@@ -39,7 +39,6 @@ const backgroundTask = async (taskDataArguments) => {
   const { delay } = taskDataArguments;
   await new Promise(async (resolve) => {
     while (BackgroundService.isRunning()) {
-      // Keep JS alive; do not touch UI here.
       await sleep(delay);
     }
     resolve();
@@ -85,6 +84,7 @@ export default function Home({ navigation }) {
   const [deviceModalVisible, setDeviceModalVisible] = useState(false);
 
   const [connectionAttempted, setConnectionAttempted] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [tripInProgress, setTripInProgress] = useState(false);
   const [formData, setFormData] = useState({
@@ -97,7 +97,7 @@ export default function Home({ navigation }) {
   });
 
   useEffect(() => {
-    if (!connectionAttempted) return;
+    if (!connectionAttempted || isConnecting) return;
 
     (async () => {
       if (isConnected && deviceModalVisible) {
@@ -105,14 +105,17 @@ export default function Home({ navigation }) {
         setDeviceModalVisible(false);
         setConnectionAttempted(false);
       } else if (isConnected === false && deviceModalVisible) {
-        Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
-        await stopBackground();
-        setDeviceModalVisible(false);
-        setConnectionAttempted(false);
-        setTripInProgress(false);
+        await sleep(700);
+        if (!isConnected) {
+          Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
+          await stopBackground();
+          setDeviceModalVisible(false);
+          setConnectionAttempted(false);
+          setTripInProgress(false);
+        }
       }
     })();
-  }, [isConnected, deviceModalVisible, connectionAttempted]);
+  }, [isConnected, deviceModalVisible, connectionAttempted, isConnecting]);
 
   useEffect(() => {
     (async () => {
@@ -155,8 +158,13 @@ export default function Home({ navigation }) {
   };
 
   const handleDeviceConnect = async (device) => {
+    setIsConnecting(true);
     setConnectionAttempted(true);
-    await connect(device);
+    try {
+      await connect(device);
+    } finally {
+      setIsConnecting(false);
+    }
   };
 
   const handleSave = async () => {
