@@ -59,6 +59,7 @@ export default function Home({ navigation }) {
       Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
       setDeviceModalVisible(false);
       setConnectionAttempted(false);
+      setTripInProgress(false);
     }
   }, [isConnected, deviceModalVisible, connectionAttempted]);
 
@@ -156,6 +157,12 @@ export default function Home({ navigation }) {
       `Percurso de ${formData.origin || 'Origem'} para ${formData.destination || 'Destino'} em ${formData.date} às ${formData.time} foi salvo com sucesso.`,
       [{ text: 'OK', onPress: closeAddTripModal }]
     );
+  };
+
+  const closeDeviceList = () => {
+    setDeviceModalVisible(false);
+    setTripInProgress(false);
+    setConnectionAttempted(false);
   };
 
   // ========== RENDER HELPERS ==========
@@ -412,7 +419,7 @@ export default function Home({ navigation }) {
         <View style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, width: '90%' }}>
           <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Selecione o dispositivo OBD</Text>
           <DeviceList devices={devices} onConnect={handleDeviceConnect} />
-          <TouchableOpacity onPress={() => setDeviceModalVisible(false)} style={{ marginTop: 20, alignSelf: 'center' }}>
+          <TouchableOpacity onPress={closeDeviceList} style={{ marginTop: 20, alignSelf: 'center' }}>
             <Text style={{ color: 'red' }}>Cancelar</Text>
           </TouchableOpacity>
         </View>
