@@ -23,7 +23,7 @@ export default function Login({ navigation }) {
 
     if (username === validUsername && password === validPassword) {
       navigation.navigate('Home');
-    } else if (username === 'leogugo' && password === '12345'){
+    } else if (username === 'Leogugo' && password === '1709'){
       navigation.navigate('Home');
     } else {
       alert('Usuário ou senha inválidos.');

@@ -21,6 +21,8 @@ import NavBar from '../components/Navbar';
 import Header from '../components/Header';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+// Add background actions
+import BackgroundService from 'react-native-background-actions';
 import {
   performanceMetrics,
   monthlyChallenges,
@@ -30,12 +32,59 @@ import {
   topUsers
 } from '../data/homeData';
 
+// ========== BACKGROUND SERVICE (keeps app alive while BT connected) ==========
+const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+
+const backgroundTask = async (taskDataArguments) => {
+  const { delay } = taskDataArguments;
+  await new Promise(async (resolve) => {
+    while (BackgroundService.isRunning()) {
+      await sleep(delay);
+    }
+    resolve();
+  });
+};
+
+const bgOptions = {
+  taskName: 'IntelliDriver',
+  taskTitle: 'Percurso em andamento',
+  taskDesc: 'Mantendo conexão Bluetooth ativa',
+  taskIcon: { name: 'ic_launcher', type: 'mipmap' },
+  color: '#4CAF50',
+  parameters: { delay: 1000 },
+};
+
+const startBackground = async (desc) => {
+  try {
+    if (!BackgroundService.isRunning()) {
+      await BackgroundService.start(backgroundTask, bgOptions);
+    }
+    if (desc) {
+      await BackgroundService.updateNotification({ taskDesc: desc });
+    }
+  } catch (e) {
+    console.log('BG start error', e);
+  }
+};
+
+const stopBackground = async () => {
+  try {
+    if (BackgroundService.isRunning()) {
+      await BackgroundService.stop();
+    }
+  } catch (e) {
+    console.log('BG stop error', e);
+  }
+};
+
 export default function Home({ navigation }) {
   const { data, dataLogs, isConnected, device, connect, disconnectNow } = useBluetooth();
 
   const [devices, setDevices] = useState([]);
   const [deviceModalVisible, setDeviceModalVisible] = useState(false);
 
+  const [connectionAttempted, setConnectionAttempted] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [tripInProgress, setTripInProgress] = useState(false);
   const [formData, setFormData] = useState({
@@ -48,14 +97,41 @@ export default function Home({ navigation }) {
   });
 
   useEffect(() => {
-    if (isConnected && deviceModalVisible) {
-      Alert.alert('Conectado', `Conectado a ${device?.name || device?.address}`);
-      setDeviceModalVisible(false);
-    } else if (deviceModalVisible) {
-      Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
-      setDeviceModalVisible(false);
-    }
-  }, [isConnected, deviceModalVisible]);
+    if (!connectionAttempted || isConnecting) return;
+
+    (async () => {
+      if (isConnected && deviceModalVisible) {
+        await startBackground(`Conectado a ${device?.name || device?.address}`);
+        setDeviceModalVisible(false);
+        setConnectionAttempted(false);
+      } else if (isConnected === false && deviceModalVisible) {
+        await sleep(700);
+        if (!isConnected) {
+          Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
+          await stopBackground();
+          setDeviceModalVisible(false);
+          setConnectionAttempted(false);
+          setTripInProgress(false);
+        }
+      }
+    })();
+  }, [isConnected, deviceModalVisible, connectionAttempted, isConnecting]);
+
+  useEffect(() => {
+    (async () => {
+      if (tripInProgress && isConnected) {
+        await startBackground();
+      } else {
+        await stopBackground();
+      }
+    })();
+  }, [tripInProgress, isConnected]);
+
+  useEffect(() => {
+    return () => {
+      stopBackground();
+    };
+  }, []);
 
   const getGreeting = () => 'Bem-vindo de volta';
   const getGreetingMessage = () => {
@@ -81,7 +157,17 @@ export default function Home({ navigation }) {
     }
   };
 
-    const handleSave = async () => {
+  const handleDeviceConnect = async (device) => {
+    setIsConnecting(true);
+    setConnectionAttempted(true);
+    try {
+      await connect(device);
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const handleSave = async () => {
     try {
       const path = await saveCsv(dataLogs);
       Alert.alert(
@@ -89,11 +175,13 @@ export default function Home({ navigation }) {
         `Dados salvos em ${path}. Conexão Bluetooth desativada.`,
         [{ text: 'OK' }]
       );
+      await stopBackground();
       disconnectNow();
     } catch (err) {
       Alert.alert(`Erro salvando CSV: ${err}`);
     }
     setTripInProgress(false);
+    setConnectionAttempted(false);
   };
 
   // ========== MODAL ADD TRIP ==========
@@ -145,6 +233,13 @@ export default function Home({ navigation }) {
       `Percurso de ${formData.origin || 'Origem'} para ${formData.destination || 'Destino'} em ${formData.date} às ${formData.time} foi salvo com sucesso.`,
       [{ text: 'OK', onPress: closeAddTripModal }]
     );
+  };
+
+  const closeDeviceList = () => {
+    setDeviceModalVisible(false);
+    setTripInProgress(false);
+    setConnectionAttempted(false);
+    stopBackground();
   };
 
   // ========== RENDER HELPERS ==========
@@ -400,8 +495,8 @@ export default function Home({ navigation }) {
       <View style={{ flex: 1, backgroundColor: '#0008', justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, width: '90%' }}>
           <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Selecione o dispositivo OBD</Text>
-          <DeviceList devices={devices} onConnect={connect} />
-          <TouchableOpacity onPress={() => setDeviceModalVisible(false)} style={{ marginTop: 20, alignSelf: 'center' }}>
+          <DeviceList devices={devices} onConnect={handleDeviceConnect} />
+          <TouchableOpacity onPress={closeDeviceList} style={{ marginTop: 20, alignSelf: 'center' }}>
             <Text style={{ color: 'red' }}>Cancelar</Text>
           </TouchableOpacity>
         </View>
