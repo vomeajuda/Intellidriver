@@ -21,6 +21,8 @@ import NavBar from '../components/Navbar';
 import Header from '../components/Header';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+// Add background actions
+import BackgroundService from 'react-native-background-actions';
 import {
   performanceMetrics,
   monthlyChallenges,
@@ -29,6 +31,52 @@ import {
   recentAchievements,
   topUsers
 } from '../data/homeData';
+
+// ========== BACKGROUND SERVICE (keeps app alive while BT connected) ==========
+const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+
+const backgroundTask = async (taskDataArguments) => {
+  const { delay } = taskDataArguments;
+  await new Promise(async (resolve) => {
+    while (BackgroundService.isRunning()) {
+      // Keep JS alive; do not touch UI here.
+      await sleep(delay);
+    }
+    resolve();
+  });
+};
+
+const bgOptions = {
+  taskName: 'IntelliDriver',
+  taskTitle: 'Percurso em andamento',
+  taskDesc: 'Mantendo conexão Bluetooth ativa',
+  taskIcon: { name: 'ic_launcher', type: 'mipmap' },
+  color: '#4CAF50',
+  parameters: { delay: 1000 },
+};
+
+const startBackground = async (desc) => {
+  try {
+    if (!BackgroundService.isRunning()) {
+      await BackgroundService.start(backgroundTask, bgOptions);
+    }
+    if (desc) {
+      await BackgroundService.updateNotification({ taskDesc: desc });
+    }
+  } catch (e) {
+    console.log('BG start error', e);
+  }
+};
+
+const stopBackground = async () => {
+  try {
+    if (BackgroundService.isRunning()) {
+      await BackgroundService.stop();
+    }
+  } catch (e) {
+    console.log('BG stop error', e);
+  }
+};
 
 export default function Home({ navigation }) {
   const { data, dataLogs, isConnected, device, connect, disconnectNow } = useBluetooth();
@@ -51,17 +99,36 @@ export default function Home({ navigation }) {
   useEffect(() => {
     if (!connectionAttempted) return;
 
-    if (isConnected && deviceModalVisible) {
-      Alert.alert('Conectado', `Conectado a ${device?.name || device?.address}`);
-      setDeviceModalVisible(false);
-      setConnectionAttempted(false);
-    } else if (isConnected === false && deviceModalVisible) {
-      Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
-      setDeviceModalVisible(false);
-      setConnectionAttempted(false);
-      setTripInProgress(false);
-    }
+    (async () => {
+      if (isConnected && deviceModalVisible) {
+        await startBackground(`Conectado a ${device?.name || device?.address}`);
+        setDeviceModalVisible(false);
+        setConnectionAttempted(false);
+      } else if (isConnected === false && deviceModalVisible) {
+        Alert.alert('Falha na Conexão', 'Não foi possível conectar ao dispositivo.');
+        await stopBackground();
+        setDeviceModalVisible(false);
+        setConnectionAttempted(false);
+        setTripInProgress(false);
+      }
+    })();
   }, [isConnected, deviceModalVisible, connectionAttempted]);
+
+  useEffect(() => {
+    (async () => {
+      if (tripInProgress && isConnected) {
+        await startBackground();
+      } else {
+        await stopBackground();
+      }
+    })();
+  }, [tripInProgress, isConnected]);
+
+  useEffect(() => {
+    return () => {
+      stopBackground();
+    };
+  }, []);
 
   const getGreeting = () => 'Bem-vindo de volta';
   const getGreetingMessage = () => {
@@ -100,6 +167,7 @@ export default function Home({ navigation }) {
         `Dados salvos em ${path}. Conexão Bluetooth desativada.`,
         [{ text: 'OK' }]
       );
+      await stopBackground();
       disconnectNow();
     } catch (err) {
       Alert.alert(`Erro salvando CSV: ${err}`);
@@ -163,6 +231,7 @@ export default function Home({ navigation }) {
     setDeviceModalVisible(false);
     setTripInProgress(false);
     setConnectionAttempted(false);
+    stopBackground();
   };
 
   // ========== RENDER HELPERS ==========

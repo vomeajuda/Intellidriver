@@ -50,7 +50,9 @@ export default function App() {
             PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-            PermissionsAndroid.PERMISSIONS.FOREGROUND_SERVICE
+            PermissionsAndroid.PERMISSIONS.FOREGROUND_SERVICE,
+            PermissionsAndroid.PERMISSIONS.WAKE_LOCK,
+            PermissionsAndroid.PERMISSIONS.FOREGROUND_SERVICE_DATA_SYNC,
           ]);
         addLog("Permissions requested");
       } catch (err) {
