@@ -1,4 +1,4 @@
-import { View, Text, Button, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 
 const DeviceList = ({ devices, onConnect }) => (
   <FlatList
@@ -7,7 +7,17 @@ const DeviceList = ({ devices, onConnect }) => (
     renderItem={({ item }) => (
       <View style={{ marginVertical: 10 }}>
         <Text style={{ color: "black" }}>{item.name || item.address}</Text>
-        <Button title="Conectar" onPress={() => onConnect(item)} />
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#4CAF50',
+            padding: 10,
+            borderRadius: 5,
+            marginTop: 5,
+          }}
+          onPress={() => onConnect(item)}
+        >
+          <Text style={{ color: "white", textAlign: "center" }}>Conectar</Text>
+        </TouchableOpacity>
       </View>
     )}
     ListEmptyComponent={<Text style={{ color: "gray" }}>Nada aq</Text>}
