@@ -14,5 +14,17 @@ export const parseOBDResponse = (raw) => {
     return { type: "fuel", value: ((100 / 255) * parts[0]).toFixed(1) };
   }
 
+  if (raw.startsWith("41 04") && parts.length >= 1) {
+    return { type: "engineLoad", value: ((100 / 255) * parts[0]).toFixed(1) };
+  }
+
+  if (raw.startsWith("41 11") && parts.length >= 1) {
+    return { type: "throttlePosition", value: ((100 / 255) * parts[0]).toFixed(1) };
+  }
+  
+  if (raw.startsWith("41 5E") && parts.length >= 2) {
+    return { type: "fuelRate", value: ((parts[0] * 256 + parts[1]) / 20).toFixed(1) };
+  }
+
   return null;
 };

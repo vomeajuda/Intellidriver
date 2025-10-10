@@ -6,11 +6,22 @@ const PID_COMMANDS = [
   { pid: "010C", label: "RPM" },
   { pid: "010D", label: "Speed" },
   { pid: "0105", label: "Coolant" },
+  { pid: "0104", label: "EngineLoad" },
+  { pid: "0111", label: "ThrottlePosition" },
   { pid: "012F", label: "Fuel" },
+  { pid: "015E", label: "FuelRate" },
 ];
 
 export const useBluetooth = () => {
-  const [data, setData] = useState({ rpm: null, speed: null, coolant: null, fuel: null });
+  const [data, setData] = useState({
+    rpm: null,
+    speed: null,
+    coolant: null,
+    fuel: null,
+    engineLoad: null,
+    throttlePosition: null,
+    fuelRate: null
+  });
   const [logs, setLogs] = useState([]);
   const [dataLogs, setDataLogs] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -19,7 +30,15 @@ export const useBluetooth = () => {
   const intervalRef = useRef(null);
   const subscriptionRef = useRef(null);
   const currentIndexRef = useRef(0);
-  const latestDataRef = useRef({ rpm: null, speed: null, coolant: null, fuel: null });
+  const latestDataRef = useRef({
+    rpm: null,
+    speed: null,
+    coolant: null,
+    fuel: null,
+    engineLoad: null,
+    throttlePosition: null,
+    fuelRate: null
+  });
 
   const addLog = (msg) => {
     console.log(msg);
@@ -67,7 +86,16 @@ export const useBluetooth = () => {
             addLog("Snapshot ignorado (sem dados)");
           }
 
-          latestDataRef.current = { rpm: null, speed: null, coolant: null, fuel: null };
+          // reset latestDataRef including new fields
+          latestDataRef.current = {
+            rpm: null,
+            speed: null,
+            coolant: null,
+            fuel: null,
+            engineLoad: null,
+            throttlePosition: null,
+            fuelRate: null
+          };
         }
       }, 500);
     } catch (err) {
@@ -94,7 +122,16 @@ export const useBluetooth = () => {
     } finally {
       setIsConnected(false);
       setDevice(null);
-      setData({ rpm: null, speed: null, coolant: null, fuel: null });
+      // reset state including new fields
+      setData({
+        rpm: null,
+        speed: null,
+        coolant: null,
+        fuel: null,
+        engineLoad: null,
+        throttlePosition: null,
+        fuelRate: null
+      });
     }
   };
 
