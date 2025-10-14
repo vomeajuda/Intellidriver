@@ -12,21 +12,20 @@ import Header from '../components/Header';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
 
+import { login } from '../services/userServices';
+
 export default function Login({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   // Função de validação de credenciais mock
-  const handleLogin = () => {
-    const validUsername = 'rafa';
-    const validPassword = '1234';
-
-    if (username === validUsername && password === validPassword) {
+  const handleLogin = async () => {
+    try {
+      await login(username, password)
       navigation.navigate('Home');
-    } else if (username === 'Leogugo' && password === '1709'){
-      navigation.navigate('Home');
-    } else {
+    } catch (err) {
       alert('Usuário ou senha inválidos.');
+      setPassword('');
     }
   };
 
