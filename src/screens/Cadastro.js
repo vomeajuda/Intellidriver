@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   
   navigationHeader: {
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingTop: spacing.md,
     backgroundColor: colors.surface,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   // Indicador de Progresso
   progressContainer: {
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     alignItems: 'center',
     borderBottomWidth: 1,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    fontSize: fonts.sizes.md,
+    fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.08)',
@@ -445,9 +445,18 @@ export default function Cadastro({ navigation }) {
   
   const validarPasso1 = () => {
     // Verificação simplificada - pelo menos nome de usuário e email
-    return nomeUsuario.trim().length > 0 && email.trim().length > 0;
+    return nomeUsuario.trim().length > 0 && email.trim().length > 0 && senha.trim().length > 0;
   };
-  
+
+  const senhaValida = () => {
+    if (senha === confirmarSenha) {
+      return avancarPasso();
+    } else {
+      Alert.alert('Atenção', 'As senhas não coincidem.');
+      return false;
+    }
+  };
+
   const validarPasso2 = () => {
     return nomeCompleto.trim().length > 0;
   };
@@ -458,7 +467,7 @@ export default function Cadastro({ navigation }) {
   
   const podeAvancar = () => {
     switch (passoAtual) {
-      case 1: return validarPasso1();
+      case 1: return validarPasso1()
       case 2: return validarPasso2();
       case 3: return validarPasso3();
       default: return false;
@@ -559,7 +568,9 @@ export default function Cadastro({ navigation }) {
           <TouchableOpacity 
             style={podeAvancar() ? styles.primaryButton : styles.disabledButton} 
             onPress={() => {
-              if (podeAvancar()) {
+              if (passoAtual === 1) {
+                senhaValida();
+              } else if (podeAvancar()) {
                 avancarPasso();
               } else {
                 Alert.alert('Atenção', 'Preencha todos os campos obrigatórios para continuar.');

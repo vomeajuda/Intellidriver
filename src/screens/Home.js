@@ -77,6 +77,8 @@ const stopBackground = async () => {
   }
 };
 
+// ========================================
+
 export default function Home({ navigation }) {
   const { data, dataLogs, isConnected, device, connect, disconnectNow } = useBluetooth();
 
@@ -133,6 +135,8 @@ export default function Home({ navigation }) {
     };
   }, []);
 
+  // ========================================
+
   const getGreeting = () => 'Bem-vindo de volta';
   const getGreetingMessage = () => {
     const hour = new Date().getHours();
@@ -142,6 +146,10 @@ export default function Home({ navigation }) {
     if (hour < 22) return 'Finalizando o dia com direção responsável?';
     return 'Dirija com segurança na madrugada!';
   };
+
+  // ========================================
+  // ! ajuda luna T-T !
+  // ========================================
   const getUserName = () => 'Leonardo';
 
   // ========== BLUETOOTH TRIP LOGIC ==========
