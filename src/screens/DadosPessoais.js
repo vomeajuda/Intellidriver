@@ -25,17 +25,26 @@ export default function DadosPessoais({ navigation }) {
   
   // Dados do perfil do usuário
   const [profileData, setProfileData] = useState({
-    name: 'Leonardo Godoy',
+    username: 'leogodoy',
+    fullname: 'Leonardo Godoy',
     email: 'leo.godoy@email.com',
     phone: '(11) 99999-9999',
     birthDate: '15/03/1990',
-    license: 'AB',
-    licensePlate: 'ABC-1234',
+    cnh: '12345678900',
+    marcaVeiculo: 'Toyota',
+    modeloVeiculo: 'Corolla',
+    anoVeiculo: '2020',
+    placaVeiculo: 'ABC-1234',
     profileImage: null
   });
 
   // Dados temporários para edição (evita alteração direta dos dados principais)
   const [tempData, setTempData] = useState({ ...profileData });
+  
+  // Modal para adicionar veículo
+  const [addVehicleModalVisible, setAddVehicleModalVisible] = useState(false);
+  const [newVehicle, setNewVehicle] = useState({ marca: '', modelo: '', ano: '', placa: '' });
+
 
   // Inicia modo de edição
   const handleEdit = () => {
@@ -96,6 +105,41 @@ export default function DadosPessoais({ navigation }) {
     </View>
   );
 
+  
+  // Abre modal de adicionar veículo
+  const openAddVehicleModal = () => {
+    setNewVehicle({ marca: '', modelo: '', ano: '', placa: '' });
+    setAddVehicleModalVisible(true);
+  };
+
+  const closeAddVehicleModal = () => {
+    setAddVehicleModalVisible(false);
+  };
+
+  const handleAddVehicle = () => {
+    const { marca, modelo, ano, placa } = newVehicle;
+
+    if (!marca.trim() || !modelo.trim() || !ano.trim() || !placa.trim()) {
+      Alert.alert('Erro', 'Todos os campos do veículo são obrigatórios');
+      return;
+    }
+
+    // Atualiza tanto profileData quanto tempData
+    const updated = {
+      ...profileData,
+      marcaVeiculo: marca,
+      modeloVeiculo: modelo,
+      anoVeiculo: ano,
+      placaVeiculo: placa,
+    };
+
+    setProfileData(updated);
+    setTempData(updated);
+    setAddVehicleModalVisible(false);
+    Alert.alert('Sucesso', 'Veículo adicionado com sucesso');
+  };
+
+
   return (
     <View style={styles.container}>
       <Header />
@@ -141,25 +185,37 @@ export default function DadosPessoais({ navigation }) {
         {/* Seção de informações pessoais básicas */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Informações Pessoais</Text>
-          
+          {renderField('Usuário', profileData.username, 'username')}
 
-          {renderField('Nome', profileData.name, 'name')}
+          {renderField('Nome', profileData.fullname, 'fullname')}
 
           {renderField('Email', profileData.email, 'email', 'email-address')}
 
           {renderField('Telefone', profileData.phone, 'phone', 'phone-pad')}
 
           {renderField('Data de Nascimento', profileData.birthDate, 'birthDate')}
+
+          {renderField('Número da CNH', profileData.cnh, 'cnh', 'default')}
         </View>
 
         {/* Seção de informações relacionadas ao veículo */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Informações do Veículo</Text>
-          
 
-          {renderField('Categoria da CNH', profileData.license, 'license')}
+          {renderField('Marca do Veículo', profileData.marcaVeiculo, 'marcaVeiculo')}
 
-          {renderField('Placa do Veículo', profileData.licensePlate, 'licensePlate')}
+          {renderField('Modelo do Veículo', profileData.modeloVeiculo, 'modeloVeiculo')}
+
+          {renderField('Ano do Veículo', profileData.anoVeiculo, 'anoVeiculo')}
+
+          {renderField('Placa do Veículo', profileData.placaVeiculo, 'placaVeiculo')}
+
+          {/* Botão para adicionar veículo (aparece quando não em edição) */}
+          {!isEditing && (
+            <TouchableOpacity style={styles.addVehicleButton} onPress={openAddVehicleModal}>
+              <Text style={styles.addVehicleText}>Adicionar Veículo</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Botões de ação no modo de edição */}
@@ -172,12 +228,7 @@ export default function DadosPessoais({ navigation }) {
             
 
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-              <LinearGradient
-                colors={[colors.primary, '#45A049']}
-                style={styles.saveButtonGradient}
-              >
-                <Text style={styles.saveButtonText}>Salvar Alterações</Text>
-              </LinearGradient>
+              <Text style={styles.saveButtonText}>Salvar Alterações</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -185,6 +236,69 @@ export default function DadosPessoais({ navigation }) {
 
         <View style={{ height: 100 }} />
       </ScrollView>
+
+        
+      {/* Modal de adicionar veículo */}
+      <Modal
+        visible={addVehicleModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={closeAddVehicleModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Adicionar Veículo</Text>
+
+            <Text style={styles.fieldLabel}>Marca</Text>
+            <TextInput
+              style={styles.fieldInput}
+              value={newVehicle.marca}
+              onChangeText={(text) => setNewVehicle(prev => ({ ...prev, marca: text }))}
+              placeholder="Marca do veículo"
+              placeholderTextColor={colors.text.placeholder}
+            />
+
+            <Text style={[styles.fieldLabel, { marginTop: spacing.sm }]}>Modelo</Text>
+            <TextInput
+              style={styles.fieldInput}
+              value={newVehicle.modelo}
+              onChangeText={(text) => setNewVehicle(prev => ({ ...prev, modelo: text }))}
+              placeholder="Modelo do veículo"
+              placeholderTextColor={colors.text.placeholder}
+            />
+
+            <Text style={[styles.fieldLabel, { marginTop: spacing.sm }]}>Ano</Text>
+            <TextInput
+              style={styles.fieldInput}
+              value={newVehicle.ano}
+              onChangeText={(text) => setNewVehicle(prev => ({ ...prev, ano: text }))}
+              placeholder="Ano"
+              keyboardType="numeric"
+              placeholderTextColor={colors.text.placeholder}
+            />
+
+            <Text style={[styles.fieldLabel, { marginTop: spacing.sm }]}>Placa</Text>
+            <TextInput
+              style={styles.fieldInput}
+              value={newVehicle.placa}
+              onChangeText={(text) => setNewVehicle(prev => ({ ...prev, placa: text }))}
+              placeholder="Placa"
+              placeholderTextColor={colors.text.placeholder}
+            />
+
+            <View style={{ flexDirection: 'row', marginTop: spacing.lg, gap: spacing.md }}>
+              <TouchableOpacity style={styles.cancelButton} onPress={closeAddVehicleModal}>
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.saveButton} onPress={handleAddVehicle}>
+                  <Text style={styles.saveButtonText}>Adicionar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }
@@ -415,23 +529,16 @@ const styles = StyleSheet.create({
 
   saveButton: {
   
-    flex: 2,
-  
+    flex: 1.5,
+    padding: spacing.md,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
     borderRadius: borderRadius.md,
   
     overflow: 'hidden',
   
     ...shadows.medium,
   },
-  
-
-  saveButtonGradient: {
-  
-    paddingVertical: spacing.md,
-  
-    alignItems: 'center',
-  },
-  
 
   saveButtonText: {
   
@@ -439,6 +546,24 @@ const styles = StyleSheet.create({
   
     fontFamily: getFontFamily('Poppins', 'SemiBold'),
   
+    color: colors.surface,
+  },
+
+  /* Estilos para o botão de adicionar veículo */
+  addVehicleButton: {
+    marginTop: spacing.md,
+    alignSelf: 'stretch',
+    borderRadius: borderRadius.md,
+    overflow: 'hidden',
+    backgroundColor: colors.primary,
+    padding: spacing.md,
+    alignItems: 'center',
+    ...shadows.medium,
+  },
+
+  addVehicleText: {
+    fontSize: fonts.sizes.md,
+    fontFamily: getFontFamily('Poppins', 'SemiBold'),
     color: colors.surface,
   },
 
@@ -459,12 +584,12 @@ const styles = StyleSheet.create({
   
     borderRadius: borderRadius.lg,
   
-    padding: spacing.xl,
-  
-    margin: spacing.lg,
-  
-    minWidth: 280,
-  
+    padding: spacing.lg,
+
+    marginHorizontal: spacing.lg,
+
+    minWidth: 320,
+
     ...shadows.large,
   },
 
