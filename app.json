@@ -14,7 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "icon": "./assets/logo.png"
+      "icon": "./assets/logo.png",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Este app precisa acessar a galeria para permitir adicionar imagens aos percursos.",
+        "NSCameraUsageDescription": "Este app precisa acessar a câmera para permitir tirar fotos dos percursos."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +27,12 @@
         "icon": "./assets/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.IntelliDriver"
+      "package": "com.anonymous.IntelliDriver",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
