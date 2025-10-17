@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   View,
   Image,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
@@ -24,7 +25,7 @@ export default function Login({ navigation }) {
       await login(username, password)
       navigation.navigate('Home');
     } catch (err) {
-      alert('Usuário ou senha inválidos.');
+      Alert.alert('Usuário ou senha inválidos.');
       setPassword('');
     }
   };
