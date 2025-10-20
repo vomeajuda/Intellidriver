@@ -17,9 +17,11 @@ import BackButton from '../components/BackButton';
 import Header from '../components/Header';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
 
 // Tela de dados pessoais do usuário com funcionalidades de visualização e edição
 export default function DadosPessoais({ navigation }) {
+  const { currentUser } = useUserContext()
   // Estado para controlar modo de edição
   const [isEditing, setIsEditing] = useState(false);
   
@@ -185,17 +187,17 @@ export default function DadosPessoais({ navigation }) {
         {/* Seção de informações pessoais básicas */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Informações Pessoais</Text>
-          {renderField('Usuário', profileData.username, 'username')}
+          {renderField('Usuário', currentUser.username, 'username')}
 
-          {renderField('Nome', profileData.fullname, 'fullname')}
+          {renderField('Nome', currentUser.fullName, 'fullname')}
 
-          {renderField('Email', profileData.email, 'email', 'email-address')}
+          {renderField('Email', currentUser.email, 'email', 'email-address')}
 
-          {renderField('Telefone', profileData.phone, 'phone', 'phone-pad')}
+          {renderField('Telefone', currentUser.phone, 'phone', 'phone-pad')}
 
-          {renderField('Data de Nascimento', profileData.birthDate, 'birthDate')}
+          {renderField('Data de Nascimento', currentUser.birthDate, 'birthDate')}
 
-          {renderField('Número da CNH', profileData.cnh, 'cnh', 'default')}
+          {renderField('Número da CNH', currentUser.cnh, 'cnh', 'default')}
         </View>
 
         {/* Seção de informações relacionadas ao veículo */}

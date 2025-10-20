@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "expo run:android --variant release",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",

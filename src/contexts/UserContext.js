@@ -9,20 +9,25 @@ export const UserContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
 
   const updateCurrentUser = (user) => {
-    setCurrentUser(user);
-    SecureStore.setItemAsync('username', JSON.stringify(user.username));
+    try {
+      setCurrentUser(user);
+      SecureStore.setItemAsync('username', user.username);
+    } catch (err) {
+      console.error("erro:", err)
+      throw err
+    }
   }
 
   const logout = async () => {
     setCurrentUser({});
-    await SecureStore.deleteItemAsync('usernamme');
+    await SecureStore.deleteItemAsync('username');
     await SecureStore.deleteItemAsync('accessToken');
     await SecureStore.deleteItemAsync('refreshToken');
   }
 
   return (
-    <appContext.Provider value={{ currentUser, updateCurrentUser, logout }}>
+    <userContext.Provider value={{ currentUser, updateCurrentUser, logout }}>
       {children}
-    </appContext.Provider>
+    </userContext.Provider>
   );
 }

@@ -87,21 +87,23 @@ export default function App() {
 
       <NavigationContainer>
         <SafeAreaView style={{ flex: 1 }}>
-          <Stack.Navigator
-            initialRouteName="Welcome"
-            screenOptions={{ headerShown: false }}
-          > 
-            <Stack.Screen name="Welcome" component={Welcome} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Cadastro" component={Cadastro} />
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Activity" component={Activity} />
-            <Stack.Screen name="Historico" component={Historico} />
-            <Stack.Screen name="PercursoDetalhes" component={PercursoDetalhes} />
-            <Stack.Screen name="CarsAnalytics" component={CarsAnalytics} />
-            <Stack.Screen name="DadosPessoais" component={DadosPessoais} />
-            <Stack.Screen name="ProfileStats" component={ProfileStats} />
-          </Stack.Navigator>
+          <UserContextProvider>
+            <Stack.Navigator
+              initialRouteName="Welcome"
+              screenOptions={{ headerShown: false }}
+            > 
+              <Stack.Screen name="Welcome" component={Welcome} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Cadastro" component={Cadastro} />
+              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="Activity" component={Activity} />
+              <Stack.Screen name="Historico" component={Historico} />
+              <Stack.Screen name="PercursoDetalhes" component={PercursoDetalhes} />
+              <Stack.Screen name="CarsAnalytics" component={CarsAnalytics} />
+              <Stack.Screen name="DadosPessoais" component={DadosPessoais} />
+              <Stack.Screen name="ProfileStats" component={ProfileStats} />
+            </Stack.Navigator>
+          </UserContextProvider>
         </SafeAreaView>
       </NavigationContainer>
     </SafeAreaProvider>

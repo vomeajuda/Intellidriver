@@ -505,7 +505,15 @@ export default function Cadastro({ navigation }) {
       fullName: nomeCompleto,
       phone: telefone,
       birthDate: dataNascimento,
-      cnh: cnh
+      cnh: cnh,
+      vehicles: [
+        {
+          brand: marcaVeiculo,
+          model: modeloVeiculo,
+          year: anoVeiculo,
+          plate: placaVeiculo
+        }
+      ]
     }
     const newVehicle = {
       brand: marcaVeiculo,
@@ -514,7 +522,7 @@ export default function Cadastro({ navigation }) {
       plate: placaVeiculo
     }
     try {
-      createUser(newUser).then((result) => {
+      createUser(newUser).then(() => {
         Alert.alert(
           'Sucesso',
           'Cadastro realizado com sucesso!',

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as SecureStore from 'expo-secure-store'
 import { 
   StyleSheet,
   Text,
@@ -14,10 +15,10 @@ import { colors, fonts, spacing, borderRadius, shadows } from '../constants/them
 import { getFontFamily } from '../hooks/useFontLoader';
 import { useUserContext } from '../hooks/useUserContext';
 
-import { login } from '../services/userServices';
+import { getUser, login } from '../services/userServices';
 
 export default function Login({ navigation }) {
-  const { updateCurrentUser } = useUserContext();
+  const { updateCurrentUser, setCurrentUser, currentUser } = useUserContext();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +33,7 @@ export default function Login({ navigation }) {
 
       navigation.navigate('Home');
     } catch (err) {
-      Alert.alert('Usuário ou senha inválidos.');
+      Alert.alert('Usuário ou senha inválidos.', JSON.stringify(err));
       setPassword('');
     }
   };

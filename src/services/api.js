@@ -29,7 +29,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const token = await SecureStore.getItemAsync('refreshToken');
+        const token = JSON.stringify(await SecureStore.getItemAsync('refreshToken'));
         const res = await axios({url: '/user/refresh', method: 'post', headers: { 'Authorization': `Bearer ${token}` }});
 
         await SecureStore.setItemAsync('accessToken', res.data.accessToken);
