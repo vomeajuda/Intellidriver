@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { 
+import { useState } from 'react';
+import {
+  Alert,
+  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
   TextInput,
-  ScrollView,
-  Alert
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
-import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
+import { colors, fonts, spacing } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
+import { createUser } from '../services/userServices';
 
 const styles = StyleSheet.create({
   container: {
@@ -414,6 +416,7 @@ const Passo3 = ({ marcaVeiculo, setMarcaVeiculo, modeloVeiculo, setModeloVeiculo
 // ========================================
 
 export default function Cadastro({ navigation }) {
+  const { updateCurrentUser } = useUserContext();
   
   // ========================================
   // ESTADOS
@@ -495,11 +498,36 @@ export default function Cadastro({ navigation }) {
   };
   
   const finalizarCadastro = () => {
-    Alert.alert(
-      'Sucesso',
-      'Cadastro realizado com sucesso!',
-      [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
-    );
+    const newUser = {
+      username: nomeUsuario,
+      password: senha,
+      email: email,
+      fullName: nomeCompleto,
+      phone: telefone,
+      birthDate: dataNascimento,
+      cnh: cnh
+    }
+    const newVehicle = {
+      brand: marcaVeiculo,
+      model: modeloVeiculo,
+      year: anoVeiculo,
+      plate: placaVeiculo
+    }
+    try {
+      createUser(newUser).then((result) => {
+        Alert.alert(
+          'Sucesso',
+          'Cadastro realizado com sucesso!',
+          [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+        );
+      })
+    } catch (err) {
+      Alert.alert(
+        'Erro',
+        JSON.stringify(err.message),
+        [{ text: 'OK', onPress: () => setPassoAtual(1) }]
+      );
+    }
   };
 
   // ========================================

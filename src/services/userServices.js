@@ -13,4 +13,24 @@ export const login = async (username, password) => {
   }
 }
 
-// export const createUser = async (username, password) => {
+export const createUser = async (user) => {
+  try {
+    const res = await api.post('/user/', { user: user })
+
+    return res.data;
+  } catch (err) {
+    console.error('User creation error:', err)
+    throw err;
+  }
+}
+
+export const getUser = async (username) => {
+  try {
+    const res = await api.get(`/user/${username}`)
+
+    return res.data;
+  } catch (err) {
+    console.error('Error getting user:', err)
+    throw err;
+  }
+}

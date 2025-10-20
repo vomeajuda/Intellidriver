@@ -21,6 +21,9 @@ import { View, Text, StatusBar, Platform, PermissionsAndroid } from 'react-nativ
 // Custom font loader
 import { useFontLoader } from './hooks/useFontLoader';
 
+// User Context Provider
+import { UserContextProvider } from './contexts/UserContext';
+
 // Screens
 import Home from './screens/Home';
 import Activity from './screens/Activity';

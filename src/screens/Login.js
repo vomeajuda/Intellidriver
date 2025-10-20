@@ -12,10 +12,13 @@ import BackButton from '../components/BackButton';
 import Header from '../components/Header';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
 
 import { login } from '../services/userServices';
 
 export default function Login({ navigation }) {
+  const { updateCurrentUser } = useUserContext();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -23,6 +26,10 @@ export default function Login({ navigation }) {
   const handleLogin = async () => {
     try {
       await login(username, password)
+      
+      const currentUser = await getUser(username)
+      updateCurrentUser(currentUser)
+
       navigation.navigate('Home');
     } catch (err) {
       Alert.alert('Usuário ou senha inválidos.');

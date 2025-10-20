@@ -1,15 +1,20 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { 
+  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   Image
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
 
 export default function Welcome({ navigation }) {
+  const { logout, updateCurrentUser } = useUserContext();
+
   const goToLogin = () => {
     navigation.navigate('Login');
   };
@@ -17,6 +22,17 @@ export default function Welcome({ navigation }) {
   const goToRegister = () => {
     navigation.navigate('Cadastro');
   };
+
+  useEffect(async () => {
+    try {
+      const username = await JSON.parse(SecureStore.getItemAsync('username'))
+      const currentUser = await getUser(username)
+      updateCurrentUser(currentUser)
+      navigation.navigate('Home')
+    } catch {
+      logout()
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
