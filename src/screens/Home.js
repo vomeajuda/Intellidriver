@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -31,6 +31,7 @@ import {
   recentAchievements,
   topUsers
 } from '../data/homeData';
+import { useUserContext } from '../hooks/useUserContext';
 
 // ========== BACKGROUND SERVICE (keeps app alive while BT connected) ==========
 const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
@@ -81,6 +82,7 @@ const stopBackground = async () => {
 
 export default function Home({ navigation }) {
   const { data, dataLogs, isConnected, device, connect, disconnectNow } = useBluetooth();
+  const { currentUser } = useUserContext()
 
   const [devices, setDevices] = useState([]);
   const [deviceModalVisible, setDeviceModalVisible] = useState(false);
@@ -137,7 +139,6 @@ export default function Home({ navigation }) {
 
   // ========================================
 
-  const getGreeting = () => 'Bem-vindo de volta';
   const getGreetingMessage = () => {
     const hour = new Date().getHours();
     if (hour < 6) return 'Que tal começar o dia com uma direção eficiente?';
@@ -146,11 +147,6 @@ export default function Home({ navigation }) {
     if (hour < 22) return 'Finalizando o dia com direção responsável?';
     return 'Dirija com segurança na madrugada!';
   };
-
-  // ========================================
-  // ! ajuda luna T-T !
-  // ========================================
-  const getUserName = () => 'Leonardo';
 
   // ========== BLUETOOTH TRIP LOGIC ==========
 
@@ -519,8 +515,8 @@ export default function Home({ navigation }) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header />
         <View style={styles.greetingSection}>
-          <Text style={styles.greetingTime}>{getGreeting()},</Text>
-          <Text style={styles.greetingName}>{getUserName()}!</Text>
+          <Text style={styles.greetingTime}>Bem vindo(a) de volta,</Text>
+          <Text style={styles.greetingName}>{currentUser.fullName.split(' ')[0]}!</Text>
           <Text style={styles.greetingSubtitle}>{getGreetingMessage()}</Text>
         </View>
         <View style={styles.tripControlSection}>

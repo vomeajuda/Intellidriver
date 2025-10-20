@@ -201,16 +201,20 @@ export default function DadosPessoais({ navigation }) {
         </View>
 
         {/* Seção de informações relacionadas ao veículo */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Informações do Veículo</Text>
+        <View style={styles.section}> 
+          {currentUser.vehicles.map((vehicle, index) => 
+            <>
+              <Text style={styles.sectionTitle}>Informações do Veículo #{index+1}</Text>
 
-          {renderField('Marca do Veículo', profileData.marcaVeiculo, 'marcaVeiculo')}
+              {renderField('Marca do Veículo', vehicle.brand, 'marcaVeiculo')}
 
-          {renderField('Modelo do Veículo', profileData.modeloVeiculo, 'modeloVeiculo')}
+              {renderField('Modelo do Veículo', vehicle.model, 'modeloVeiculo')}
 
-          {renderField('Ano do Veículo', profileData.anoVeiculo, 'anoVeiculo')}
+              {renderField('Ano do Veículo', vehicle.year, 'anoVeiculo')}
 
-          {renderField('Placa do Veículo', profileData.placaVeiculo, 'placaVeiculo')}
+              {renderField('Placa do Veículo', vehicle.plate, 'placaVeiculo')}
+            </>
+          )}
 
           {/* Botão para adicionar veículo (aparece quando não em edição) */}
           {!isEditing && (
