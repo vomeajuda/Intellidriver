@@ -21,6 +21,9 @@ import { View, Text, StatusBar, Platform, PermissionsAndroid } from 'react-nativ
 // Custom font loader
 import { useFontLoader } from './hooks/useFontLoader';
 
+// User Context Provider
+import { UserContextProvider } from './contexts/UserContext';
+
 // Screens
 import Home from './screens/Home';
 import Activity from './screens/Activity';
@@ -84,21 +87,23 @@ export default function App() {
 
       <NavigationContainer>
         <SafeAreaView style={{ flex: 1 }}>
-          <Stack.Navigator
-            initialRouteName="Welcome"
-            screenOptions={{ headerShown: false }}
-          > 
-            <Stack.Screen name="Welcome" component={Welcome} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Cadastro" component={Cadastro} />
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Activity" component={Activity} />
-            <Stack.Screen name="Historico" component={Historico} />
-            <Stack.Screen name="PercursoDetalhes" component={PercursoDetalhes} />
-            <Stack.Screen name="CarsAnalytics" component={CarsAnalytics} />
-            <Stack.Screen name="DadosPessoais" component={DadosPessoais} />
-            <Stack.Screen name="ProfileStats" component={ProfileStats} />
-          </Stack.Navigator>
+          <UserContextProvider>
+            <Stack.Navigator
+              initialRouteName="Welcome"
+              screenOptions={{ headerShown: false }}
+            > 
+              <Stack.Screen name="Welcome" component={Welcome} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Cadastro" component={Cadastro} />
+              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="Activity" component={Activity} />
+              <Stack.Screen name="Historico" component={Historico} />
+              <Stack.Screen name="PercursoDetalhes" component={PercursoDetalhes} />
+              <Stack.Screen name="CarsAnalytics" component={CarsAnalytics} />
+              <Stack.Screen name="DadosPessoais" component={DadosPessoais} />
+              <Stack.Screen name="ProfileStats" component={ProfileStats} />
+            </Stack.Navigator>
+          </UserContextProvider>
         </SafeAreaView>
       </NavigationContainer>
     </SafeAreaProvider>

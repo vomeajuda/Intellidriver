@@ -130,14 +130,11 @@ export default function ProfileStats() {
                   <Ionicons name="person" size={50} color="white" />
                 </View>
               )}
-              <View style={styles.editIndicator}>
-                <Ionicons name="pencil" size={12} color={colors.surface} />
-              </View>
+              
             </TouchableOpacity>
 
             <View style={styles.userInfo}>
               <Text style={styles.userName}>{userData.name}</Text>
-              <Text style={styles.userLevel}>{userData.level}</Text>
               <Text style={styles.memberSince}>Membro desde {userData.memberSince}</Text>
             </View>
 
@@ -303,7 +300,7 @@ const styles = StyleSheet.create({
   // HEADER DO PERFIL
   profileHeader: {
     paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xl,
+    paddingVertical: spacing.md,
     borderBottomLeftRadius: borderRadius.xl,
     borderBottomRightRadius: borderRadius.xl,
   },
@@ -363,13 +360,6 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   
-  userLevel: {
-    fontSize: fonts.sizes.md,
-    fontFamily: getFontFamily('Poppins', 'SemiBold'),
-    color: 'white',
-    opacity: 0.9,
-  },
-  
   memberSince: {
     fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
@@ -382,8 +372,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
     borderRadius: borderRadius.xl,
     ...shadows.medium,
   },

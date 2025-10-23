@@ -69,9 +69,8 @@ export const percursosData = {
      */
     { 
       id: '1',                                           // Identificador único do percurso
-      nome: 'Casa → Trabalho',                          // Nome descritivo origem → destino
       img: 'https://picsum.photos/200/200?20',          // Imagem ilustrativa (placeholder)
-      horario: '08:30',                                 // Horário de saída
+      horario: '08:30',                                 // Horário de início
       distancia: '12.5 km',                             // Distância total percorrida
       duracao: '25 min',                                // Tempo total de viagem
       velocidadeMedia: '30 km/h',                       // Velocidade média calculada
@@ -94,7 +93,6 @@ export const percursosData = {
      */
     { 
       id: '2', 
-      nome: 'Trabalho → Academia', 
       img: 'https://picsum.photos/200/200?21', 
       horario: '18:45', 
       distancia: '3.2 km',
@@ -119,7 +117,6 @@ export const percursosData = {
      */
     { 
       id: '3', 
-      nome: 'Academia → Casa', 
       img: 'https://picsum.photos/200/200?22', 
       horario: '20:15', 
       distancia: '15.1 km',
@@ -157,7 +154,6 @@ export const percursosData = {
      */
     { 
       id: '4', 
-      nome: 'Casa → Shopping', 
       img: 'https://picsum.photos/200/200?23', 
       horario: '14:20', 
       distancia: '8.7 km',
@@ -181,7 +177,6 @@ export const percursosData = {
      */
     { 
       id: '5', 
-      nome: 'Shopping → Supermercado', 
       img: 'https://picsum.photos/200/200?24', 
       horario: '16:30', 
       distancia: '2.1 km',
@@ -206,7 +201,6 @@ export const percursosData = {
      */
     { 
       id: '6', 
-      nome: 'Supermercado → Casa', 
       img: 'https://picsum.photos/200/200?25', 
       horario: '17:45', 
       distancia: '9.3 km',
@@ -235,26 +229,32 @@ export const percursosData = {
   '2025-09-18': [
     { 
       id: '7', 
-      nome: 'Casa → Escola', 
       img: 'https://picsum.photos/200/200?26', 
       horario: '07:15', 
       distancia: '6.8 km', 
+      duracao: '18 min',
+      velocidadeMedia: '22 km/h',
+      combustivel: '0.9L',
       ecoCoins: 31 
     },
     { 
       id: '8', 
-      nome: 'Escola → Biblioteca', 
       img: 'https://picsum.photos/200/200?27', 
       horario: '16:00', 
       distancia: '1.5 km', 
+      duracao: '6 min',
+      velocidadeMedia: '15 km/h',
+      combustivel: '0.1L',
       ecoCoins: 18 
     },
     { 
       id: '9', 
-      nome: 'Biblioteca → Casa', 
       img: 'https://picsum.photos/200/200?28', 
       horario: '18:30', 
       distancia: '7.9 km', 
+      duracao: '20 min',
+      velocidadeMedia: '24 km/h',
+      combustivel: '1.1L',
       ecoCoins: 35 
     },
   ],
@@ -273,75 +273,36 @@ export const percursosData = {
   '2025-09-17': [
     { 
       id: '10', 
-      nome: 'Casa → Hospital', 
       img: 'https://picsum.photos/200/200?29', 
       horario: '09:00', 
       distancia: '11.2 km', 
+      duracao: '25 min',
+      velocidadeMedia: '27 km/h',
+      combustivel: '1.3L',
       ecoCoins: 48 
     },
     { 
       id: '11', 
-      nome: 'Hospital → Farmácia', 
       img: 'https://picsum.photos/200/200?30', 
       horario: '11:30', 
       distancia: '0.8 km', 
+      duracao: '4 min',
+      velocidadeMedia: '12 km/h',
+      combustivel: '0.05L',
       ecoCoins: 12 
     },
     { 
       id: '12', 
-      nome: 'Farmácia → Casa', 
       img: 'https://picsum.photos/200/200?31', 
       horario: '12:15', 
       distancia: '11.7 km', 
+      duracao: '28 min',
+      velocidadeMedia: '25 km/h',
+      combustivel: '1.5L',
       ecoCoins: 50 
     },
   ],
   
-  /**
-   * PERCURSOS DE 16/09/2025 (SEGUNDA-FEIRA)
-   * 
-   * Dia com atividades no centro da cidade.
-   * 
-   * Características interessantes:
-   * - Percurso longo para o centro (18.3 km)
-   * - EcoCoins negativos no centro (-8)
-   * - Recuperação com pontuação alta no retorno (62)
-   * - Múltiplas paradas no centro
-   */
-  '2025-09-16': [
-    { 
-      id: '13', 
-      nome: 'Casa → Centro da Cidade', 
-      img: 'https://picsum.photos/200/200?32', 
-      horario: '10:45', 
-      distancia: '18.3 km', 
-      ecoCoins: -8     // Trânsito pesado no centro
-    },
-    { 
-      id: '14', 
-      nome: 'Centro → Banco', 
-      img: 'https://picsum.photos/200/200?33', 
-      horario: '14:20', 
-      distancia: '0.5 km', 
-      ecoCoins: 8      // Percurso muito curto
-    },
-    { 
-      id: '15', 
-      nome: 'Banco → Restaurante', 
-      img: 'https://picsum.photos/200/200?34', 
-      horario: '15:30', 
-      distancia: '1.2 km', 
-      ecoCoins: -3     // Pequena ineficiência
-    },
-    { 
-      id: '16', 
-      nome: 'Restaurante → Casa', 
-      img: 'https://picsum.photos/200/200?35', 
-      horario: '19:00', 
-      distancia: '17.8 km', 
-      ecoCoins: 62     // Excelente direção no retorno
-    },
-  ],
   
   /**
    * PERCURSOS DE 15/09/2025 (DOMINGO)
@@ -352,26 +313,33 @@ export const percursosData = {
   '2025-09-15': [
     { 
       id: '17', 
-      nome: 'Casa → Parque', 
       img: 'https://picsum.photos/200/200?36', 
       horario: '06:30', 
       distancia: '4.2 km', 
+      duracao: '12 min',
+      velocidadeMedia: '21 km/h',
+      combustivel: '0.5L',
       ecoCoins: 26 
     },
     { 
       id: '18', 
-      nome: 'Parque → Padaria', 
       img: 'https://picsum.photos/200/200?37', 
       horario: '08:15', 
+      distance: '1.8 km', 
       distancia: '1.8 km', 
+      duracao: '5 min',
+      velocidadeMedia: '18 km/h',
+      combustivel: '0.08L',
       ecoCoins: 20 
     },
     { 
       id: '19', 
-      nome: 'Padaria → Casa', 
       img: 'https://picsum.photos/200/200?38', 
       horario: '09:00', 
       distancia: '5.1 km', 
+      duracao: '14 min',
+      velocidadeMedia: '22 km/h',
+      combustivel: '0.7L',
       ecoCoins: 28 
     },
   ],
@@ -390,17 +358,21 @@ export const percursosData = {
   '2025-09-14': [
     { 
       id: '20', 
-      nome: 'Casa → Aeroporto', 
       img: 'https://picsum.photos/200/200?39', 
       horario: '05:30', 
-      distancia: '35.2 km' 
+      distancia: '35.2 km',
+      duracao: '45 min',
+      velocidadeMedia: '47 km/h',
+      combustivel: '4.5L'
     },
     { 
       id: '21', 
-      nome: 'Aeroporto → Hotel', 
       img: 'https://picsum.photos/200/200?40', 
       horario: '22:45', 
-      distancia: '12.1 km' 
+      distancia: '12.1 km',
+      duracao: '22 min',
+      velocidadeMedia: '33 km/h',
+      combustivel: '1.6L'
     },
   ],
   
@@ -413,54 +385,60 @@ export const percursosData = {
   '2025-09-13': [
     { 
       id: '22', 
-      nome: 'Casa → Clínica Veterinária', 
       img: 'https://picsum.photos/200/200?41', 
       horario: '10:00', 
-      distancia: '7.5 km' 
+      distancia: '7.5 km',
+      duracao: '16 min',
+      velocidadeMedia: '28 km/h',
+      combustivel: '0.9L'
     },
     { 
       id: '23', 
-      nome: 'Clínica → Pet Shop', 
       img: 'https://picsum.photos/200/200?42', 
       horario: '11:30', 
-      distancia: '2.3 km' 
+      distancia: '2.3 km', 
+      duracao: '7 min',
+      velocidadeMedia: '20 km/h',
+      combustivel: '0.12L',
+      ecoCoins: 10
     },
     { 
       id: '24', 
-      nome: 'Pet Shop → Casa', 
       img: 'https://picsum.photos/200/200?43', 
       horario: '12:45', 
-      distancia: '8.9 km' 
+      distancia: '8.9 km',
+      duracao: '20 min',
+      velocidadeMedia: '26 km/h',
+      combustivel: '1.0L'
     },
   ],
-  
-  /**
-   * PERCURSOS DE 12/09/2025 (QUINTA-FEIRA)
-   * 
-   * Dia de trabalho com parada para compras.
-   * Padrão: Casa → Trabalho → Supermercado → Casa
-   */
   '2025-09-12': [
     { 
       id: '25', 
-      nome: 'Casa → Trabalho', 
       img: 'https://picsum.photos/200/200?44', 
       horario: '08:30', 
-      distancia: '12.5 km' 
+      distancia: '12.5 km',
+      duracao: '25 min',
+      velocidadeMedia: '30 km/h',
+      combustivel: '1.2L'
     },
     { 
       id: '26', 
-      nome: 'Trabalho → Supermercado', 
       img: 'https://picsum.photos/200/200?45', 
       horario: '18:30', 
-      distancia: '5.7 km' 
+      distancia: '5.7 km',
+      duracao: '12 min',
+      velocidadeMedia: '28 km/h',
+      combustivel: '0.6L'
     },
     { 
       id: '27', 
-      nome: 'Supermercado → Casa', 
       img: 'https://picsum.photos/200/200?46', 
       horario: '19:45', 
-      distancia: '14.2 km' 
+      distancia: '14.2 km',
+      duracao: '30 min',
+      velocidadeMedia: '28 km/h',
+      combustivel: '1.6L'
     },
   ],
   
@@ -477,24 +455,30 @@ export const percursosData = {
   '2025-09-11': [
     { 
       id: '28', 
-      nome: 'Casa → Academia', 
       img: 'https://picsum.photos/200/200?47', 
       horario: '06:00', 
-      distancia: '3.2 km' 
+      distancia: '3.2 km',
+      duracao: '9 min',
+      velocidadeMedia: '21 km/h',
+      combustivel: '0.25L'
     },
     { 
       id: '29', 
-      nome: 'Academia → Trabalho', 
       img: 'https://picsum.photos/200/200?48', 
       horario: '07:30', 
-      distancia: '9.8 km' 
+      distancia: '9.8 km',
+      duracao: '22 min',
+      velocidadeMedia: '27 km/h',
+      combustivel: '1.0L'
     },
     { 
       id: '30', 
-      nome: 'Trabalho → Casa', 
       img: 'https://picsum.photos/200/200?49', 
       horario: '17:30', 
-      distancia: '12.5 km' 
+      distancia: '12.5 km',
+      duracao: '28 min',
+      velocidadeMedia: '26 km/h',
+      combustivel: '1.5L'
     },
   ],
   
@@ -511,24 +495,30 @@ export const percursosData = {
   '2025-09-10': [
     { 
       id: '31', 
-      nome: 'Casa → Escola', 
       img: 'https://picsum.photos/200/200?50', 
       horario: '07:15', 
-      distancia: '6.8 km' 
+      distancia: '6.8 km',
+      duracao: '18 min',
+      velocidadeMedia: '22 km/h',
+      combustivel: '0.9L'
     },
     { 
       id: '32', 
-      nome: 'Escola → Centro da Cidade', 
       img: 'https://picsum.photos/200/200?51', 
       horario: '16:00', 
-      distancia: '11.5 km' 
+      distancia: '11.5 km',
+      duracao: '30 min',
+      velocidadeMedia: '23 km/h',
+      combustivel: '1.6L'
     },
     { 
       id: '33', 
-      nome: 'Centro → Casa', 
       img: 'https://picsum.photos/200/200?52', 
       horario: '18:30', 
-      distancia: '18.3 km' 
+      distancia: '18.3 km',
+      duracao: '42 min',
+      velocidadeMedia: '26 km/h',
+      combustivel: '2.1L'
     },
   ],
 };
@@ -557,6 +547,9 @@ export const percursosData = {
  * - getPercursosByDate('2025-12-25') → [] (data não existe)
  * - getPercursosByDate(null) → [] (parâmetro inválido)
  */
+// Imagem padrão para todos os percursos (arquivo local em src/assets/imgPercurso.png)
+export const defaultPercursoImg = 'imgPercurso.png';
+
 export const getPercursosByDate = (dateString) => {
   /**
    * OPERADOR DE COALESCÊNCIA NULA
@@ -565,10 +558,11 @@ export const getPercursosByDate = (dateString) => {
    * - Se percursosData[dateString] existir: retorna o array
    * - Se for undefined ou null: retorna array vazio []
    * 
-   * Isso garante que a função sempre retorne um array,
-   * evitando erros de "map is not a function" ou similares.
+   * Aqui garantimos também que a imagem inicial de cada percurso
+   * seja a imagem padrão local, evitando imagens aleatórias.
    */
-  return percursosData[dateString] || [];
+  const list = percursosData[dateString] || [];
+  return list.map(p => ({ ...p, img: defaultPercursoImg }));
 };
 
 // ========================================

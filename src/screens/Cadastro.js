@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { 
+import { useState } from 'react';
+import {
+  Alert,
+  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
   TextInput,
-  ScrollView,
-  Alert
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
-import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
+import { colors, fonts, spacing } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
+import { createUser } from '../services/userServices';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
   
   navigationHeader: {
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingTop: spacing.md,
     backgroundColor: colors.surface,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
   // Indicador de Progresso
   progressContainer: {
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     alignItems: 'center',
     borderBottomWidth: 1,
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    fontSize: fonts.sizes.md,
+    fontSize: fonts.sizes.sm,
     fontFamily: getFontFamily('Poppins', 'Regular'),
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.08)',
@@ -414,6 +416,7 @@ const Passo3 = ({ marcaVeiculo, setMarcaVeiculo, modeloVeiculo, setModeloVeiculo
 // ========================================
 
 export default function Cadastro({ navigation }) {
+  const { updateCurrentUser } = useUserContext();
   
   // ========================================
   // ESTADOS
@@ -445,9 +448,18 @@ export default function Cadastro({ navigation }) {
   
   const validarPasso1 = () => {
     // Verificação simplificada - pelo menos nome de usuário e email
-    return nomeUsuario.trim().length > 0 && email.trim().length > 0;
+    return nomeUsuario.trim().length > 0 && email.trim().length > 0 && senha.trim().length > 0;
   };
-  
+
+  const senhaValida = () => {
+    if (senha === confirmarSenha) {
+      return avancarPasso();
+    } else {
+      Alert.alert('Atenção', 'As senhas não coincidem.');
+      return false;
+    }
+  };
+
   const validarPasso2 = () => {
     return nomeCompleto.trim().length > 0;
   };
@@ -458,7 +470,7 @@ export default function Cadastro({ navigation }) {
   
   const podeAvancar = () => {
     switch (passoAtual) {
-      case 1: return validarPasso1();
+      case 1: return validarPasso1()
       case 2: return validarPasso2();
       case 3: return validarPasso3();
       default: return false;
@@ -486,11 +498,44 @@ export default function Cadastro({ navigation }) {
   };
   
   const finalizarCadastro = () => {
-    Alert.alert(
-      'Sucesso',
-      'Cadastro realizado com sucesso!',
-      [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
-    );
+    const newUser = {
+      username: nomeUsuario,
+      password: senha,
+      email: email,
+      fullName: nomeCompleto,
+      phone: telefone,
+      birthDate: dataNascimento,
+      cnh: cnh,
+      vehicles: [
+        {
+          brand: marcaVeiculo,
+          model: modeloVeiculo,
+          year: anoVeiculo,
+          plate: placaVeiculo
+        }
+      ]
+    }
+    const newVehicle = {
+      brand: marcaVeiculo,
+      model: modeloVeiculo,
+      year: anoVeiculo,
+      plate: placaVeiculo
+    }
+    try {
+      createUser(newUser).then(() => {
+        Alert.alert(
+          'Sucesso',
+          'Cadastro realizado com sucesso!',
+          [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+        );
+      })
+    } catch (err) {
+      Alert.alert(
+        'Erro',
+        JSON.stringify(err.message),
+        [{ text: 'OK', onPress: () => setPassoAtual(1) }]
+      );
+    }
   };
 
   // ========================================
@@ -559,7 +604,9 @@ export default function Cadastro({ navigation }) {
           <TouchableOpacity 
             style={podeAvancar() ? styles.primaryButton : styles.disabledButton} 
             onPress={() => {
-              if (podeAvancar()) {
+              if (passoAtual === 1) {
+                senhaValida();
+              } else if (podeAvancar()) {
                 avancarPasso();
               } else {
                 Alert.alert('Atenção', 'Preencha todos os campos obrigatórios para continuar.');

@@ -54,20 +54,35 @@ export default function Historico() {
     const isNegative = ecoCoins < 0;
     const showTimeHeader = index === 0 || percursos[index - 1]?.horario !== item.horario;
     
+    // Calcula horário de término a partir de horario (HH:MM) e duracao ('XX min')
+    const calculateEndTime = (start, dur) => {
+      if (!start || !dur) return null;
+      try {
+        const [h, m] = start.split(':').map(Number);
+        const minutes = parseInt(String(dur).replace(/[^0-9]/g, ''), 10);
+        const date = new Date();
+        date.setHours(h || 0, m || 0, 0, 0);
+        date.setMinutes(date.getMinutes() + (isNaN(minutes) ? 0 : minutes));
+        return date.toTimeString().slice(0,5);
+      } catch (e) {
+        return null;
+      }
+    };
+    const endTime = calculateEndTime(item.horario, item.duracao);
+
     return (
       <View>
-        {/* Header de horário para agrupar percursos */}
-        {showTimeHeader && (
-          <View style={[styles.timeHeader, index === 0 && styles.firstTimeHeader]}>
-            <Text style={styles.timeHeaderText}>{item.horario}</Text>
-          </View>
-        )}
         
         <TouchableOpacity style={styles.item} onPress={() => handleItemPress(item)}>
-          <Image source={{ uri: item.img }} style={styles.img} />
+          {/* Use imagem local padrão quando item.img for o marcador 'imgPercurso.png' */}
+          {item.img === 'imgPercurso.png' ? (
+            <Image source={require('../assets/imgPercurso.png')} style={styles.img} />
+          ) : (
+            <Image source={{ uri: item.img }} style={styles.img} />
+          )}
           <View style={styles.itemContent}>
             <View style={styles.itemTopRow}>
-              <Text style={styles.itemText}>{item.nome}</Text>
+              <Text style={styles.itemText}>{item.horario}{endTime ? ` – ${endTime}` : ''}</Text>
               <Text style={styles.itemDistance}>{item.distancia}</Text>
             </View>
             {/* EcoCoins com estilização baseada em ganho/perda */}
@@ -283,7 +298,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     backgroundColor: '#FFFFFF',
     padding: 16,
-    marginBottom: 2,
+    marginBottom: 8,
     borderRadius: 12,
     shadowColor: 'rgba(42, 60, 26, 0.1)',
     shadowOffset: { width: 0, height: 2 },
@@ -316,23 +331,6 @@ const styles = StyleSheet.create({
   itemDetails: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  timeHeader: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    backgroundColor: '#F8F9F7',
-    borderLeftWidth: 1,
-    borderLeftColor: '#7F9170',
-    marginBottom: 4,
-    marginTop: 8,
-  },
-  firstTimeHeader: {
-    marginTop: 0,
-  },
-  timeHeaderText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#51663E',
   },
   itemDistance: {
     fontSize: 12,

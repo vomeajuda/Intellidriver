@@ -20,8 +20,7 @@ import { mockData } from '../data/carsAnalyticsData';
 
 export default function CarsAnalytics({ navigation }) {
   
-  const [analyticsData, setAnalyticsData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [analyticsData, setAnalyticsData] = useState(mockData);
   const [maintenanceModalVisible, setMaintenanceModalVisible] = useState(false);
   const [maintenanceFormData, setMaintenanceFormData] = useState({
     type: '',
@@ -39,14 +38,6 @@ export default function CarsAnalytics({ navigation }) {
     connectionStatus,
     isDeviceReady
   } = useBluetooth();
-
-  // Simula carregamento de dados de 1 segundo
-  useEffect(() => {
-    setTimeout(() => {
-      setAnalyticsData(mockData);
-      setLoading(false);
-    }, 1000);
-  }, []);
 
   // Funções do modal de manutenção
   const openMaintenanceModal = () => {
@@ -243,20 +234,6 @@ export default function CarsAnalytics({ navigation }) {
       </View>
     );
   };
-
-  if (loading || !analyticsData) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Diagnóstico do Carro</Text>
-        
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Carregando diagnóstico...</Text>
-        </View>
-        
-        <NavBar />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.mainContainer}>

@@ -15,8 +15,6 @@ export const userData = {
   name: 'Leonardo Godoy',
   profileImage: null,
   ecocoins: 1850,
-  level: 'Eco Master',
-  nextLevelPoints: 2000,
   memberSince: 'Janeiro 2024',
   
   // ========================================

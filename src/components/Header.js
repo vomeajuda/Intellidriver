@@ -6,7 +6,7 @@ import { colors, spacing } from '../constants/theme';
 export default function Header() {
   return (
     <LinearGradient
-      colors={[colors.primary, colors.dark]}
+      colors={[colors.dark, colors.primary]}
       style={styles.headerContainer}
     >
       <View style={styles.headerContent}>

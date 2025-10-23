@@ -1,22 +1,40 @@
-import React from 'react';
-import { 
+import * as SecureStore from 'expo-secure-store';
+import { useEffect } from 'react';
+import {
+  Alert,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  Image
+  View
 } from 'react-native';
-import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
+import { borderRadius, colors, fonts, shadows, spacing } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
+import { getUser } from '../services/userServices';
 
 export default function Welcome({ navigation }) {
-  const goToLogin = () => {
+  const { logout, updateCurrentUser } = useUserContext();
+
+  const goToLogin = async () => {
     navigation.navigate('Login');
   };
 
-  const goToRegister = () => {
+  const goToRegister = async () => {
     navigation.navigate('Cadastro');
   };
+
+  useEffect(async () => {
+    try {
+      const username = await SecureStore.getItemAsync('username')
+      const result = await getUser(username)
+
+      updateCurrentUser(result)
+      navigation.navigate('Home')
+    } catch {
+      logout()
+    }
+  }, []);
 
   return (
     <View style={styles.container}>

@@ -1,32 +1,40 @@
 import React, { useState } from 'react';
+import * as SecureStore from 'expo-secure-store'
 import { 
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   Image,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
+
+import { getUser, login } from '../services/userServices';
 
 export default function Login({ navigation }) {
+  const { updateCurrentUser, setCurrentUser, currentUser } = useUserContext();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   // Função de validação de credenciais mock
-  const handleLogin = () => {
-    const validUsername = 'rafa';
-    const validPassword = '1234';
+  const handleLogin = async () => {
+    try {
+      await login(username, password)
+      
+      const currentUser = await getUser(username)
+      updateCurrentUser(currentUser)
 
-    if (username === validUsername && password === validPassword) {
       navigation.navigate('Home');
-    } else if (username === 'Leogugo' && password === '1709'){
-      navigation.navigate('Home');
-    } else {
-      alert('Usuário ou senha inválidos.');
+    } catch (err) {
+      Alert.alert('Usuário ou senha inválidos.', JSON.stringify(err));
+      setPassword('');
     }
   };
 
