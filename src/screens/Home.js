@@ -516,7 +516,7 @@ export default function Home({ navigation }) {
         <Header />
         <View style={styles.greetingSection}>
           <Text style={styles.greetingTime}>Bem vindo(a) de volta,</Text>
-          <Text style={styles.greetingName}>{currentUser.fullName.split(' ')[0]}!</Text>
+          {currentUser.fullName && <Text style={styles.greetingName}>{currentUser.fullName.split(' ')[0]}!</Text>}
           <Text style={styles.greetingSubtitle}>{getGreetingMessage()}</Text>
         </View>
         <View style={styles.tripControlSection}>
