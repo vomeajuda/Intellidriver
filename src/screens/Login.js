@@ -71,7 +71,7 @@ export default function Login({ navigation }) {
             onChangeText={setPassword}
             placeholder="Digite sua senha"
             placeholderTextColor={colors.text.placeholder}
-            secureTextEntry
+            secureTextEntry={!passwordVisible}
           />
           <Pressable onPress={() => setPasswordVisible(!passwordVisible) }>
             <Ionicons
