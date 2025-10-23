@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Pressable,
   TextInput,
   Alert
 } from 'react-native';
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
+import { Ionicons } from '@expo/vector-icons';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
 import { useUserContext } from '../hooks/useUserContext';
@@ -19,6 +21,8 @@ import { getUser, login } from '../services/userServices';
 
 export default function Login({ navigation }) {
   const { updateCurrentUser, setCurrentUser, currentUser } = useUserContext();
+  
+  const [passwordVisible, setPasswordVisible] = useState(false)
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -45,7 +49,6 @@ export default function Login({ navigation }) {
       <View style={styles.navigationHeader}>
         <BackButton />
       </View>
-      
       <View style={styles.content}>
         <Text style={styles.title}>Acesse</Text>
         <Text style={styles.subtitle}>com nome de usuário e senha</Text>
@@ -60,14 +63,25 @@ export default function Login({ navigation }) {
         />
 
         <Text style={styles.inputText}>Senha</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Digite sua senha"
-          placeholderTextColor={colors.text.placeholder}
-          secureTextEntry
-        />
+
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Digite sua senha"
+            placeholderTextColor={colors.text.placeholder}
+            secureTextEntry
+          />
+          <Pressable onPress={() => setPasswordVisible(!passwordVisible) }>
+            <Ionicons
+              style={{ marginHorizontal: 15, marginBottom: 20 }}
+              name={passwordVisible ? 'eye' : 'eye-off'}
+              size={24}
+              color='gray'
+            />
+          </Pressable>
+        </View>
 
         <View style={styles.forgotContainer}>
           <TouchableOpacity>

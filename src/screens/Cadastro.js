@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Alert,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +12,7 @@ import {
 
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
+import { Ionicons } from '@expo/vector-icons';
 import { colors, fonts, spacing } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
 import { useUserContext } from '../hooks/useUserContext';
@@ -250,7 +252,7 @@ const ProgressIndicator = ({ passoAtual }) => (
   </View>
 );
 
-const Passo1 = ({ nomeUsuario, setNomeUsuario, email, setEmail, senha, setSenha, confirmarSenha, setConfirmarSenha }) => (
+const Passo1 = ({ nomeUsuario, setNomeUsuario, email, passwordVisible, setEmail, senha, setPasswordVisible, setSenha, confirmarSenha, setConfirmarSenha }) => (
   <View style={styles.formContainer}>
     <Text style={styles.title}>Dados da Conta</Text>
     <Text style={styles.subtitle}>Crie suas credenciais de acesso</Text>
@@ -281,14 +283,24 @@ const Passo1 = ({ nomeUsuario, setNomeUsuario, email, setEmail, senha, setSenha,
 
     <View style={styles.inputGroup}>
       <Text style={styles.label}>Senha</Text>
-      <TextInput
-        style={styles.input}
-        value={senha}
-        onChangeText={setSenha}
-        placeholder="Crie uma senha segura"
-        placeholderTextColor="rgba(0, 0, 0, 0.4)"
-        secureTextEntry
-      />
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          value={senha}
+          onChangeText={setSenha}
+          placeholder="Crie uma senha segura"
+          placeholderTextColor="rgba(0, 0, 0, 0.4)"
+          secureTextEntry={!passwordVisible}
+        />
+        <Pressable onPress={() => setPasswordVisible(!passwordVisible) }>
+          <Ionicons
+            style={{ marginHorizontal: 15 }}
+            name={passwordVisible ? 'eye' : 'eye-off'}
+            size={24}
+            color='gray'
+          />
+        </Pressable>
+      </View>
     </View>
 
     <View style={styles.inputGroup}>
@@ -423,6 +435,7 @@ export default function Cadastro({ navigation }) {
   // ========================================
   
   const [passoAtual, setPassoAtual] = useState(1);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   
   // Passo 1 - Dados da Conta
   const [nomeUsuario, setNomeUsuario] = useState('');
@@ -567,8 +580,10 @@ export default function Cadastro({ navigation }) {
             nomeUsuario={nomeUsuario}
             setNomeUsuario={setNomeUsuario}
             email={email}
+            passwordVisible={passwordVisible}
             setEmail={setEmail}
             senha={senha}
+            setPasswordVisible={setPasswordVisible}
             setSenha={setSenha}
             confirmarSenha={confirmarSenha}
             setConfirmarSenha={setConfirmarSenha}
