@@ -18,12 +18,15 @@ import Header from '../components/Header';
 import EcoCoinIcon from '../assets/ecocoin-icon';
 import { colors, fonts, spacing, borderRadius, shadows } from '../constants/theme';
 import { getFontFamily } from '../hooks/useFontLoader';
+import { useUserContext } from '../hooks/useUserContext';
 import userData from '../data/profileStatsData';
 
 const { width } = Dimensions.get('window');
 
 export default function ProfileStats() {
   const navigation = useNavigation();
+
+  const { currentUser, logout } = useUserContext();
   
   const StatCard = ({ icon, value, label, color = colors.primary, subtitle = null }) => (
     <View style={styles.statCard}>
@@ -134,7 +137,7 @@ export default function ProfileStats() {
             </TouchableOpacity>
 
             <View style={styles.userInfo}>
-              <Text style={styles.userName}>{userData.name}</Text>
+              <Text style={styles.userName}>{currentUser.fullName}</Text>
               <Text style={styles.memberSince}>Membro desde {userData.memberSince}</Text>
             </View>
 
@@ -143,7 +146,7 @@ export default function ProfileStats() {
               <View style={styles.ecocoinIcon}>
                 <EcoCoinIcon size={24} />
               </View>
-              <Text style={styles.ecocoinsValue}>{userData.ecocoins.toLocaleString()}</Text>
+              {currentUser.ecoCoins && <Text style={styles.ecocoinsValue}>{currentUser.ecoCoins.toLocaleString()}</Text>}
               <Text style={styles.ecocoinsLabel}>EcoCoins</Text>
             </View>
           </View>
@@ -166,6 +169,25 @@ export default function ProfileStats() {
               <View style={styles.personalDataText}>
                 <Text style={styles.personalDataTitle}>Dados Pessoais</Text>
                 <Text style={styles.personalDataSubtitle}>Editar informações do perfil</Text>
+              </View>
+              <Ionicons name="arrow-forward" size={20} color="white" />
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={[styles.personalDataButton, { marginTop: spacing.md }]}
+            onPress={() => {
+              logout().then(() => navigation.navigate('Welcome'))
+              
+            }}
+          >
+            <LinearGradient
+              colors={['#dba0a0', '#db5050ff']}
+              style={styles.personalDataGradient}
+            >
+              <Ionicons name="person-circle" size={24} color="white" />
+              <View style={styles.personalDataText}>
+                <Text style={styles.personalDataTitle}>Sair</Text>
               </View>
               <Ionicons name="arrow-forward" size={20} color="white" />
             </LinearGradient>
